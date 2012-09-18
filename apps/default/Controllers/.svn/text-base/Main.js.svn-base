@@ -1,0 +1,205 @@
+/* Main Controller JS */
+var Main = {
+
+	//sections widths
+	windowWidth: null,
+	windowHeight: null,
+	headerHeight: null,
+	footerHeight: null,
+	
+	//js session vars
+	currentPageId: null,
+	currentGallery: null,
+	selectedMedia: null,
+	currentMenuItemId: null,
+	currentMediaItemId: null,
+	currentTypeOfMain3Data: 'document',
+
+	run: function() {
+		Main.resizeWindow();
+		Main.initList();
+		Main.initMenuItems();
+		Main.initNav();
+		MainMenu.show();
+	},
+	
+	resizeWindow: function() {
+		this.setWindowSizes();
+		this.adjustWindow();
+	},
+
+	setWindowSizes: function() {
+		this.windowWidth = $(window).width();
+		this.windowHeight = $(window).height();
+	},
+
+	adjustWindow: function () {
+		$('.section').each(function(){
+			$(this).find('.section-container').height(($(window).height()-42-41));
+			switch($(this).attr('class')) {
+			case 'section list':
+				$(this).width(($(window).width()/5));
+				break;	
+			case 'section view':
+				$(this).width(($(window).width()/5*3));
+				break;	
+			}
+			$(this).height(($(window).height()-102));
+		})
+	},
+	
+	initList: function(container) {
+		$(container).find('li').click(function() {
+			$(this).parent().find('.current').removeClass('current');
+			$(this).addClass('current');
+		Main.ListItemEvent($(this).data());
+		});
+	},
+	
+	initTextareas: function(container) {
+		$(container)
+			.find('textarea')
+				.each(function() {
+					switch($(this).data('inputtype')) {
+						case 'tags':
+							$(this).tagsInput({'width': '96%'});
+							break;
+						case 'wysiwyg':
+							$(this).cleditor({
+							width:'97%',
+							height:'300px',
+							controls:     // controls to add to the toolbar
+                        "bold italic underline strikethrough | color highlight removeformat | bullets numbering | alignleft center alignright justify | undo redo | " + "image link unlink | cut copy paste pastetext | source",
+							});
+							break;
+					}
+				})
+	},
+	
+	ListItemEvent: function(data) {
+		switch(data.type) {
+		case 'folder':
+		case 'cat':
+			Document.showList(data.type, data.id);
+			break;
+		case 'doc':
+			Document.show(data.id);
+			break;
+		case 'library':
+			$('#main-2').find('.section-container').html();
+			Media.showList("limit=0,50");
+			break;
+		case 'mediaItem':
+			Media.show(data.id);
+			break;
+		}
+	},
+	
+	notify: function(functionName) {
+		var gritter_title = functionName;
+		switch(functionName) {
+			case 'Save Document':
+			var gritter_text = 'The document was succesfully saved';
+			break;
+			case 'Create Document':
+			var gritter_text = 'A document was successfully created';
+			break;
+			case 'Delete Document':
+			var gritter_text = 'The document was successfully deleted';
+			break;
+			case 'Order Documents':
+			var gritter_text = 'Documents successfully reordered';
+			break;
+			case 'Order Media':
+			var gritter_text = 'Gallery media were successfully reordered';
+			break;
+			case 'Add Media to Gallery':
+			var gritter_text = 'One or more images were succesfully added to the gallery';
+			break;
+			case 'Remove Media from Gallery':
+			var gritter_text = 'One or more images were succesfully removed from the gallery.';
+			break;
+			case 'Save Media':
+			var gritter_text = 'Media was successfully saved';
+			break;
+			case 'Delete Media':
+			var gritter_text = 'Media was successfully deleted';
+			break;
+		}
+		
+		$.gritter.add({
+			title: gritter_title,
+			text: gritter_text,
+			sticky: false,
+			time: '2000'
+		});
+
+	},
+	
+	initMenuItems: function() {
+		$('.button-create').click(function() {
+			switch(Main.currentTypeOfMain3Data){
+			case 'document':
+				Document.create();
+			break;
+			case 'mediaItem':
+				Media.showUploadScreen();
+				break;
+			}
+		})
+		$('.button-saveitem').click(function() {
+			switch(Main.currentTypeOfMain3Data){
+			case 'document':
+				Document.save();
+				break;
+			case 'mediaItem':
+				Media.save();
+				break;
+			}
+		})
+		$('.menu-item-removemedia').click(function() {
+			Gallery.removeMedia();
+		})
+		$('.menu-item-deletedoc').click(function() {
+
+			switch(Main.currentTypeOfMain3Data){
+			case 'document':
+				Document.drop();
+				break;
+			case 'mediaItem':
+				Media.drop();
+				break;
+			}
+
+		})		
+	},
+	
+	initNav: function() {
+		$('nav').find('li').click(function() {
+			$(this).parent().find('.current').removeClass('current');
+			$(this).addClass('current');
+			switch($(this).data('label')) {
+			case 'documents':
+				MainMenu.show();
+				Main.currentTypeOfMain3Data = 'document';
+				Main.currentPageId = null;
+				Main.currentMediaItemId = null;
+				break;
+			case 'media':
+				Media.showMenu();
+				Main.currentTypeOfMain3Data = 'mediaItem';
+				Main.currentPageId = null;
+				Main.currentMediaItemId = null;
+				break;
+			}
+		});
+		$('.logout').click(function() {Logger.logout()});
+	}
+}
+
+$(document).ready(function() {
+	Main.run();
+});
+$(window).resize(function(){
+	Main.resizeWindow();
+});

@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/rearendrepo/!svn/ver/21/lib/MYSQL-DAOS
+END
+Template.php
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/rearendrepo/!svn/ver/59/lib/MYSQL-DAOS/Template.php
+END
+Category.php
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/rearendrepo/!svn/ver/20/lib/MYSQL-DAOS/Category.php
+END
+Document.php
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/rearendrepo/!svn/ver/55/lib/MYSQL-DAOS/Document.php
+END
+User.php
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/rearendrepo/!svn/ver/20/lib/MYSQL-DAOS/User.php
+END
+Media.php
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/rearendrepo/!svn/ver/20/lib/MYSQL-DAOS/Media.php
+END
+MenuItem.php
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/rearendrepo/!svn/ver/20/lib/MYSQL-DAOS/MenuItem.php
+END
+Field.php
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/rearendrepo/!svn/ver/53/lib/MYSQL-DAOS/Field.php
+END
