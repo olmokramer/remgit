@@ -281,6 +281,10 @@ overflow-y: auto;
 	font-size: 12px;
 }
 
+#content #main-2.list ul li {
+	position: relative;
+}
+
 #content .list ul li .listItemImgDiv {
 display:inline-table;
 width:50px;
@@ -333,8 +337,9 @@ margin-left:-37px;
 	height:20px;
 	background-size: 20px;
 	-moz-background-size: 20px;
-	position: relative;
-	float: right;
+	position: absolute;
+	right: 5px;
+	top: 10px;
 	margin-right: 10px;
 	background-position: top right;
 }
