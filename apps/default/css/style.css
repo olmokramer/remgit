@@ -939,7 +939,7 @@ font-weight: 500;
 #media-tabs {
 padding: 0 20px;
 height:350px;
-overflow-y: auto;
+overflow-y: none;
 margin: -15px auto;
 }
 
