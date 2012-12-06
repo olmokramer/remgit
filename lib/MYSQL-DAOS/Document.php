@@ -195,7 +195,7 @@ UNION ALL (SELECT templates_fields.position as bx, documents_fields_multiline.id
 	private function selectByMenuItemsId($menuItemsId, $options) {
 		$pdo = \Config\DB::getInstance();
 		$options = $this->parseOptions($options);
-		$sth = $pdo->prepare("SELECT * FROM documents WHERE menuItems_id = :menuItems_id".$options->conditions.$options->order.$options->limit);
+		$sth = $pdo->prepare("SELECT * FROM documents WHERE menuItems_id = :menuItems_id ".$options->conditions.$options->order.$options->limit);
 		$sth->bindParam(":menuItems_id", $menuItemsId);
 		$sth->execute();
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
@@ -205,7 +205,7 @@ UNION ALL (SELECT templates_fields.position as bx, documents_fields_multiline.id
 	private function selectByMenuItemsLabel($menuItemsLabel, $options) {
 		$pdo = \Config\DB::getInstance();
 		$options = $this->parseOptions($options);
-		$sth = $pdo->prepare("SELECT documents.* FROM documents LEFT JOIN menuItems ON documents.menuItems_id = menuItems.id ".$options->joins." WHERE menuItems.label = :label".$options->conditions.$options->order.$options->limit);
+		$sth = $pdo->prepare("SELECT documents.* FROM documents LEFT JOIN menuItems ON documents.menuItems_id = menuItems.id ".$options->joins." WHERE menuItems.label = :label ".$options->conditions.$options->order.$options->limit);
 		$sth->bindParam(":label", $menuItemsLabel);
 		$sth->execute();
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
@@ -215,7 +215,7 @@ UNION ALL (SELECT templates_fields.position as bx, documents_fields_multiline.id
 	private function selectByCategoryMatchCount($id, $options) {
 		$pdo = \Config\DB::getInstance();
 		$options = $this->parseOptions($options);
-		$sth = $pdo->prepare("SELECT (SELECT menuItems_id FROM documents WHERE id = :documents_id LIMIT 1) AS menuItemsId, documents.*, count(*) AS matches FROM documents_categories LEFT JOIN documents ON documents_categories.documents_id = documents.id WHERE categories_id IN (SELECT categories_id FROM documents_categories WHERE documents_id = :documents_id) AND documents_id != :documents_id AND menuItems_id = menuItems_id GROUP BY documents_id ORDER BY matches DESC, RAND()".$options->limit);
+		$sth = $pdo->prepare("SELECT (SELECT menuItems_id FROM documents WHERE id = :documents_id LIMIT 1) AS menuItemsId, documents.*, count(*) AS matches FROM documents_categories LEFT JOIN documents ON documents_categories.documents_id = documents.id WHERE categories_id IN (SELECT categories_id FROM documents_categories WHERE documents_id = :documents_id) AND documents_id != :documents_id AND menuItems_id = menuItems_id GROUP BY documents_id ORDER BY matches DESC, RAND() ".$options->limit);
 		$sth->bindParam(":documents_id", $id);
 		$sth->execute();
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
@@ -249,7 +249,7 @@ UNION ALL (SELECT templates_fields.position as bx, documents_fields_multiline.id
 	private function selectByCategoryId($id, $options) {
 		$pdo = \Config\DB::getInstance();
 		$options = $this->parseOptions($options);
-		$sth = $pdo->prepare("SELECT documents.* FROM documents LEFT JOIN documents_categories ON documents.id = documents_categories.documents_id WHERE documents_categories.categories_id = :categories_id".$options->conditions.$options->order.$options->limit);
+		$sth = $pdo->prepare("SELECT documents.* FROM documents LEFT JOIN documents_categories ON documents.id = documents_categories.documents_id WHERE documents_categories.categories_id = :categories_id ".$options->conditions.$options->order.$options->limit);
 		$sth->bindParam(":categories_id", $id);
 		$sth->execute();
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
