@@ -9405,3 +9405,4 @@
 [10-Dec-2012 11:52:56 UTC] PHP Warning:  include(/Users/woutervroege/Sites/rearend/apps/default/Views/DocumentList.php): failed to open stream: No such file or directory in /Users/woutervroege/Sites/rearend/apps/default/Controllers/Document.php on line 14
 [10-Dec-2012 11:52:56 UTC] PHP Warning:  include(): Failed opening '/Users/woutervroege/Sites/rearend/apps/default/Views/DocumentList.php' for inclusion (include_path='.:/etc/pearrc/share/pear:/Users/woutervroege/pear/share/pear:/usr/share/pear') in /Users/woutervroege/Sites/rearend/apps/default/Controllers/Document.php on line 14
 [10-Dec-2012 11:52:56 UTC] PHP Fatal error:  Class 'Views\DocumentList' not found in /Users/woutervroege/Sites/rearend/apps/default/Controllers/Document.php on line 33
+[10-Dec-2012 12:15:50 UTC] PHP Fatal error:  Cannot break/continue 1 level in /Users/woutervroege/Sites/rearend/apps/default/AjaxListener.php on line 146
