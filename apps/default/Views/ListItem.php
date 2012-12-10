@@ -23,7 +23,7 @@ class ListItem {
 		<li data-type="<?=$this->type?>" data-id="<?=$this->id?>">
 			
 			<!-- label -->
-			<h6 style="<?=$li_style?>" class="icon-<?=$this->type?>"><?=$this->label?></h6>
+			<h6 style="<?=$li_style?>" class="icon-<?=$this->type?>"><?=$this->label?> <span style="color:#aaa">(<?=$this->id?>)</span></h6>
 			
 			<!-- pubstate -->
 			<?php if($this->secondary != null): ?>

@@ -10,8 +10,8 @@ ini_set("error_log", dirname(__FILE__) . "/error_log.txt");
 require(dirname(__FILE__) . "/DB.php");
 
 //global settings
-define('ROOT', '/Users/woutervroege/Sites/abramdeswaan/');
-define('WEBROOT', 'http://localhost/~woutervroege/abramdeswaan/');
+define('ROOT', '/Users/woutervroege/Sites/rearend/');
+define('WEBROOT', 'http://localhost/~woutervroege/rearend/');
 
 define('LIB_ROOT', ROOT.'lib/');
 define('APPS_ROOT', ROOT.'apps/');

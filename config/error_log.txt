@@ -9402,3 +9402,6 @@
 [17-Sep-2012 15:57:29 UTC] PHP Stack trace:
 [17-Sep-2012 15:57:29 UTC] PHP   1. {main}() /Users/woutervroege/Sites/abramdeswaan/apps/web/index.php:0
 [17-Sep-2012 15:57:29 UTC] PHP   2. include() /Users/woutervroege/Sites/abramdeswaan/apps/web/index.php:1
+[10-Dec-2012 11:52:56 UTC] PHP Warning:  include(/Users/woutervroege/Sites/rearend/apps/default/Views/DocumentList.php): failed to open stream: No such file or directory in /Users/woutervroege/Sites/rearend/apps/default/Controllers/Document.php on line 14
+[10-Dec-2012 11:52:56 UTC] PHP Warning:  include(): Failed opening '/Users/woutervroege/Sites/rearend/apps/default/Views/DocumentList.php' for inclusion (include_path='.:/etc/pearrc/share/pear:/Users/woutervroege/pear/share/pear:/usr/share/pear') in /Users/woutervroege/Sites/rearend/apps/default/Controllers/Document.php on line 14
+[10-Dec-2012 11:52:56 UTC] PHP Fatal error:  Class 'Views\DocumentList' not found in /Users/woutervroege/Sites/rearend/apps/default/Controllers/Document.php on line 33
