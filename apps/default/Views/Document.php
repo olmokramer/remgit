@@ -133,8 +133,8 @@ class Document {
 						<textarea data-kind="custom" data-id="<?=$field->id?>" data-name="<?=$label?>" data-inputtype="<?=$field->inputtype?>" data-fieldtype="multi"><?=$field->value?></textarea>
 						</li>
 	
-						
-						<?php
+    					<?php
+						break;
 						endswitch;
 						?>
 
