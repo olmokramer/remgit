@@ -9406,3 +9406,6 @@
 [10-Dec-2012 11:52:56 UTC] PHP Warning:  include(): Failed opening '/Users/woutervroege/Sites/rearend/apps/default/Views/DocumentList.php' for inclusion (include_path='.:/etc/pearrc/share/pear:/Users/woutervroege/pear/share/pear:/usr/share/pear') in /Users/woutervroege/Sites/rearend/apps/default/Controllers/Document.php on line 14
 [10-Dec-2012 11:52:56 UTC] PHP Fatal error:  Class 'Views\DocumentList' not found in /Users/woutervroege/Sites/rearend/apps/default/Controllers/Document.php on line 33
 [10-Dec-2012 12:15:50 UTC] PHP Fatal error:  Cannot break/continue 1 level in /Users/woutervroege/Sites/rearend/apps/default/AjaxListener.php on line 146
+[10-Dec-2012 12:18:45 UTC] PHP Notice:  Undefined variable: valid_credentials in /Users/woutervroege/Sites/rearend/apps/default/Controllers/Logger.php on line 21
+[10-Dec-2012 12:18:45 UTC] PHP Notice:  Undefined variable: valid_credentials in /Users/woutervroege/Sites/rearend/apps/default/Controllers/Logger.php on line 22
+[10-Dec-2012 12:19:20 UTC] PHP Fatal error:  Cannot break/continue 1 level in /Users/woutervroege/Sites/rearend/apps/default/AjaxListener.php on line 146
