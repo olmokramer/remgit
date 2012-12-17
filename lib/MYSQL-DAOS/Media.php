@@ -46,7 +46,7 @@ class Media {
 		return $newItems;
 	}
 	
-	public function create($fileName, $kind="image/jpeg") {
+	public function create($fileName, $kind) {
 		$pdo = \Config\DB::getInstance();
 		$sth = $pdo->prepare("INSERT INTO media(kind, imgUrl, title, created) VALUES(:kind, :imgUrl, :title, UNIX_TIMESTAMP())");
 		$sth->bindParam(":imgUrl", $fileName);
