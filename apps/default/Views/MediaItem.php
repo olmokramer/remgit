@@ -11,7 +11,20 @@ class MediaItem {
 		<div id="mediaitem-container">
 			
 			<div style="text-align:center;">
-			<img src="<?php echo UPLOADS.$this->m->imgUrl; ?>" class="mediaItemFull">
+            <?php
+			switch($this->m->kind):
+			default:
+				break;
+			case "image/jpeg":
+				?>
+				<img src="<?php echo UPLOADS.$this->m->imgUrl; ?>" class="mediaItemFull">
+                <?php
+				break;
+			case "vimeo/embedded":
+				echo $this->m->embedCode;
+				break;
+			endswitch;
+			?>
 			</div>
 			
 			<div class="properties-head">title</div><br>

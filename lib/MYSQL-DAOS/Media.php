@@ -39,11 +39,19 @@ class Media {
 		return $media;	
 	}
 	
-	public function create($fileName) {
+	public function findNewVimeoItems($galleryId) {
+		$result = $this->selectVimeoItems($galleryId);
+		$resultAPI = $this->selectVimeoItemsAPI($galleryId);
+		$newItems = array_diff($resultAPI, $result);
+		return $newItems;
+	}
+	
+	public function create($fileName, $kind="image/jpeg") {
 		$pdo = \Config\DB::getInstance();
-		$sth = $pdo->prepare("INSERT INTO media(imgUrl, title, created) VALUES(:imgUrl, :title, UNIX_TIMESTAMP())");
+		$sth = $pdo->prepare("INSERT INTO media(kind, imgUrl, title, created) VALUES(:kind, :imgUrl, :title, UNIX_TIMESTAMP())");
 		$sth->bindParam(":imgUrl", $fileName);
 		$sth->bindParam(":title", $fileName);
+		$sth->bindParam(":kind", $kind);
 		$sth->execute();
 		return true;
 	}
@@ -163,6 +171,24 @@ class Media {
 		$sth->execute();
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
 		return $result;		
+	}
+	
+	private function selectVimeoItems($galleryId) {
+		$pdo = \Config\DB::getInstance();
+		$sth = $pdo->prepare("SELECT media.*, galleries_media.position FROM media LEFT JOIN galleries_media ON media.id = galleries_media_id WHERE galleries_media.galleries_id = :galleries_id AND media.kind = vimeo/embedded ORDER BY galleries_media.position");
+		$sth->bindParam(":galleries_id", $galleryId);
+		$sth->execute();
+		$result = $sth->fetchAll(\PDO::FETCJ_OBJ);
+		return $result;
+	}
+	
+	private function selectVimeoItemsAPI($galleryId) {
+		$pdo = \Config\DB::getInstance();
+		$content = file_get_contents("http://vimeo.com/api/v2/user/".$galleryId."/videos.php");
+		if ($content) {
+			$videos = unserialize($content);
+		}
+		return $videos;
 	}
 	
 	private function parseResultToGalleries($result) {

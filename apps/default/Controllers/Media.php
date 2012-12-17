@@ -38,10 +38,10 @@ class Media {
 		new \Views\MediaBrowser_Media($media, $activeMedia=array(), $options);
 	}
 	
-	public function showList($options="limit=0,50", $append=0) {
+	public function showList($options="limit=0,50", $kind="all", $append=0) {
 		$mediaDAO = new \DAOS\Media;
 		$media = $mediaDAO->findAllMedia($options);
-		new \Views\MediaList($media, $options, $append);
+		new \Views\MediaList($media, $options, $kind, $append);
 	}
 	
 	public function show($id) {

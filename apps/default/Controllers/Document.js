@@ -51,7 +51,7 @@ var Document = {
 			},
 			success: function(data){
 				$("#loading-indicator").hide(); //hide the loading indicator
-				Document.initList(data);				
+				Document.initList(data);			
 			}
 		})
 	},

@@ -107,7 +107,7 @@ class AjaxListener {
 	public function showMediaList() {
 		include(CONTROLLERS_ROOT."Media.php");
 		$this->controller = new \Controllers\Media;
-		$this->controller->showList($this->vars['options'], 0);
+		$this->controller->showList($this->vars['options'], $this->vars['kind'], 0);
 	}
 	public function appendtoMediaList() {
 		include(CONTROLLERS_ROOT."Media.php");

@@ -57,13 +57,14 @@ var Media = {
 	@param string options
 	*/
 	
-	showList: function(options) {
+	showList: function(options, kind) {
 		$.ajax({
 			type: "POST",
 			url: "AjaxListener.php",
 			data: {
 				"action": "showMediaList",
-				"options": options
+				"options": options,
+				"kind": kind
 			},
 			cache: false,
 			beforeSend: function() {

@@ -60,7 +60,7 @@ class UploadScreen {
 			uploader.bind('FileUploaded', function(Up, File, Response) {
 			    if( (uploader.total.uploaded + 1) == uploader.files.length)
 			         {
-						Media.showList('limit=0,50');
+						Media.showList('limit=0,50', Media.currentMediaKind);
 						console.log(Response);
 			          }
 			    })

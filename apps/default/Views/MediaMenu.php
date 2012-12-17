@@ -8,7 +8,9 @@ class MediaMenu {
 		
 		<!-- media menu -->
 		<ul>
-			<?php new \Views\ListItem($type='library', null, 'All Media'); ?>
+			<?php new \Views\ListItem($type='library', null, 'All Media', null, null, 'all'); ?>
+			<?php new \Views\ListItem($type='library', null, 'Photos', null, null, 'photos'); ?>
+			<?php new \Views\ListItem($type='library', null, 'Videos', null, null, 'videos'); ?>
 
 		</ul>
 		<!-- end media menu -->

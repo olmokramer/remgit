@@ -87,7 +87,8 @@ var Main = {
 			break;
 		case 'library':
 			$('#main-2').find('.section-container').html();
-			Media.showList("limit=0,50");
+			Media.currentMediaKind=data.mediakind;
+			Media.showList("limit=0,50",Media.currentMediaKind);
 			break;
 		case 'mediaItem':
 			Media.show(data.id);
@@ -190,6 +191,7 @@ var Main = {
 				Main.currentTypeOfMain3Data = 'mediaItem';
 				Main.currentPageId = null;
 				Main.currentMediaItemId = null;
+				Media.currentMediaKind = "all";
 				break;
 			}
 		});
