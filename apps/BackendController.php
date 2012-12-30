@@ -1,6 +1,6 @@
 <?php
 //settings
-include("../../config/settings.php");
+include(dirname(dirname(__FILE__)) . "/config/settings.php");
 
 //DAOS
 include(DAOS_ROOT."Category.php");

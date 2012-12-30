@@ -16,7 +16,6 @@ var Logger = {
 				}
 				else {
 					$('#loginWindow').effect("shake", { times:3 }, 75);
-					alert(data);
 					//console.log(data);
 				}
 			}

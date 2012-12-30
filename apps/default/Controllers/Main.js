@@ -168,10 +168,10 @@ var Main = {
 
 			switch(Main.currentTypeOfMain3Data){
 			case 'document':
-				Document.drop();
+				Main.confirmDelete("document");
 				break;
 			case 'mediaItem':
-				Media.drop();
+				Main.confirmDelete("media");
 				break;
 			}
 
@@ -199,7 +199,24 @@ var Main = {
 			}
 		});
 		$('.logout').click(function() {Logger.logout()});
+	},
+
+	confirmDelete: function (action, id) {
+		apprise('Are You Sure you want to delete this item?', {'verify':true}, function(r) {
+		if(r) { 
+			switch(action) {
+			case 'document':
+				Document.drop();
+				break;
+			case 'media':
+				Media.drop();
+				break;
+			}
+		}
+		else { }
+	    })
 	}
+
 }
 
 $(document).ready(function() {
