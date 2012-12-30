@@ -3,7 +3,7 @@
 namespace Views;
 
 class MediaList {
-	public function __construct($media, $options, $append=0) {
+	public function __construct($media, $options, $kind, $append=0) {
 		$this->media = $media;
 		
 		/* options */
@@ -25,9 +25,26 @@ class MediaList {
 		
 		<!-- media items -->
 		<?php
-		foreach($this->media as $item):
-		new \Views\ListItem($type='mediaItem', $id=$item->id, $label=$item->title, null, THUMBS.$item->imgUrl);
-		endforeach;
+		switch($kind):
+			case "all":
+				foreach($this->media as $item):
+					new \Views\ListItem($type='mediaItem', $id=$item->id, $label=$item->title, null, ($item->kind != "vimeo/embedded") ? THUMBS.$item->imgUrl : $item->imgUrl);
+				endforeach;
+			break;
+			case "videos":
+				$this->media = array_filter($this->media, function($item) {return ($item->kind == "vimeo/embedded") ? true : false;});
+				foreach($this->media as $item):
+					new \Views\ListItem($type='mediaItem', $id=$item->id, $label=$item->title, null, $item->imgUrl);
+				endforeach;
+			break;
+			case "photos":
+				$this->media = array_filter($this->media, function($item) { return (strstr($item->kind, "image/") !== false) ? true : false;});
+				foreach($this->media as $item):
+					new \Views\ListItem($type='mediaItem', $id=$item->id, $label=$item->title, null, THUMBS.$item->imgUrl);
+				endforeach;
+			break;
+		endswitch;
+				
 		?>
 		<!-- end media items -->
 				

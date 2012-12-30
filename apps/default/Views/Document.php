@@ -28,7 +28,7 @@ class Document {
 					foreach($this->doc->galleries as $gallery):
 					?>
 					<li>
-					<a href="#tabs-<?=$gallery->label?>"><?=$gallery->label?></a>
+					<a href="#tabs-<?=$gallery->label?>" data-kind="<?=$gallery->kind?>"><?=$gallery->label?></a>
 					</li>
 					<?php
 					endforeach;

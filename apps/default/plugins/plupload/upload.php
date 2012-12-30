@@ -1,6 +1,7 @@
 <?php
 
 include('../../../../config/settings.php');
+include(APPS_ROOT.'default/settings.php');
 include(APPS_ROOT.'default/Controllers/Media.php');
 
 /**
@@ -169,14 +170,17 @@ $imgsize = getimagesize($targetFile);
 	    switch(strtolower(substr($targetFile, -3))){
 	        case "jpg":
 	            header("Content-Type: image/jpeg");
+				$mediaType = "image/jpeg";
 	            $bool2 = imagejpeg($picture,$targetDirThumbs.$fileName,90);
 	        break;
 	        case "png":
 	            header("Content-Type: image/png");
+				$mediaType = "image/png";
 	            imagepng($picture,$targetDirThumbs.$fileName);
 	        break;
 	        case "gif":
 	            header("Content-Type: image/gif");
+				$mediaType = "image/gif";
 	            imagegif($picture,$targetDirThumbs.$fileName);
 	        break;
 	    }
@@ -197,7 +201,7 @@ end uploadify */
 ------------------------------------------------------------*/
 
 $mediaController = new \Controllers\Media();
-$mediaController->create($fileName);
+$mediaController->create($fileName, $mediaType);
 
 /*------------------------------------------------------------
 end rearend */

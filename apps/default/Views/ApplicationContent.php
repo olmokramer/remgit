@@ -52,7 +52,6 @@ class ApplicationContent {
 								<div class="button button-create" title="Add Item(s)">
 								</div>
 							</div>
-							
 						</div>
 					</div>
 					<!-- end main 2 -->

@@ -57,7 +57,7 @@ class Document {
 	//public
 	
 	public function create($menuItemsId) {
-		$templateId = $menuItemsId;
+		$templateId = $this->getTemplatesIdByMenuItemsId($menuItemsId);
 		$templateDAO = new \DAOS\Template;
 		$docId = $this->insertDoc($menuItemsId);
 		$templateFields = $templateDAO->getTemplateFields($templateId);
@@ -155,11 +155,21 @@ class Document {
 	
 	private function insertGalleryInstance($templateField, $docId) {
 		$pdo = \Config\DB::getInstance();
-		$sth = $pdo->prepare("INSERT INTO galleries(label, documents_id) VALUES(:label, :documents_id)");
+		$sth = $pdo->prepare("INSERT INTO galleries(label, kind, documents_id) VALUES(:label, :kind, :documents_id)");
 		$sth->bindParam(":label", $templateField->label);
+		$sth->bindParam(":kind", $templateField->kind);
 		$sth->bindParam(":documents_id", $docId);
 		$sth->execute();
 		return true;
+	}
+	
+	private function getTemplatesIdByMenuItemsId($menuItemsId) {
+		$pdo = \Config\DB::getInstance();
+		$sth = $pdo->prepare("SELECT id FROM templates WHERE menuItems_id = :menuItems_id LIMIT 1");
+		$sth->bindParam(":menuItems_id", $menuItemsId);
+		$sth->execute();
+		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		return $result[0]->id;
 	}
 	
 	private function parseDocumentElements($docResult) {
