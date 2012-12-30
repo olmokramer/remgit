@@ -36,6 +36,10 @@ var MainMenu = {
 		$('#main-2').find('.section-container').html(''); 
 		$('#main-3').find('.section-container').html('');
 		
+		//show the settings button in the footer
+		$('.footer').find('.button-docsettings').show();
+		$('.footer').find('.button-create').find('.dropdown').remove();
+		
 		Main.resizeWindow(); //resize window
 	}
 }

@@ -4,19 +4,21 @@ namespace Controllers;
 
 //include backend files
 include(DAOS_ROOT.'Media.php');
+include(MODELS_ROOT.'MediaItem.php');
 
 //include views
 include(VIEWS_ROOT.'MediaBrowser.php');
 include(VIEWS_ROOT.'MediaBrowser_Media.php');
 include(VIEWS_ROOT.'MediaList.php');
 include(VIEWS_ROOT.'MediaItem.php');
-include(VIEWS_ROOT.'ListItem.php');
+require_once(VIEWS_ROOT.'ListItem.php');
 include(VIEWS_ROOT.'UploadScreen.php');
+include(VIEWS_ROOT.'AddVideoStream.php');
 
 class Media {
-	public function showBrowser($activeMedia, $options="limit=0,50") {
+	public function showBrowser($activeMedia, $mediaKind, $options="limit=0,50") {
 		$mediaDAO = new \DAOS\Media;
-		$media = $mediaDAO->findAllMedia($options);
+		$media = $mediaDAO->findMediaByKind($mediaKind, $options);
 		new \Views\MediaBrowser($media, $activeMedia, $options);
 	}
 
@@ -60,13 +62,35 @@ class Media {
 		$mediaItem = $mediaDAO->delete($id);
 	}
 	
-	public function create($fileName) {
+	public function create($fileName, $mediaKind) {
 		$mediaDAO = new \DAOS\Media;
-		$mediaDAO->create($fileName);
+		$mediaDAO->create($fileName, $mediaKind);
 	}
 	
 	public function showUploadScreen() {
 		new \Views\UploadScreen();
+	}
+	
+	public function showAddVideoStream() {
+		new \Views\AddVideoStream();
+	}
+	
+	public function addVideoStream($vimeoUserId) {
+		$mediaDAO = new \DAOS\Media;
+		$mediaDAO->addVideoStream($vimeoUserId);
+	}
+	
+	public function refreshVideoStreams() {
+		$mediaDAO = new \DAOS\Media;
+		$videoStreams = $mediaDAO->findVideoStreams();
+		foreach($videoStreams as $videoStream) {
+			$this->addNewVimeoItems($videoStream->label);
+		}
+	}
+	
+	public function addNewVimeoItems($userId) {
+		$mediaDAO = new \DAOS\Media;
+		$mediaDAO->addNewVimeoItems($userId);
 	}
 }
 ?>

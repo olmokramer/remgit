@@ -7,7 +7,8 @@ class ListItem {
 		$this->type = $type;
 		$this->imgurl = $imgurl;
 		$this->id = $id;
-		$this->label = $label;
+		$this->label = substr($label, 0, (strlen($label) > 40) ? 40 : strlen($label));
+		$this->label .= (strlen($label) > 40) ? '...' : '';
 		$this->secondary = $secondary;
 		$this->mediakind = $mediakind;
 		

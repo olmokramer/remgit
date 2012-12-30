@@ -107,7 +107,7 @@ var Media = {
 	Diplays the Media Browser
 	*/
 	
-	showBrowser: function(activeIds, options) {
+	showBrowser: function(activeIds, mediaKind, options) {
 		Main.activeGalleryIds = activeIds;
 		
 		$.ajax({
@@ -116,6 +116,7 @@ var Media = {
 			data: {
 				"action": "showMediaBrowser",
 				"activeMedia": activeIds,
+				"mediaKind": mediaKind,
 				"options": options
 			},
 			cache: false,
@@ -195,6 +196,33 @@ var Media = {
 	},
 	
 	/*
+	function addVideoStream
+	Adds a vimeo user id to db and refreshes vimeo media
+	*/
+	
+	addVideoStream: function() {
+		$.ajax({
+			type: "POST",
+			url: "AjaxListener.php",
+			data: {
+				action: 'addVideoStream',
+				vimeoUserId: $('#ajaxLoader').find('#streamId').val()
+			},
+			cache: false,
+			beforeSend: function() {
+				$("#loading-indicator").show(); //show the loading indicator
+			},
+			success: function(data){
+				$("#loading-indicator").hide(); //hide the loading indicator
+				Main.notify('Add vimeo stream');
+				Media.refreshVideoStreams();
+				$('#addVideoStream').remove();
+				Main.ListItemEvent($('.section-container li:last').data());
+			}
+		})
+	},
+	
+	/*
 	function save
 	Updates media item info
 	*/
@@ -266,9 +294,57 @@ var Media = {
 			success: function(data){
 				$("#loading-indicator").hide(); //hide the loading indicator
 				$("#ajaxLoader").html(data);
-					$("#uploadScreen").draggable({
-						handle: ".header"
-					});
+				$("#uploadScreen").draggable({
+					handle: ".header"
+				});
+			}
+		})
+	},
+	
+	/*
+	function showAddVideoStream
+	Displays a popup in which you can fill in video stream information
+	*/
+	
+	showAddVideoStream: function() {
+		$.ajax({
+			type: "POST",
+			url: "AjaxListener.php",
+			data: {
+				action: 'showAddVideoStream',
+			},
+			cache: false,
+			beforeSend: function() {
+				$("#loading-indicator").show(); //show the loading indicator
+			},
+			success: function(data){
+				$("#loading-indicator").hide(); //hide the loading indicator
+				$("#ajaxLoader").html(data);
+				$("#addVideoStream").draggable({
+					handle: ".header"
+				});
+			}
+		})
+	},
+	
+	/*
+	function refreshVideoStreams
+	Refreshes all known media streams in the db
+	*/
+	
+	refreshVideoStreams: function() {
+		$.ajax({
+			type: "POST",
+			url: "AjaxListener.php",
+			data: {
+				action: 'refreshVideoStreams',
+			},
+			cache: false,
+			beforeSend: function() {
+				$("#loading-indicator").show(); //show the loading indicator
+			},
+			success: function(data){
+				$("#loading-indicator").hide(); //hide the loading indicator
 			}
 		})
 	},
@@ -297,6 +373,33 @@ var Media = {
 		//empty the other section-containers
 		$('#main-2').find('.section-container').html(''); 
 		$('#main-3').find('.section-container').html('');
+		$('<div/>')
+			.addClass('dropdown')
+			.append($('<ul/>')
+				.append($('<li/>')
+					.addClass('menu-item-addimages')
+					.html('Add Image(s)')
+					.click(function() {
+						Media.showUploadScreen();
+					})
+				)
+				.append($('<li/>')
+					.addClass('menu-item-addvideostream')
+					.html('Add Video Stream')
+					.click(function() {
+						Media.showAddVideoStream();
+					})
+				)
+				.append($('<li/>')
+					.addClass('menu-item-refreshvideostreams')
+					.html('Refresh Video Streams')
+					.click(function() {
+						Media.refreshVideoStreams();
+					})
+				)
+			)
+			.appendTo('.button-create');
+		$('.footer').find('.button-docsettings').hide();
 		
 		Main.resizeWindow(); //resize window
 	},
@@ -310,7 +413,6 @@ var Media = {
 	initList: function(data) {
 		$('#main-2').find('.section-container').html(data);		
 		Main.initList('#main-2');
-		$('.footer').find('.button-docsettings').hide();
 		$('.showmore').click(function(){
 			$(this).remove();
 			options = "limit="+$(this).data('limitstart')+","+$(this).data('limitend');

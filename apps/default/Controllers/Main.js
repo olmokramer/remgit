@@ -126,6 +126,9 @@ var Main = {
 			case 'Delete Media':
 			var gritter_text = 'Media was successfully deleted';
 			break;
+			case 'Add vimeo stream':
+			var gritter_text = 'Vimeo Stream succesfully added';
+			break;
 		}
 		
 		$.gritter.add({
@@ -144,7 +147,7 @@ var Main = {
 				Document.create();
 			break;
 			case 'mediaItem':
-				Media.showUploadScreen();
+				//Media.showUploadScreen();
 				break;
 			}
 		})

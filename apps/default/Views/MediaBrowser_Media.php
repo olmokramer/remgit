@@ -23,18 +23,19 @@ class MediaBrowser_Media {
 		/* end options */
 		
 		foreach($this->media as $item):
+		$imgUrl = ($item->kind != "vimeo/embedded") ? THUMBS.$item->imgUrl : $item->imgUrl;
 		if(is_array($this->activeMedia)):
 		$className = (!in_array($item->id, $this->activeMedia)) ? "mediaItem" : "mediaItemInactive";
 		?>
 
 		<div class="<?=$className?>" data-id="<?=$item->id?>">
-			<img src="<?=THUMBS.$item->imgUrl?>" data-cleanurl="<?=$item->imgUrl?>">
+			<img src="<?=$imgUrl?>" data-cleanurl="<?=$item->imgUrl?>">
 		</div>
 		
 		<?php else: ?>
 		
 		<div class="mediaItem" data-id="<?=$item->id?>">
-			<img src="<?=THUMBS.$item->imgUrl?>" data-id="<?=$item->id?>" data-cleanurl="<?=$item->imgUrl?>">
+			<img src="<?=$imgUrl?>" data-id="<?=$item->id?>" data-cleanurl="<?=$item->imgUrl?>">
 		</div>
 		
 		<?php endif;

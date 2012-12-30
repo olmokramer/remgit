@@ -15,7 +15,7 @@ class MediaItem {
 			switch($this->m->kind):
 			default:
 				break;
-			case "image/jpeg":
+			default:
 				?>
 				<img src="<?php echo UPLOADS.$this->m->imgUrl; ?>" class="mediaItemFull">
                 <?php

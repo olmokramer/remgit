@@ -52,7 +52,7 @@ class UploadScreen {
 				})
 	
 			});
-	
+			
 	        var uploader = $('#uploader').pluploadQueue();
 			
 			// added redirect function after uploaded

@@ -9,7 +9,7 @@ include(MODELS_ROOT.'MenuItem.php');
 
 include(VIEWS_ROOT.'MainMenu.php');
 include(VIEWS_ROOT.'MediaMenu.php');
-include(VIEWS_ROOT.'ListItem.php');
+require_once(VIEWS_ROOT.'ListItem.php');
 
 class MainMenu {
 	public function show() {

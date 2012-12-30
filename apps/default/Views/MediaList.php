@@ -38,7 +38,7 @@ class MediaList {
 				endforeach;
 			break;
 			case "photos":
-				$this->media = array_filter($this->media, function($item) { return ($item->kind == "image/jpeg") ? true : false;});
+				$this->media = array_filter($this->media, function($item) { return (strstr($item->kind, "image/") !== false) ? true : false;});
 				foreach($this->media as $item):
 					new \Views\ListItem($type='mediaItem', $id=$item->id, $label=$item->title, null, THUMBS.$item->imgUrl);
 				endforeach;

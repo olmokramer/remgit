@@ -4,12 +4,13 @@ namespace Views;
 
 class GalleryItem {
 	public function __construct($item) {
+		$imgUrl = ($item->kind != "vimeo/embedded") ? THUMBS.$item->imgUrl : $item->imgUrl;
 		?>
 		
 		<!-- gallery item -->
 		<div class="item" data-id="<?php echo $item->id; ?>">
 			<div class="remove">-</div>
-			<img src="<?php echo THUMBS.$item->imgUrl; ?>">
+			<img src="<?=$imgUrl?>">
 		</div>
 		<!-- end gallery item -->
 		

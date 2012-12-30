@@ -1,6 +1,7 @@
 <?php
 
 include('../../../../config/settings.php');
+include(APPS_ROOT.'default/settings.php');
 include(APPS_ROOT.'default/Controllers/Media.php');
 
 /**

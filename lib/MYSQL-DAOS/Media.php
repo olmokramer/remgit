@@ -39,11 +39,61 @@ class Media {
 		return $media;	
 	}
 	
-	public function findNewVimeoItems($galleryId) {
-		$result = $this->selectVimeoItems($galleryId);
-		$resultAPI = $this->selectVimeoItemsAPI($galleryId);
-		$newItems = array_diff($resultAPI, $result);
-		return $newItems;
+	public function findMediaByKind($mediaKind, $options) {
+		switch($mediaKind) {
+		case 'photos':
+			$mediaKind = 'image/';
+			break;
+		case 'videos':
+			$mediaKind = 'vimeo/embedded';
+			break;
+		}
+		$result = $this->selectMediaByKind($mediaKind, $options);
+		$media = $this->parseResultToMedia($result);
+		return $media;
+	}
+	
+	public function addVideoStream($vimeoUserId) {
+		$pdo = \Config\DB::getInstance();
+		$sth = $pdo->prepare("INSERT INTO galleries(label, kind) VALUES(:label, 'stream')");
+		$sth->bindParam(':label', $vimeoUserId);
+		$sth->execute();
+		return true;
+	}
+	
+	public function findVideoStreams() {
+		$result = $this->selectVideoStreams();
+		return $result;
+	}
+	
+	public function addNewVimeoItems($userId) {
+		$newVimeoItems = $this->findNewVimeoItems($userId);
+		if($newVimeoItems != false) {
+			foreach($newVimeoItems as $newMediaItem) {
+				$this->insertMediaItem($newMediaItem);
+			}
+		}
+		return true;
+	}
+	
+	public function findNewVimeoItems($userId) {
+		$result = $this->selectVimeoItems();
+		$resultIds = array();
+		foreach ($result as $mediaItem) {
+			$resultIds[] = $mediaItem['uuid'];
+		}
+		$resultAPI = $this->selectVimeoItemsAPI($userId);
+		$newVimeoItems = array();
+		foreach($resultAPI as $vimeoItem) {
+			if(!in_array($vimeoItem['id'], $resultIds)) {
+				$newVimeoItems[] = $vimeoItem;
+			}
+		}
+		if(count($newVimeoItems) != 0) {
+			$newMediaItems = $this->parseVimeoResultToMedia($newVimeoItems);
+			return $newMediaItems;
+		}
+		return false;
 	}
 	
 	public function create($fileName, $kind) {
@@ -157,7 +207,7 @@ class Media {
 		
 	private function selectGalleriesByDocId($docId) {
 		$pdo = \Config\DB::getInstance();
-		$sth = $pdo->prepare("SELECT id, label FROM galleries WHERE documents_id = :doc_id");
+		$sth = $pdo->prepare("SELECT id, label, kind FROM galleries WHERE documents_id = :doc_id");
 		$sth->bindParam(":doc_id", $docId);
 		$sth->execute();
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
@@ -173,22 +223,55 @@ class Media {
 		return $result;		
 	}
 	
-	private function selectVimeoItems($galleryId) {
+	private function selectMediaByKind($mediaKind, $options) {
+		$options = $this->parseOptions($options);
+		$mediaKind .= '%';
 		$pdo = \Config\DB::getInstance();
-		$sth = $pdo->prepare("SELECT media.*, galleries_media.position FROM media LEFT JOIN galleries_media ON media.id = galleries_media_id WHERE galleries_media.galleries_id = :galleries_id AND media.kind = vimeo/embedded ORDER BY galleries_media.position");
-		$sth->bindParam(":galleries_id", $galleryId);
+		$sth = $pdo->prepare("SELECT * FROM media WHERE media.kind LIKE :mediaKind ORDER BY created".$options->limit);
+		$sth->bindParam(":mediaKind", $mediaKind);
 		$sth->execute();
-		$result = $sth->fetchAll(\PDO::FETCJ_OBJ);
+		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
 		return $result;
 	}
 	
-	private function selectVimeoItemsAPI($galleryId) {
+	private function selectVideoStreams() {
 		$pdo = \Config\DB::getInstance();
-		$content = file_get_contents("http://vimeo.com/api/v2/user/".$galleryId."/videos.php");
+		$sth = $pdo->prepare("SELECT label FROM galleries WHERE kind LIKE '%stream%'");
+		$sth->execute();
+		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		return $result;
+	}
+	
+	private function selectVimeoItems() {
+		$pdo = \Config\DB::getInstance();
+		$sth = $pdo->prepare("SELECT * FROM media WHERE media.kind = 'vimeo/embedded' ORDER BY created");
+		$sth->bindParam(":galleries_id", $galleryId);
+		$sth->execute();
+		$result = $sth->fetchAll();
+		return $result;
+	}
+	
+	private function selectVimeoItemsAPI($userId) {
+		$pdo = \Config\DB::getInstance();
+		$content = file_get_contents("http://vimeo.com/api/v2/user/".$userId."/videos.php");
 		if ($content) {
-			$videos = unserialize($content);
+			$vimeoItems = unserialize($content);
 		}
-		return $videos;
+		return $vimeoItems;
+	}
+	
+	private function insertMediaItem($mediaItem) {
+		var_dump($mediaItem);
+		$pdo = \Config\DB::getInstance();
+		$sth = $pdo->prepare("INSERT INTO media(kind, imgUrl, embedCode, title, caption, uuid, created) VALUES(:kind, :imgUrl, :embedCode, :title, :caption, :uuid, :created)");
+		$sth->bindParam(':kind', $mediaItem->kind);
+		$sth->bindParam(':imgUrl', $mediaItem->imgUrl);
+		$sth->bindParam(':embedCode', $mediaItem->embedCode);
+		$sth->bindParam(':title', $mediaItem->title);
+		$sth->bindParam(':caption', $mediaItem->caption);
+		$sth->bindParam(':uuid', $mediaItem->uuid);
+		$sth->bindParam(':created', $mediaItem->created);
+		$sth->execute();
 	}
 	
 	private function parseResultToGalleries($result) {
@@ -204,6 +287,7 @@ class Media {
 		$gallery->id = $galleryResult->id;
 		$gallery->label = $galleryResult->label;
 		$gallery->media = $this->findMediaByGalleryId($galleryResult->id);
+		$gallery->kind = $galleryResult->kind;
 		return $gallery;
 	}
 	
@@ -213,6 +297,24 @@ class Media {
 			$media[] = $mediaResult;
 		}
 		return $media;
+	}
+	
+	private function parseVimeoResultToMedia($vimeoResult) {
+		$mediaItems = array();
+		foreach($vimeoResult as $vimeoItem) {
+			$mediaItem = new \Models\MediaItem;
+			$mediaItem->kind = "vimeo/embedded";
+			$mediaItem->imgUrl = $vimeoItem['thumbnail_medium'];
+			$mediaItem->embedCode = '<iframe src="http://player.vimeo.com/video/'.$vimeoItem['id'].'?title=0&amp;byline=0&amp;portrait=0" width="700" height="' . (700/$vimeoItem['width'])*$vimeoItem['height'] .'" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
+			$mediaItem->title = $vimeoItem['title'];
+			$mediaItem->caption = $vimeoItem['description'];
+			$mediaItem->uuid = $vimeoItem['id'];
+			$mediaItem->created = time();
+			$mediaItem->galleryItemId = NULL;
+			$mediaItem->galleryPosition = NULL;
+			$mediaItems[] = $mediaItem;
+		}
+		return $mediaItems;
 	}
 
 	private function parseOptions($optionsString) {

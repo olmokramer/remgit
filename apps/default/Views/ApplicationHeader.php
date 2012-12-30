@@ -6,7 +6,7 @@ class ApplicationHeader {
 	public function __construct() {
 		?>
 
-		<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+		<!DOCTYPE html>
 		<html>
 		<head>
 		
