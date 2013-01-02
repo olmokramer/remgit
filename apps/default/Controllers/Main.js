@@ -216,7 +216,6 @@ var Main = {
 		else { }
 	    })
 	}
-
 }
 
 $(document).ready(function() {

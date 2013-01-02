@@ -54,11 +54,22 @@ class Media {
 	}
 	
 	public function addVideoStream($vimeoUserId) {
-		$pdo = \Config\DB::getInstance();
-		$sth = $pdo->prepare("INSERT INTO galleries(label, kind) VALUES(:label, 'stream')");
-		$sth->bindParam(':label', $vimeoUserId);
-		$sth->execute();
-		return true;
+		if(!$this->streamExists($vimeoUserId)) {
+			$this->insertVideoStream($vimeoUserId);
+			$this->refreshVideoStreams();
+			return true;
+		}
+		return false;
+	}
+	
+	public function refreshVideoStreams() {
+		$videoStreams = $this->findVideoStreams();
+		foreach($videoStreams as $videoStream) {
+			$newVideoItems = $this->findNewVideoItems($videoStream->stream_id, $videoStream->kind);
+			if($newVideoItems != false) {
+				$this->addVideoItems($newVideoItems);
+			}
+		}
 	}
 	
 	public function findVideoStreams() {
@@ -66,17 +77,25 @@ class Media {
 		return $result;
 	}
 	
-	public function addNewVimeoItems($userId) {
-		$newVimeoItems = $this->findNewVimeoItems($userId);
-		if($newVimeoItems != false) {
-			foreach($newVimeoItems as $newMediaItem) {
-				$this->insertMediaItem($newMediaItem);
-			}
+	private function addVideoItems($videoItems) {
+		foreach($videoItems as $mediaItem) {
+			$this->insertMediaItem($mediaItem);
 		}
 		return true;
 	}
 	
-	public function findNewVimeoItems($userId) {
+	private function findNewVideoItems($streamId, $videoKind) {
+		switch($videoKind) {
+		default:
+			break;
+		case 'embedded/vimeo':
+			$result = $this->findNewVimeoItems($streamId);
+			break;
+		}
+		return $result;
+	}
+	
+	private function findNewVimeoItems($userId) {
 		$result = $this->selectVimeoItems();
 		$resultIds = array();
 		foreach ($result as $mediaItem) {
@@ -236,7 +255,7 @@ class Media {
 	
 	private function selectVideoStreams() {
 		$pdo = \Config\DB::getInstance();
-		$sth = $pdo->prepare("SELECT label FROM galleries WHERE kind LIKE '%stream%'");
+		$sth = $pdo->prepare("SELECT * FROM video_streams");
 		$sth->execute();
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
 		return $result;
@@ -245,7 +264,6 @@ class Media {
 	private function selectVimeoItems() {
 		$pdo = \Config\DB::getInstance();
 		$sth = $pdo->prepare("SELECT * FROM media WHERE media.kind = 'vimeo/embedded' ORDER BY created");
-		$sth->bindParam(":galleries_id", $galleryId);
 		$sth->execute();
 		$result = $sth->fetchAll();
 		return $result;
@@ -258,6 +276,13 @@ class Media {
 			$vimeoItems = unserialize($content);
 		}
 		return $vimeoItems;
+	}
+	
+	private function insertVideoStream($streamId) {
+		$pdo = \Config\DB::getInstance();
+		$sth = $pdo->prepare("INSERT INTO video_streams(stream_id, kind) VALUES(:stream_id, 'embedded/vimeo')");
+		$sth->bindParam(':stream_id', $streamId);
+		$sth->execute();
 	}
 	
 	private function insertMediaItem($mediaItem) {
@@ -373,6 +398,13 @@ class Media {
 			$output = "1=1";
 		}
 		return " WHERE ".$output;
+	}
+	
+	private function streamExists($streamId) {
+		$pdo = \Config\DB::getInstance();
+		$sth = $pdo->query('(SELECT COUNT(*) FROM video_streams WHERE stream_id = ' . $streamId . ' LIMIT 1)');
+		$result = ($sth->fetchColumn() > 0) ? true : false;
+		return $result;
 	}
 }
 ?>

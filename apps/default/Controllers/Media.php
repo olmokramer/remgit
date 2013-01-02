@@ -82,15 +82,7 @@ class Media {
 	
 	public function refreshVideoStreams() {
 		$mediaDAO = new \DAOS\Media;
-		$videoStreams = $mediaDAO->findVideoStreams();
-		foreach($videoStreams as $videoStream) {
-			$this->addNewVimeoItems($videoStream->label);
-		}
-	}
-	
-	public function addNewVimeoItems($userId) {
-		$mediaDAO = new \DAOS\Media;
-		$mediaDAO->addNewVimeoItems($userId);
+		$mediaDAO->refreshVideoStreams();
 	}
 }
 ?>

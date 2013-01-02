@@ -1,5 +1,6 @@
 <?php
 //error settings
+ini_set('include_path', '/domains/luukkramer.nl/DEFAULT/');
 ini_set("display_errors", "On");
 error_reporting(E_ALL);
 

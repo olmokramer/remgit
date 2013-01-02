@@ -344,7 +344,7 @@ var Media = {
 				$("#loading-indicator").show(); //show the loading indicator
 			},
 			success: function(data){
-				$("#loading-indicator").hide(); //hide the loading indicator
+				$("#loading-indicator").hide(); //hide the loading indicator 
 			}
 		})
 	},
