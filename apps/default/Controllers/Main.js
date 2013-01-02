@@ -180,22 +180,24 @@ var Main = {
 	
 	initNav: function() {
 		$('nav').find('li').click(function() {
-			$(this).parent().find('.current').removeClass('current');
-			$(this).addClass('current');
-			switch($(this).data('label')) {
-			case 'documents':
-				MainMenu.show();
-				Main.currentTypeOfMain3Data = 'document';
-				Main.currentPageId = null;
-				Main.currentMediaItemId = null;
-				break;
-			case 'media':
-				Media.showMenu();
-				Main.currentTypeOfMain3Data = 'mediaItem';
-				Main.currentPageId = null;
-				Main.currentMediaItemId = null;
-				Media.currentMediaKind = "all";
-				break;
+			if(!$(this).hasClass('current')) {
+				$(this).parent().find('.current').removeClass('current');
+				$(this).addClass('current');
+				switch($(this).data('label')) {
+				case 'documents':
+					MainMenu.show();
+					Main.currentTypeOfMain3Data = 'document';
+					Main.currentPageId = null;
+					Main.currentMediaItemId = null;
+					break;
+				case 'media':
+					Media.showMenu();
+					Main.currentTypeOfMain3Data = 'mediaItem';
+					Main.currentPageId = null;
+					Main.currentMediaItemId = null;
+					Media.currentMediaKind = "all";
+					break;
+				}
 			}
 		});
 		$('.logout').click(function() {Logger.logout()});
