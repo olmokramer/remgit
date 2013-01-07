@@ -11,7 +11,7 @@ class ApplicationContent {
 			<!-- header -->
 			<header>
 			
-				 <h1><img src="img/loader.gif" id="loading-indicator"> rearend <b>manager </b> 2 | <a class="logout">logout</a></h1>
+				 <h1><img src="img/loader.gif" id="loading-indicator"> rearend <b>manager </b> 3 | <a class="logout">logout</a></h1>
 				
 				<!-- main navigation -->
 				<nav>
