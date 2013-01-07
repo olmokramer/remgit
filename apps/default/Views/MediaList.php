@@ -28,7 +28,7 @@ class MediaList {
 		switch($kind):
 			case "all":
 				foreach($this->media as $item):
-					new \Views\ListItem($type='mediaItem', $id=$item->id, $label=$item->title, null, ($item->kind == "image") ? THUMBS.$item->imgUrl : $item->imgUrl);
+					new \Views\ListItem($type='mediaItem', $id=$item->id, $label=$item->title, null, ($item->kind != "vimeo/embedded" && $item->kind != "youtube/embedded") ? THUMBS.$item->imgUrl : $item->imgUrl);
 				endforeach;
 			break;
 			case "videos":

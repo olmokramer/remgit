@@ -4,7 +4,7 @@ namespace Views;
 
 class GalleryItem {
 	public function __construct($item) {
-		$imgUrl = ($item->kind != "vimeo/embedded") ? THUMBS.$item->imgUrl : $item->imgUrl;
+		$imgUrl = ($item->kind != "vimeo/embedded" && $item->kind != "youtube/embedded") ? THUMBS.$item->imgUrl : $item->imgUrl;
 		?>
 		
 		<!-- gallery item -->

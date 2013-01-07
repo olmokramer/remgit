@@ -45,7 +45,10 @@ class Media {
 			$mediaKind = 'image/';
 			break;
 		case 'videos':
-			$mediaKind = 'vimeo/embedded';
+			$mediaKind = 'embedded';
+			break;
+		case 'mixed':
+			$mediaKind = "";
 			break;
 		}
 		$result = $this->selectMediaByKind($mediaKind, $options);
@@ -248,9 +251,9 @@ class Media {
 	
 	private function selectMediaByKind($mediaKind, $options) {
 		$options = $this->parseOptions($options);
-		$mediaKind .= '%';
+		$mediaKind = '%' . $mediaKind . '%';
 		$pdo = \Config\DB::getInstance();
-		$sth = $pdo->prepare("SELECT * FROM media WHERE media.kind LIKE :mediaKind ORDER BY created".$options->limit);
+		$sth = $pdo->prepare("SELECT * FROM media WHERE media.kind LIKE :mediaKind ".$options->order.$options->limit);
 		$sth->bindParam(":mediaKind", $mediaKind);
 		$sth->execute();
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
