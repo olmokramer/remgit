@@ -885,6 +885,7 @@ float: left;
 
 #loginWindow button {
 float: left;
+background: #ccc;
 }
 
 #uploadScreen button:hover,
@@ -892,7 +893,7 @@ float: left;
 #addVideoStream button:hover,
 .plupload_button,
 #loginWindow button:hover {
-background: #555;
+background: #999;
 }
 
 #addVideoStream input {
@@ -930,17 +931,21 @@ color: #eee;
     margin-left: -200px;
     margin-top: -90px;
     height:160px;
-	color:#fff;
-	background: #a7cfdf; /* Old browsers */
-	background: -moz-linear-gradient(top, #a7cfdf 0%, #23538a 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#a7cfdf), color-stop(100%,#23538a)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, #a7cfdf 0%,#23538a 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, #a7cfdf 0%,#23538a 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top, #a7cfdf 0%,#23538a 100%); /* IE10+ */
-	background: linear-gradient(to bottom, #a7cfdf 0%,#23538a 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a7cfdf', endColorstr='#23538a',GradientType=0 ); /* IE6-9 */
-	border-radius: 2px;
-    box-shadow: 0 0 6px #222;
+	color:#000;
+background: #f5f5f5; /* Old browsers */
+background: -moz-linear-gradient(top, #f5f5f5 0%, #ebebeb 50%, #eeeeee 100%, #eeeeee 100%, #f5f5f5 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f5f5f5), color-stop(50%,#ebebeb), color-stop(100%,#eeeeee), color-stop(100%,#eeeeee), color-stop(100%,#f5f5f5)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, #f5f5f5 0%,#ebebeb 50%,#eeeeee 100%,#eeeeee 100%,#f5f5f5 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, #f5f5f5 0%,#ebebeb 50%,#eeeeee 100%,#eeeeee 100%,#f5f5f5 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, #f5f5f5 0%,#ebebeb 50%,#eeeeee 100%,#eeeeee 100%,#f5f5f5 100%); /* IE10+ */
+background: linear-gradient(to bottom, #f5f5f5 0%,#ebebeb 50%,#eeeeee 100%,#eeeeee 100%,#f5f5f5 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f5f5f5', endColorstr='#f5f5f5',GradientType=0 ); /* IE6-9 */
+color: #222;
+box-shadow: 0 0 5px #222;
+    }
+    
+    #loginWindow * {
+	    color: #000!important;
     }
     
     #loginWindow #title {
@@ -951,7 +956,7 @@ color: #eee;
         
     
     #loginWindow input, #loginWindow select {
-	border: 1px solid #23538a;
+	border: 1px solid #999;
     border-radius: 3px;
     width:95%;
     padding: 5px;
