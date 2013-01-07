@@ -149,10 +149,10 @@ class AjaxListener {
 		$this->controller = new \Controllers\Media;
 		$this->controller->refreshVideoStreams();
 	}
-	public function saveYoutubeVideo() {
+	public function saveSingleVideo() {
 		include(CONTROLLERS_ROOT."Media.php");
 		$this->controller = new \Controllers\Media;
-		$this->controller->saveYoutubeVideo($this->vars['url']);
+		$this->controller->saveSingleVideo($this->vars['url']);
 	}
 	public function login() {
 		include(CONTROLLERS_ROOT.'Logger.php');

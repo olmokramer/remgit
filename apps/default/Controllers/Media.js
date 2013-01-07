@@ -399,9 +399,9 @@ var Media = {
 				)
 				.append($('<li/>')
 					.addClass('menu-item-refreshvideostreams')
-					.html('Add Youtube video')
+					.html('Add Single video')
 					.click(function() {
-						Media.addYoutubeVideo();
+						Media.addSingleVideo();
 					})
 				)
 			)
@@ -488,15 +488,15 @@ var Media = {
 	},
 	
 	/*
-	add Youtube video
+	add Single video
 	*/
 	
-	addYoutubeVideo: function() {
+	addSingleVideo: function() {
 		$(document).load('Views/ModalWindow.php', function(data) {
 			$('body').append(data);
 			
 			$(".modalWindow .button-confirm").click(function() {
-				Media.saveYoutubeVideo();
+				Media.saveSingleVideo();
 			})
 			
 			$(".modalWindow .button-cancel").click(function() {
@@ -508,17 +508,17 @@ var Media = {
 	},
 	
 	/*
-	save Youtube video
+	save Single video
 	*/
 	
-	saveYoutubeVideo: function() {
+	saveSingleVideo: function() {
 		url = $(".modalWindow input#url").val();
 
 		$.ajax({
 			type: "POST",
 			url: "AjaxListener.php",
 			data: {
-				action: 'saveYoutubeVideo',
+				action: 'saveSingleVideo',
 				url: url,
 			},
 			cache: false,
@@ -526,9 +526,11 @@ var Media = {
 				$("#loading-indicator").show(); //show the loading indicator
 			},
 			success: function(data){
+				//alert(data);
 				$("#loading-indicator").hide(); //hide the loading indicator
 				$(".modalOverlay").hide().remove();
-				Main.notify('Youtube video saved');
+				Main.notify('Video added to library');
+				Media.showList('limit=0,50', Media.currentMediaKind);
 			}
 		})
 	}
