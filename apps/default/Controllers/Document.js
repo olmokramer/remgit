@@ -51,7 +51,7 @@ var Document = {
 			},
 			success: function(data){
 				$("#loading-indicator").hide(); //hide the loading indicator
-				Document.initList(data);				
+				Document.initList(data);			
 			}
 		})
 	},
@@ -242,10 +242,11 @@ var Document = {
 		$('.add-media').click(function() {
 			media = [];
 			Main.currentGallery = $(this).parent().data('id');
+			galleryKind = $('#main-3 #document-tabs li.ui-tabs-selected a').data('kind');
 			$(this).parent().find('.item').each(function() {
 				media.push($(this).data('id'));
 			})
-			Media.showBrowser(media, 'limit=0,50');
+			Media.showBrowser(media, galleryKind, 'limit=0,50');
 		})
 				
 		//init the gallery item elements
@@ -295,9 +296,6 @@ var Document = {
 		$('#main-2').find('li[data-id="'+Main.currentPageId+'"]').addClass('current'); 
 			
 		Main.initList('#main-2'); //init the list elements
-		
-		//show the settings button in the footer
-		$('.footer').find('.button-docsettings').show();
 		
 	},
 	

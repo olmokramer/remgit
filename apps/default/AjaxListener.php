@@ -81,7 +81,7 @@ class AjaxListener {
 		include(CONTROLLERS_ROOT."Media.php");
 		$this->controller = new \Controllers\Media;
 		$activeMedia = (isset($this->vars['activeMedia'])) ? $this->vars['activeMedia'] : array();
-		$this->controller->showBrowser($activeMedia, $this->vars['options']);
+		$this->controller->showBrowser($activeMedia, $this->vars['mediaKind'], $this->vars['options']);
 	}
 	public function appendToMediaBrowser() {
 		include(CONTROLLERS_ROOT."Media.php");
@@ -107,7 +107,7 @@ class AjaxListener {
 	public function showMediaList() {
 		include(CONTROLLERS_ROOT."Media.php");
 		$this->controller = new \Controllers\Media;
-		$this->controller->showList($this->vars['options'], 0);
+		$this->controller->showList($this->vars['options'], $this->vars['kind'], 0);
 	}
 	public function appendtoMediaList() {
 		include(CONTROLLERS_ROOT."Media.php");
@@ -133,6 +133,21 @@ class AjaxListener {
 		include(CONTROLLERS_ROOT."Media.php");
 		$this->controller = new \Controllers\Media;
 		$this->controller->showUploadScreen();
+	}
+	public function showAddVideoStream() {
+		include(CONTROLLERS_ROOT."Media.php");
+		$this->controller = new \Controllers\Media;
+		$this->controller->showAddVideoStream();
+	}
+	public function addVideoStream() {
+		include(CONTROLLERS_ROOT."Media.php");
+		$this->controller = new \Controllers\Media;
+		$this->controller->addVideoStream($this->vars['vimeoUserId']);
+	}
+	public function refreshVideoStreams() {
+		include(CONTROLLERS_ROOT."Media.php");
+		$this->controller = new \Controllers\Media;
+		$this->controller->refreshVideoStreams();
 	}
 	public function login() {
 		include(CONTROLLERS_ROOT.'Logger.php');

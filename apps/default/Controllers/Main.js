@@ -87,7 +87,8 @@ var Main = {
 			break;
 		case 'library':
 			$('#main-2').find('.section-container').html();
-			Media.showList("limit=0,50");
+			Media.currentMediaKind=data.mediakind;
+			Media.showList("limit=0,50",Media.currentMediaKind);
 			break;
 		case 'mediaItem':
 			Media.show(data.id);
@@ -125,6 +126,9 @@ var Main = {
 			case 'Delete Media':
 			var gritter_text = 'Media was successfully deleted';
 			break;
+			case 'Add vimeo stream':
+			var gritter_text = 'Vimeo Stream succesfully added';
+			break;
 		}
 		
 		$.gritter.add({
@@ -143,7 +147,7 @@ var Main = {
 				Document.create();
 			break;
 			case 'mediaItem':
-				Media.showUploadScreen();
+				//Media.showUploadScreen();
 				break;
 			}
 		})
@@ -176,21 +180,24 @@ var Main = {
 	
 	initNav: function() {
 		$('nav').find('li').click(function() {
-			$(this).parent().find('.current').removeClass('current');
-			$(this).addClass('current');
-			switch($(this).data('label')) {
-			case 'documents':
-				MainMenu.show();
-				Main.currentTypeOfMain3Data = 'document';
-				Main.currentPageId = null;
-				Main.currentMediaItemId = null;
-				break;
-			case 'media':
-				Media.showMenu();
-				Main.currentTypeOfMain3Data = 'mediaItem';
-				Main.currentPageId = null;
-				Main.currentMediaItemId = null;
-				break;
+			if(!$(this).hasClass('current')) {
+				$(this).parent().find('.current').removeClass('current');
+				$(this).addClass('current');
+				switch($(this).data('label')) {
+				case 'documents':
+					MainMenu.show();
+					Main.currentTypeOfMain3Data = 'document';
+					Main.currentPageId = null;
+					Main.currentMediaItemId = null;
+					break;
+				case 'media':
+					Media.showMenu();
+					Main.currentTypeOfMain3Data = 'mediaItem';
+					Main.currentPageId = null;
+					Main.currentMediaItemId = null;
+					Media.currentMediaKind = "all";
+					break;
+				}
 			}
 		});
 		$('.logout').click(function() {Logger.logout()});
@@ -211,7 +218,6 @@ var Main = {
 		else { }
 	    })
 	}
-
 }
 
 $(document).ready(function() {

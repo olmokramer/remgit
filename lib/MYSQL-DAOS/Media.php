@@ -39,11 +39,88 @@ class Media {
 		return $media;	
 	}
 	
-	public function create($fileName) {
+	public function findMediaByKind($mediaKind, $options) {
+		switch($mediaKind) {
+		case 'photos':
+			$mediaKind = 'image/';
+			break;
+		case 'videos':
+			$mediaKind = 'vimeo/embedded';
+			break;
+		}
+		$result = $this->selectMediaByKind($mediaKind, $options);
+		$media = $this->parseResultToMedia($result);
+		return $media;
+	}
+	
+	public function addVideoStream($vimeoUserId) {
+		if(!$this->streamExists($vimeoUserId)) {
+			$this->insertVideoStream($vimeoUserId);
+			$this->refreshVideoStreams();
+			return true;
+		}
+		return false;
+	}
+	
+	public function refreshVideoStreams() {
+		$videoStreams = $this->findVideoStreams();
+		foreach($videoStreams as $videoStream) {
+			$newVideoItems = $this->findNewVideoItems($videoStream->stream_id, $videoStream->kind);
+			if($newVideoItems != false) {
+				$this->addVideoItems($newVideoItems);
+			}
+		}
+	}
+	
+	public function findVideoStreams() {
+		$result = $this->selectVideoStreams();
+		return $result;
+	}
+	
+	private function addVideoItems($videoItems) {
+		foreach($videoItems as $mediaItem) {
+			$this->insertMediaItem($mediaItem);
+		}
+		return true;
+	}
+	
+	private function findNewVideoItems($streamId, $videoKind) {
+		switch($videoKind) {
+		default:
+			break;
+		case 'embedded/vimeo':
+			$result = $this->findNewVimeoItems($streamId);
+			break;
+		}
+		return $result;
+	}
+	
+	private function findNewVimeoItems($userId) {
+		$result = $this->selectVimeoItems();
+		$resultIds = array();
+		foreach ($result as $mediaItem) {
+			$resultIds[] = $mediaItem['uuid'];
+		}
+		$resultAPI = $this->selectVimeoItemsAPI($userId);
+		$newVimeoItems = array();
+		foreach($resultAPI as $vimeoItem) {
+			if(!in_array($vimeoItem['id'], $resultIds)) {
+				$newVimeoItems[] = $vimeoItem;
+			}
+		}
+		if(count($newVimeoItems) != 0) {
+			$newMediaItems = $this->parseVimeoResultToMedia($newVimeoItems);
+			return $newMediaItems;
+		}
+		return false;
+	}
+	
+	public function create($fileName, $kind) {
 		$pdo = \Config\DB::getInstance();
-		$sth = $pdo->prepare("INSERT INTO media(imgUrl, title, created) VALUES(:imgUrl, :title, UNIX_TIMESTAMP())");
+		$sth = $pdo->prepare("INSERT INTO media(kind, imgUrl, title, created) VALUES(:kind, :imgUrl, :title, UNIX_TIMESTAMP())");
 		$sth->bindParam(":imgUrl", $fileName);
 		$sth->bindParam(":title", $fileName);
+		$sth->bindParam(":kind", $kind);
 		$sth->execute();
 		return true;
 	}
@@ -149,7 +226,7 @@ class Media {
 		
 	private function selectGalleriesByDocId($docId) {
 		$pdo = \Config\DB::getInstance();
-		$sth = $pdo->prepare("SELECT id, label FROM galleries WHERE documents_id = :doc_id");
+		$sth = $pdo->prepare("SELECT id, label, kind FROM galleries WHERE documents_id = :doc_id");
 		$sth->bindParam(":doc_id", $docId);
 		$sth->execute();
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
@@ -165,6 +242,63 @@ class Media {
 		return $result;		
 	}
 	
+	private function selectMediaByKind($mediaKind, $options) {
+		$options = $this->parseOptions($options);
+		$mediaKind .= '%';
+		$pdo = \Config\DB::getInstance();
+		$sth = $pdo->prepare("SELECT * FROM media WHERE media.kind LIKE :mediaKind ORDER BY created".$options->limit);
+		$sth->bindParam(":mediaKind", $mediaKind);
+		$sth->execute();
+		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		return $result;
+	}
+	
+	private function selectVideoStreams() {
+		$pdo = \Config\DB::getInstance();
+		$sth = $pdo->prepare("SELECT * FROM video_streams");
+		$sth->execute();
+		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		return $result;
+	}
+	
+	private function selectVimeoItems() {
+		$pdo = \Config\DB::getInstance();
+		$sth = $pdo->prepare("SELECT * FROM media WHERE media.kind = 'vimeo/embedded' ORDER BY created");
+		$sth->execute();
+		$result = $sth->fetchAll();
+		return $result;
+	}
+	
+	private function selectVimeoItemsAPI($userId) {
+		$pdo = \Config\DB::getInstance();
+		$content = file_get_contents("http://vimeo.com/api/v2/user/".$userId."/videos.php");
+		if ($content) {
+			$vimeoItems = unserialize($content);
+		}
+		return $vimeoItems;
+	}
+	
+	private function insertVideoStream($streamId) {
+		$pdo = \Config\DB::getInstance();
+		$sth = $pdo->prepare("INSERT INTO video_streams(stream_id, kind) VALUES(:stream_id, 'embedded/vimeo')");
+		$sth->bindParam(':stream_id', $streamId);
+		$sth->execute();
+	}
+	
+	private function insertMediaItem($mediaItem) {
+		var_dump($mediaItem);
+		$pdo = \Config\DB::getInstance();
+		$sth = $pdo->prepare("INSERT INTO media(kind, imgUrl, embedCode, title, caption, uuid, created) VALUES(:kind, :imgUrl, :embedCode, :title, :caption, :uuid, :created)");
+		$sth->bindParam(':kind', $mediaItem->kind);
+		$sth->bindParam(':imgUrl', $mediaItem->imgUrl);
+		$sth->bindParam(':embedCode', $mediaItem->embedCode);
+		$sth->bindParam(':title', $mediaItem->title);
+		$sth->bindParam(':caption', $mediaItem->caption);
+		$sth->bindParam(':uuid', $mediaItem->uuid);
+		$sth->bindParam(':created', $mediaItem->created);
+		$sth->execute();
+	}
+	
 	private function parseResultToGalleries($result) {
 		$galleries = array();
 		foreach($result as $galleryResult) {
@@ -178,6 +312,7 @@ class Media {
 		$gallery->id = $galleryResult->id;
 		$gallery->label = $galleryResult->label;
 		$gallery->media = $this->findMediaByGalleryId($galleryResult->id);
+		$gallery->kind = $galleryResult->kind;
 		return $gallery;
 	}
 	
@@ -187,6 +322,24 @@ class Media {
 			$media[] = $mediaResult;
 		}
 		return $media;
+	}
+	
+	private function parseVimeoResultToMedia($vimeoResult) {
+		$mediaItems = array();
+		foreach($vimeoResult as $vimeoItem) {
+			$mediaItem = new \Models\MediaItem;
+			$mediaItem->kind = "vimeo/embedded";
+			$mediaItem->imgUrl = $vimeoItem['thumbnail_medium'];
+			$mediaItem->embedCode = '<iframe src="http://player.vimeo.com/video/'.$vimeoItem['id'].'?title=0&amp;byline=0&amp;portrait=0" width="700" height="' . (700/$vimeoItem['width'])*$vimeoItem['height'] .'" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>';
+			$mediaItem->title = $vimeoItem['title'];
+			$mediaItem->caption = $vimeoItem['description'];
+			$mediaItem->uuid = $vimeoItem['id'];
+			$mediaItem->created = time();
+			$mediaItem->galleryItemId = NULL;
+			$mediaItem->galleryPosition = NULL;
+			$mediaItems[] = $mediaItem;
+		}
+		return $mediaItems;
 	}
 
 	private function parseOptions($optionsString) {
@@ -245,6 +398,13 @@ class Media {
 			$output = "1=1";
 		}
 		return " WHERE ".$output;
+	}
+	
+	private function streamExists($streamId) {
+		$pdo = \Config\DB::getInstance();
+		$sth = $pdo->query('(SELECT COUNT(*) FROM video_streams WHERE stream_id = ' . $streamId . ' LIMIT 1)');
+		$result = ($sth->fetchColumn() > 0) ? true : false;
+		return $result;
 	}
 }
 ?>

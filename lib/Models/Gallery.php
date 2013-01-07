@@ -9,6 +9,7 @@ class Gallery {
 	public $id;
 	public $label;
 	public $media;
+	public $kind;
 	
 	//getter
 	

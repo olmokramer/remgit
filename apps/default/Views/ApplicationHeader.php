@@ -6,7 +6,7 @@ class ApplicationHeader {
 	public function __construct() {
 		?>
 
-		<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+		<!DOCTYPE html>
 		<html>
 		<head>
 		
@@ -31,7 +31,7 @@ class ApplicationHeader {
 		<script src="js/jquery.cookie.js"></script>
 		<script src="js/jquery.tagsinput.js"></script>
 		<script src="js/jquery.cleditor.js"></script>
-		<script src="js/jquery.gritter.js"></script>	
+		<script src="js/jquery.gritter.js"></script>
 		<script src="js/jquery.apprise.js"></script>
 		<script type="text/javascript" src="plugins/plupload/js/plupload.js"></script>
 		<script type="text/javascript" src="plugins/plupload/js/plupload.html4.js"></script>

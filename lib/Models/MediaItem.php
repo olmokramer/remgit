@@ -16,6 +16,7 @@ class MediaItem {
 	public $created;
 	public $galleryItemId;
 	public $galleryPosition;
+	public $active;
 	
 	//getter
 	
