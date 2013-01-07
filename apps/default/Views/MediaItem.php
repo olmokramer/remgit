@@ -21,6 +21,7 @@ class MediaItem {
                 <?php
 				break;
 			case "vimeo/embedded":
+			case "youtube/embedded":
 				echo $this->m->embedCode;
 				break;
 			endswitch;

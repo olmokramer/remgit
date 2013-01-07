@@ -28,11 +28,11 @@ class MediaList {
 		switch($kind):
 			case "all":
 				foreach($this->media as $item):
-					new \Views\ListItem($type='mediaItem', $id=$item->id, $label=$item->title, null, ($item->kind != "vimeo/embedded") ? THUMBS.$item->imgUrl : $item->imgUrl);
+					new \Views\ListItem($type='mediaItem', $id=$item->id, $label=$item->title, null, ($item->kind == "image") ? THUMBS.$item->imgUrl : $item->imgUrl);
 				endforeach;
 			break;
 			case "videos":
-				$this->media = array_filter($this->media, function($item) {return ($item->kind == "vimeo/embedded") ? true : false;});
+				$this->media = array_filter($this->media, function($item) {return ($item->kind == "vimeo/embedded" || $item->kind == "youtube/embedded") ? true : false;});
 				foreach($this->media as $item):
 					new \Views\ListItem($type='mediaItem', $id=$item->id, $label=$item->title, null, $item->imgUrl);
 				endforeach;

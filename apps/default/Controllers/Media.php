@@ -84,5 +84,16 @@ class Media {
 		$mediaDAO = new \DAOS\Media;
 		$mediaDAO->refreshVideoStreams();
 	}
+	
+	public function saveYoutubeVideo($url) {
+		$mediaDAO = new \DAOS\Media;
+		$pos = strrpos($url, "/") + 1;
+		$id = substr(stristr(substr($url, $pos), "="), 1);
+		$embedCode = '<iframe width="560" height="315" src="http://www.youtube.com/embed/'.$id.'" frameborder="0" allowfullscreen></iframe>';
+		$thumb = 'http://img.youtube.com/vi/'.$id.'/default.jpg';
+		
+		$mediaDAO->create($thumb, "youtube/embedded", $embedCode, "Youtube video (".$id.")");
+		
+	}
 }
 ?>

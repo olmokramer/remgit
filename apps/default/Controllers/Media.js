@@ -385,16 +385,23 @@ var Media = {
 				)
 				.append($('<li/>')
 					.addClass('menu-item-addvideostream')
-					.html('Add Video Stream')
+					.html('Add Vimeo Stream')
 					.click(function() {
 						Media.showAddVideoStream();
 					})
 				)
 				.append($('<li/>')
 					.addClass('menu-item-refreshvideostreams')
-					.html('Refresh Video Streams')
+					.html('Refresh Vimeo Streams')
 					.click(function() {
 						Media.refreshVideoStreams();
+					})
+				)
+				.append($('<li/>')
+					.addClass('menu-item-refreshvideostreams')
+					.html('Add Youtube video')
+					.click(function() {
+						Media.addYoutubeVideo();
 					})
 				)
 			)
@@ -478,6 +485,52 @@ var Media = {
 			imageElem = $(this).find('img');
 			imageElem.toggleClass('activated');
 		});
+	},
+	
+	/*
+	add Youtube video
+	*/
+	
+	addYoutubeVideo: function() {
+		$(document).load('Views/ModalWindow.php', function(data) {
+			$('body').append(data);
+			
+			$(".modalWindow .button-confirm").click(function() {
+				Media.saveYoutubeVideo();
+			})
+			
+			$(".modalWindow .button-cancel").click(function() {
+				$(".modalOverlay").hide().remove();
+			})
+			
+			
+		});
+	},
+	
+	/*
+	save Youtube video
+	*/
+	
+	saveYoutubeVideo: function() {
+		url = $(".modalWindow input#url").val();
+
+		$.ajax({
+			type: "POST",
+			url: "AjaxListener.php",
+			data: {
+				action: 'saveYoutubeVideo',
+				url: url,
+			},
+			cache: false,
+			beforeSend: function() {
+				$("#loading-indicator").show(); //show the loading indicator
+			},
+			success: function(data){
+				$("#loading-indicator").hide(); //hide the loading indicator
+				$(".modalOverlay").hide().remove();
+				Main.notify('Youtube video saved');
+			}
+		})
 	}
 	
 }

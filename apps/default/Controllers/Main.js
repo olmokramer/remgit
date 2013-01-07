@@ -129,6 +129,9 @@ var Main = {
 			case 'Add vimeo stream':
 			var gritter_text = 'Vimeo Stream succesfully added';
 			break;
+			case 'Youtube video saved':
+			var gritter_text = 'Youtube video successfully added to the library';
+			break;
 		}
 		
 		$.gritter.add({
