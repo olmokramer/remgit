@@ -1,6 +1,6 @@
 <?php
 //error settings
-ini_set('include_path', '/domains/luukkramer.nl/DEFAULT/');
+ini_set('include_path', '/Users/woutervroege/Sites/rearend/');
 ini_set("display_errors", "On");
 error_reporting(E_ALL);
 
@@ -11,8 +11,8 @@ ini_set("error_log", dirname(__FILE__) . "/error_log.txt");
 require(dirname(__FILE__) . "/DB.php");
 
 //global settings
-define('ROOT', 'c:/EasyPHP/www/luukkramer.nl/rearend/');
-define('WEBROOT', 'http://localhost/luukkramer.nl/rearend/');
+define('ROOT', '/Users/woutervroege/Sites/rearend/');
+define('WEBROOT', 'http://localhost/~woutervroege/rearend/');
 
 define('LIB_ROOT', ROOT.'lib/');
 define('APPS_ROOT', ROOT.'apps/');
