@@ -6,7 +6,7 @@ include("../../config/settings.php");
 include("Utils.php");
 include("settings.php");
 
-//
+//enable magic quotes if needed
 if (get_magic_quotes_gpc()) {
     function stripslashes_gpc(&$value) {
         $value = stripslashes($value);
