@@ -30,16 +30,6 @@ class BackendController {
 		return $documents;	
 	}
 	
-	public function countDocuments($label, $options=null) {
-		$count = $this->docDAO->countDocuments($label, $options);
-		return $count;
-	}
-	
-	public function searchDocuments($label, $options=null) {
-		$documents = $this->docDAO->getDocuments($label, $options);
-		return $documents;	
-	}
-	
 	public function getRelatedDocuments($id, $options=null) {
 		$documents = $this->docDAO->getRelatedDocuments($id, $options);
 		return $documents;		
@@ -50,26 +40,4 @@ class BackendController {
 		return $document;	
 	}
 }
-
-/*
-$options = array(
-	"orderBy" => "title",
-	"orderType" => "ASC",
-	"limit" => "0,10",
-	"cat" => "bio,contact",
-	"query" => array(
-		array(
-			"title" => "RIVA",
-			"wildcard" => true
-		),	
-		array(
-			"title" => "Test",
-			"wildcard" => false
-		),
-		
-	),
-	"matchAll" => true
-);
-*/
-
 ?>
