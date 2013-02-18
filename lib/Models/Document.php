@@ -53,7 +53,7 @@ class Document {
 	}
 	
 	public function getCoverUrl($type='full') {
-		$coverUrl = ($type!='full') ? THUMBS.$this->coverUrl : UPLOADS.$this->coverUrl;
+		$coverUrl = (substr($this->coverUrl, 0, 7) != 'http://') ? ((substr($this->coverUrl, 0, 7) != 'http://') ? (($type!='full') ? THUMBS.$this->coverUrl : UPLOADS.$this->coverUrl) : $this->coverUrl;
 		return $coverUrl;
 	}
 	
@@ -63,8 +63,10 @@ class Document {
 			$media = array();
 			foreach($gallery->media as $mediaItem) {
 				$item = new \stdClass;
-				$item->url = UPLOADS.$mediaItem->imgUrl;
-				$item->thumb_url = THUMBS.$mediaItem->imgUrl;
+				$item->id = $mediaItem->id;
+				$item->url = (substr($mediaItem->imgUrl, 0, 7) != 'http://') ? UPLOADS.$mediaItem->imgUrl : $mediaItem->imgUrl;
+				$item->thumb_url = (substr($mediaItem->imgUrl, 0, 7) != 'http://') ? THUMBS.$mediaItem->imgUrl : $mediaItem->imgUrl;
+				$item->embedCode = $mediaItem->embedCode;
 				$item->title = $mediaItem->title;
 				$item->caption = $mediaItem->caption;
 				$media[] = $item;
