@@ -16,7 +16,12 @@ class Document {
 		return $documents;
 	}
 	
-		public function getDocument($id) {
+	public function countDocuments($menuItemsRef, $options=null) {
+		$document = (is_numeric($menuItemsRef)) ? $this->countByMenuItemsId($menuItemsRef, $options) : $this->countByMenuItemsLabel($menuItemsRef, $options);
+		return $documents;
+	}
+	
+	public function getDocument($id) {
 		$document = $this->findById($id);
 		return $document;
 	}
@@ -31,6 +36,18 @@ class Document {
 
 	private function findByMenuItemsLabel($menuItemsLabel, $options=null) {
 		$result = $this->selectByMenuItemsLabel($menuItemsLabel, $options);
+		$documents = $this->parseResultToDocs($result);
+		return $documents;
+	}
+	
+	private function countByMenuItemsId($menuItemsId, $options=null) {
+		$result = $this->selectCountByMenuItemsId($menuItemsId, $options);
+		$documents = $this->parseResultToDocs($result);
+		return $documents;
+	}
+
+	private function countByMenuItemsLabel($menuItemsLabel, $options=null) {
+		$result = $this->selectCountByMenuItemsLabel($menuItemsLabel, $options);
 		$documents = $this->parseResultToDocs($result);
 		return $documents;
 	}
@@ -217,6 +234,26 @@ UNION ALL (SELECT templates_fields.position as bx, documents_fields_multiline.id
 		$options = $this->parseOptions($options);
 		$sth = $pdo->prepare("SELECT documents.* FROM documents LEFT JOIN menuItems ON documents.menuItems_id = menuItems.id ".$options->joins." WHERE menuItems.label = :label ".$options->conditions.$options->order.$options->limit);
 		$sth->bindParam(":label", $menuItemsLabel);
+		$sth->execute();
+		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		return $result;
+	}
+	
+	private function selectCountByMenuItemsId($menuItemsId, $options) {
+		$pdo = \Config\DB::getInstance();
+		$options = $this->parseOptions($options);
+		$sth = $pdo->prepare("SELECT COUNT(id) FROM documents WHERE menuItems_id = :menuItems_id ".$options->conditions);
+		$sth->bindParam(":menuItems_id", $menuItemsId);
+		$sth->execute();
+		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		return $result;
+	}
+	
+	private function selectCountByMenuItemsLabel($menuItemsLabel, $options) {
+		$pdo = \Config\DB::getInstance();
+		$options = $this->parseOptions($options);
+		$sth = $pdo->prepare("SELECT COUNT(documents.id) FROM documents LEFT JOIN menuItems ON documents.menuItems_id = menuItems.id ".$options->joins." WHERE menuItems.label = :label ".$options->conditions);
+		$sth->bindParam(":menuItems_id", $menuItemsId);
 		$sth->execute();
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
 		return $result;
