@@ -5,24 +5,38 @@ namespace DAOS;
 class Field {
 	
 	public function findAllFields() {
-		$fields = $this->selectAllFields();
-		$fields = $this->parseResultToFields($result);
+		$result = $this->selectAllFields();
+		$fields = $this->parseResultsToFields($result);
 		return $fields;
 	}
 	
+	public function findFieldByLabel($label) {
+		$field = $this->selectFieldByLabel($label);
+		return $field;
+	}
+	
 	private function selectAllFields() {
-		$db = DB::getInstance();
+		$db = \Config\DB::getInstance();
 		$sth = $db->prepare("SELECT * FROM fields");
 		$sth->execute();
-		$result = $sth->fetchAll(PDO::FETCH_OBJ);
+		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
 		return $result;	
 	}
 	
-	private function parseResultToFields($result) {
-		foreach($result as $fieldResult) {
-			new \Models\Field($fieldResult);
-		}
-		return true;
+	private function selectFieldByLabel($label) {
+		$db = \Config\DB::getInstance();
+		$sth = $db->prepare("SELECT * FROM fields WHERE label = :label LIMIT 1");
+		$sth->bindParam(":label", $label);
+		$sth->execute();
+		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		return $result[0];
 	}
 	
+	private function parseResultsToFields($result) {
+		$fields = array();
+		foreach($result as $fieldResult) {
+			$fields[] = new \Models\Field($result);
+		}
+		return $fields;
+	}
 }

@@ -53,7 +53,7 @@ class Document {
 	}
 	
 	public function getCoverUrl($type='full') {
-		$coverUrl = (substr($this->coverUrl, 0, 7) != 'http://') ? ((substr($this->coverUrl, 0, 7) != 'http://') ? (($type!='full') ? THUMBS.$this->coverUrl : UPLOADS.$this->coverUrl) : $this->coverUrl;
+		$coverUrl = (substr($this->coverUrl, 0, 7) != 'http://') ? (($type!='full') ? THUMBS.$this->coverUrl : UPLOADS.$this->coverUrl) : $this->coverUrl;
 		return $coverUrl;
 	}
 	

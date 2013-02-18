@@ -16,9 +16,14 @@ class Document {
 		return $documents;
 	}
 	
-	public function countDocuments($menuItemsRef, $options=null) {
-		$document = (is_numeric($menuItemsRef)) ? $this->countByMenuItemsId($menuItemsRef, $options) : $this->countByMenuItemsLabel($menuItemsRef, $options);
+	public function searchDocuments($menuItemsRef, $options=null) {
+		$documents = (is_numeric($menuItemsRef)) ? $this->searchByMenuItemsId($menuItemsRef, $options) : $this->searchByMenuItemsLabel($menuItemsRef, $options);
 		return $documents;
+	}
+	
+	public function countDocuments($menuItemsRef, $options=null) {
+		$count = (is_numeric($menuItemsRef)) ? $this->countByMenuItemsId($menuItemsRef, $options) : $this->countByMenuItemsLabel($menuItemsRef, $options);
+		return $count;
 	}
 	
 	public function getDocument($id) {
@@ -40,16 +45,26 @@ class Document {
 		return $documents;
 	}
 	
-	private function countByMenuItemsId($menuItemsId, $options=null) {
-		$result = $this->selectCountByMenuItemsId($menuItemsId, $options);
+	private function searchByMenuItemsId($menuItemsId, $options=null) {
+		$result = $this->selectSearchByMenuItemsId($menuItemsId, $options);
 		$documents = $this->parseResultToDocs($result);
 		return $documents;
 	}
-
-	private function countByMenuItemsLabel($menuItemsLabel, $options=null) {
-		$result = $this->selectCountByMenuItemsLabel($menuItemsLabel, $options);
+	
+	private function searchByMenuItemsLabel($menuItemsLabel, $options=null) {
+		$result = $this->selectSearchByMenuItemsLabel($menuItemsLabel, $options);
 		$documents = $this->parseResultToDocs($result);
 		return $documents;
+	}
+	
+	private function countByMenuItemsId($menuItemsId, $options=null) {
+		$count = $this->selectCountByMenuItemsId($menuItemsId, $options);
+		return $count;
+	}
+
+	private function countByMenuItemsLabel($menuItemsLabel, $options=null) {
+		$count = $this->selectCountByMenuItemsLabel($menuItemsLabel, $options);
+		return $count;
 	}
 	
 	private function findByCategoryMatchCount($id, $options=null) {
@@ -239,24 +254,44 @@ UNION ALL (SELECT templates_fields.position as bx, documents_fields_multiline.id
 		return $result;
 	}
 	
+	private function selectSearchByMenuItemsId($menuItemsId, $options) {
+		$pdo = \Config\DB::getInstance();
+		$options = $this->parseOptions($options);
+		$sth = $pdo->prepare("SELECT documents.* FROM documents LEFT JOIN documents_fields_singleline ON documents.id = documents_fields_singleline.documents_id LEFT JOIN documents_fields_multiline ON documents.id = documents_fields_multiline.documents_id LEFT JOIN menuItems ON documents.menuItems_id = menuItems.id WHERE menuItems.id = :menuItems_id ".$options->conditions." GROUP BY documents.id ".$options->order.$options->limit);
+		$sth->bindParam(':menuItems_id', $menuItemsId);
+		$sth->execute();
+		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		return $result;
+	}
+	
+	private function selectSearchByMenuItemsLabel($menuItemsLabel, $options) {
+		$pdo = \Config\DB::getInstance();
+		$options = $this->parseOptions($options);
+		$sth = $pdo->prepare("SELECT documents.* FROM documents LEFT JOIN documents_fields_singleline ON documents.id = documents_fields_singleline.documents_id LEFT JOIN documents_fields_multiline ON documents.id = documents_fields_multiline.documents_id LEFT JOIN menuItems ON documents.menuItems_id = menuItems.id WHERE menuItems.label = :menuItems_label ".$options->conditions." GROUP BY documents.id ".$options->order.$options->limit);
+		$sth->bindParam(':menuItems_label', $menuItemsLabel);
+		$sth->execute();
+		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		return $result;
+	}
+	
 	private function selectCountByMenuItemsId($menuItemsId, $options) {
 		$pdo = \Config\DB::getInstance();
 		$options = $this->parseOptions($options);
 		$sth = $pdo->prepare("SELECT COUNT(id) FROM documents WHERE menuItems_id = :menuItems_id ".$options->conditions);
 		$sth->bindParam(":menuItems_id", $menuItemsId);
 		$sth->execute();
-		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
-		return $result;
+		$result = $sth->fetchAll();
+		return $result[0][0];
 	}
 	
 	private function selectCountByMenuItemsLabel($menuItemsLabel, $options) {
 		$pdo = \Config\DB::getInstance();
 		$options = $this->parseOptions($options);
 		$sth = $pdo->prepare("SELECT COUNT(documents.id) FROM documents LEFT JOIN menuItems ON documents.menuItems_id = menuItems.id ".$options->joins." WHERE menuItems.label = :label ".$options->conditions);
-		$sth->bindParam(":menuItems_id", $menuItemsId);
+		$sth->bindParam(":label", $menuItemsLabel);
 		$sth->execute();
-		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
-		return $result;
+		$result = $sth->fetchAll();
+		return $result[0][0];
 	}
 	
 	private function selectByCategoryMatchCount($id, $options) {
@@ -355,23 +390,23 @@ UNION ALL (SELECT templates_fields.position as bx, documents_fields_multiline.id
 		return $doc;
 	}
 	
-	private function parseOptions($optionsString) {
-		$optionsElements = $this->parseStringToOptionsElements($optionsString);
-		$options = $this->parseOptionsElementsToOptions($optionsElements);
+	private function parseOptions($options) {
+		$options = (is_array($options)) ? $options : $this->parseOptionsStringToOptions($options);
 		$optionsObj = $this->parseOptionsToObject($options);
 		return $optionsObj;
 	}
 	
-	private function parseStringToOptionsElements($optionsString) {
-		$optionsElements = ($optionsString != null) ? explode("&", $optionsString) : null;
-		return $optionsElements;
+	private function parseOptionsStringToOptions($optionsString) {
+		$optionElements = ($optionsString != null) ? explode("&", $optionsString) : null;
+		$options = $this->parseOptionsElementsToOptions($optionElements);
+		return $options;
 	}
 
-	private function parseOptionsElementsToOptions($optionsElements) {
+	private function parseOptionsElementsToOptions($optionElements) {
 		$options = array();
-		if(count($optionsElements)>0) {
-			foreach($optionsElements as $optionsElement) {
-				$option = list($label, $value) = explode("=", $optionsElement);
+		if(count($optionElements)>0) {
+			foreach($optionElements as $optionElement) {
+				$option = list($label, $value) = explode("=", $optionElement);
 				$options[$label] = $value;
 			}
 		}
@@ -383,10 +418,11 @@ UNION ALL (SELECT templates_fields.position as bx, documents_fields_multiline.id
 		$orderType = (isset($options['orderType'])) ? $options['orderType'] : 'ASC';
 		$limit = (isset($options['limit'])) ? $options['limit'] : null;
 		$cats = (isset($options['cat'])) ? $options['cat'] : null;
+		$query = (isset($options['query'])) ? $options['query'] : null;
 		$ignoreUnpublished = (isset($options['ignoreUnpublished'])) ? $options['ignoreUnpublished'] : null;
 		$optionsObj = new \stdClass();
 		$optionsObj->joins = ($cats != null) ? $this->joinTable('categories', $cats) : null;
-		$optionsObj->conditions = $this->parseConditions($cats, null, $ignoreUnpublished);
+		$optionsObj->conditions = $this->parseConditions($cats, $query, $ignoreUnpublished);
 		$optionsObj->order = $this->parseOrder($orderBy, $orderType);
 		$optionsObj->limit = $this->parseLimit($limit);
 		return $optionsObj;
@@ -401,21 +437,68 @@ UNION ALL (SELECT templates_fields.position as bx, documents_fields_multiline.id
 		return $join;
 	}
 	
-	private function parseConditions($cats=null, $searchstring=null, $ignoreUnpublished=null) {
+	private function parseConditions($cats=null, $query=null, $ignoreUnpublished=null) {
 		$cats = array_filter(explode(",",$cats));
-		$conditions_return = null;
-		if(is_array($cats) && count($cats)>0) {
-			$conditions = array();
-			foreach($cats as $cat) {
-				$categoryDAO = new \DAOS\Category;
-				$catId = $categoryDAO->findIdByLabel($cat);
-				$conditions[] = "documents_categories.categories_id = '".$catId."'";
-			}
-			$conditions_return = " AND (" . implode(" OR ", $conditions) . ") ";
-
+		$conditions_return = '';
+		if(is_array($cats) && count($cats) > 0) {
+			$conditions = $this->parseCatConditions($cats);
+			$conditions_return .= " AND (" . implode(" OR ", $conditions) . ") ";
+		}
+		if(is_array($query) && count($query) > 0) {
+			$conditions = $this->parseQueryConditions($query);
+			$queryDelimiter = (isset($query['matchAll']) && !$query['matchAll']) ? ' OR ' : ' AND '; //defaults to matchAll=true
+			$conditions_return .= " AND (" . implode($queryDelimiter, $conditions) . ") ";
 		}
 		$conditions_return .= ($ignoreUnpublished == "1") ? null : " AND documents.publishState !='0' ";
 		return $conditions_return;
+	}
+	
+	private function parseCatConditions($cats) {
+		$conditions = array();
+		foreach($cats as $cat) {
+			$categoryDAO = new \DAOS\Category;
+			$catId = $categoryDAO->findIdByLabel($cat);
+			$conditions[] = "documents_categories.categories_id = '".$catId."'";
+		}
+		return $conditions;
+	}
+	
+	private function parseQueryConditions($query) {
+		$conditions = array();
+		$searchFields = (isset($query['searchFields'])) ? $query['searchFields'] : null;
+		unset($query['matchAll'], $query['searchFields']);
+		
+		foreach($query as $i => $item) {
+			if($searchFields != null) {
+				$condition = '(';
+				foreach($searchFields as $j => $fieldLabel) {
+					$condition .= ($j > 0) ? ' OR ' : '';
+					$condition .= $this->parseQueryItem($item, $fieldLabel);
+				}
+				$condition .= ')';
+			} else {
+				$condition = $this->parseQueryItem($item, $item['label']);
+			}
+			$conditions[] = $condition;
+		}
+		return $conditions;
+	}
+	
+	private function parseQueryItem($queryItem, $label) {
+		$fieldDAO = new \DAOS\Field;
+		$wildcard = (isset($queryItem['wildcard']) && !$queryItem['wildcard']) ? '' : '%'; //defaults to wildcard=true
+		$wildcard_operator = (isset($queryItem['wildcard']) && !$queryItem['wildcard']) ? ' = ' : ' LIKE '; //defaults to wildcard=true
+		switch($label) {
+			case 'title':
+				$condition = 'documents.title' . $wildcard_operator . '\'' . $wildcard . $queryItem['value'] . $wildcard . '\'';
+				break;
+			default:
+				$fieldTemplate = $fieldDAO->findFieldByLabel($label);
+				$table = 'documents_fields_' . $fieldTemplate->fieldtype . 'line';
+				$condition = '(' . $table . '.value' . $wildcard_operator . '\'' . $wildcard . $queryItem['value'] . $wildcard . '\'' . ' AND ' . $table . '.fields_id = ' . $fieldTemplate->id . ')';
+				break;
+		}
+		return $condition;
 	}
 	
 	private function parseOrder($orderBy, $orderType) {

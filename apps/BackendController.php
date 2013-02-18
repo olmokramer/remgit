@@ -5,6 +5,7 @@ include(dirname(dirname(__FILE__))."/config/settings.php");
 //DAOS
 include(DAOS_ROOT."Category.php");
 include(DAOS_ROOT."Document.php");
+include(DAOS_ROOT."Field.php");
 include(DAOS_ROOT."Media.php");
 include(DAOS_ROOT."MenuItem.php");
 include(DAOS_ROOT."User.php");
@@ -13,6 +14,7 @@ include(DAOS_ROOT."User.php");
 include(MODELS_ROOT."CustomField.php");
 include(MODELS_ROOT."Document.php");
 include(MODELS_ROOT."Gallery.php");
+include(MODELS_ROOT."Field.php");
 include(MODELS_ROOT."MediaItem.php");
 include(MODELS_ROOT."MenuItem.php");
 include(MODELS_ROOT."TemplateField.php");
@@ -36,7 +38,7 @@ class BackendController {
 	}
 	
 	public function searchDocuments($label, $options=null) {
-		$documents = $this->docDAO->getDocuments($label, $options);
+		$documents = $this->docDAO->searchDocuments($label, $options);
 		return $documents;	
 	}
 	
@@ -59,16 +61,22 @@ $options = array(
 	"cat" => "bio,contact",
 	"query" => array(
 		array(
-			"title" => "RIVA",
+			"value" => "RIVA",
 			"wildcard" => true
 		),	
 		array(
-			"title" => "Test",
+			"value" => "test",
 			"wildcard" => false
 		),
-		
+		...,
+		"matchAll" => true,
+		"searchFields" => array(
+			[0] => title,
+			[1] => opdracht,
+			[2] => locatie,
+			...
+		)
 	),
-	"matchAll" => true
 );
 */
 
