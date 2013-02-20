@@ -19,7 +19,7 @@ if (get_magic_quotes_gpc()) {
 
 $listener = new \AjaxListener;
 $listener->vars = ($_SERVER['REQUEST_METHOD'] == "POST") ? $_POST : $_GET;
-$action = strip_tags($listener->vars['action']);
+$action = ($_SERVER['REQUEST_METHOD'] == "POST") ? strip_tags($_POST['action']) : strip_tags($_GET['action']);
 $listener->$action();
 
 class AjaxListener {
