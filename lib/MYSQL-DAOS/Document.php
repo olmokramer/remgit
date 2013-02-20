@@ -261,6 +261,11 @@ UNION ALL (SELECT templates_fields.position as bx, documents_fields_multiline.id
 		$sth->bindParam(':menuItems_id', $menuItemsId);
 		$sth->execute();
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		$sth2 = $pdo->prepare("SELECT COUNT(documents.id) FROM documents LEFT JOIN documents_fields_singleline ON documents.id = documents_fields_singleline.documents_id LEFT JOIN documents_fields_multiline ON documents.id = documents_fields_multiline.documents_id LEFT JOIN menuItems ON documents.menuItems_id = menuItems.id WHERE menuItems.id = :menuItems_id ".$options->conditions." GROUP BY documents.id ".$options->order);
+		$sth->bindParam(':menuItems_id', $menuItemsId);
+		$sth2->execute();
+		$count = $sth2->rowCount();
+		$result["count"] = $count;
 		return $result;
 	}
 	
@@ -271,6 +276,11 @@ UNION ALL (SELECT templates_fields.position as bx, documents_fields_multiline.id
 		$sth->bindParam(':menuItems_label', $menuItemsLabel);
 		$sth->execute();
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		$sth2 = $pdo->prepare("SELECT COUNT(documents.id) FROM documents LEFT JOIN documents_fields_singleline ON documents.id = documents_fields_singleline.documents_id LEFT JOIN documents_fields_multiline ON documents.id = documents_fields_multiline.documents_id LEFT JOIN menuItems ON documents.menuItems_id = menuItems.id WHERE menuItems.label = :menuItems_label ".$options->conditions." GROUP BY documents.id ".$options->order);
+		$sth2->bindParam(':menuItems_label', $menuItemsLabel);
+		$sth2->execute();
+		$count = $sth2->rowCount();
+		$result["count"] = $count;
 		return $result;
 	}
 	
@@ -378,9 +388,14 @@ UNION ALL (SELECT templates_fields.position as bx, documents_fields_multiline.id
 	
 	private function parseResultToDocs($result) {
 		$docs = array();
-		foreach($result as $docResult) {
-			$docElements = $this->parseDocumentElements($docResult);
-			$docs[] = $this->parseDocElementsToDoc($docElements);
+		foreach($result as $key => $docResult) {
+			if($key !== "count") {
+				$docElements = $this->parseDocumentElements($docResult);
+				$docs[] = $this->parseDocElementsToDoc($docElements);
+			}
+		}
+		if(isset($result["count"])) {
+			$docs["count"] = $result["count"];
 		}
 		return $docs;
 	}
