@@ -8,11 +8,12 @@ document tabs NEEED TO GET UPDATED I HATE JQUERYUI
 
 autoupdate metadata filmpjes
 
-multivalue fieldtypes
 default value voor fields
-selectbox fields
-checkbox fields
-radio fields
+    -check!
+multivalue fieldtypes:
+    -selectbox fields
+    -checkbox fields
+    -radio fields
 calculated fields
 
 factuurnr. field
