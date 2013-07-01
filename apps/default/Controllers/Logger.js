@@ -1,10 +1,10 @@
 /* Logger Controller JS */
 var Logger = {
-	
+
 	/*
 	function login
 	*/
-	
+
 	login: function() {
 		$.ajax({
 			type: "POST",
@@ -21,11 +21,11 @@ var Logger = {
 			}
 		})
 	},
-	
+
 	/*
 	function logout
 	*/
-	
+
 	logout: function() {
 		$('body').load(
 			'AjaxListener.php',

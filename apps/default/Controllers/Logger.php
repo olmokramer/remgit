@@ -6,25 +6,25 @@ include(DAOS_ROOT.'User.php');
 include(MODELS_ROOT.'User.php');
 
 class Logger {
-		private $valid_users;
-		
-		public function login($vars) {
-	
-			$input_user = trim(strip_tags($vars['username']));
-			$input_password = trim(strip_tags($vars['password']));
-			$input_sharedkey = SHARED_KEY;
-			$valid_user = $this->validateUser($input_user, $this->valid_users);
-			if($valid_user) {
-				$valid_credentials = $this->validatePasswordByUsername($input_password, $valid_user, $input_sharedkey);
-			}
+	private $valid_users;
 
-			$_SESSION['app']['loginStatus'] = ($valid_credentials == 'true') ? 1 : 0;
-			echo $valid_credentials;
+	public function login($vars) {
+
+		$input_user = trim(strip_tags($vars['username']));
+		$input_password = trim(strip_tags($vars['password']));
+		$input_sharedkey = SHARED_KEY;
+		$valid_user = $this->validateUser($input_user, $this->valid_users);
+		if($valid_user) {
+			$valid_credentials = $this->validatePasswordByUsername($input_password, $valid_user, $input_sharedkey);
 		}
-		
-		public function logout() {
-			session_destroy();
-		}
+
+		$_SESSION['app']['loginStatus'] = ($valid_credentials == 'true') ? 1 : 0;
+		echo $valid_credentials;
+	}
+
+	public function logout() {
+		session_destroy();
+	}
 
 	private function findAllUsers() {
 		$userDAO = \DAOS\User::getInstance();

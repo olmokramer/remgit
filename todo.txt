@@ -1,0 +1,30 @@
+comments bij media per document opslaan, niet per foto/filmpje
+upload button in media browser
+new table for video streams
+fix: streams get added multiple times
+fix: press enter to login
+
+document tabs NEEED TO GET UPDATED I HATE JQUERYUI
+
+autoupdate metadata filmpjes
+
+default value voor fields
+    -check!
+multivalue fieldtypes:
+    -selectbox fields
+    -checkbox fields
+    -radio fields
+calculated fields
+
+factuurnr. field
+factuur herinnering
+
+search documents/media (zowel zowel frontend als backend)
+    -functionaliteit ingebouwd
+    -nog niet in de interface geïntegreerd
+
+folders for media
+subfolders
+upload media to folder
+
+add multiple videos (instead of just single one)
