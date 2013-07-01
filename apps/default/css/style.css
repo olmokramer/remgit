@@ -694,7 +694,7 @@ box-shadow: 0 0 5px #000;
 	display: inline;
 	float: left;
 	margin: 5px;
-	height: 160px;
+	height: 150px;
 	cursor: move;
 	padding: 5px;
 	text-align: center;
@@ -726,7 +726,7 @@ color:#ab2323;
 
 .gallery .item img {
 	box-shadow: 0 0 4px #222;
-	height: 150px;
+	height: 140px;
 	border: 3px solid transparent;
 }
 
