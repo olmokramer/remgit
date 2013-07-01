@@ -15,6 +15,15 @@ checkbox fields
 radio fields
 calculated fields
 
+factuurnr. field
 factuur herinnering
 
 search documents/media (zowel zowel frontend als backend)
+    -functionaliteit ingebouwd
+    -nog niet in de interface geïntegreerd
+
+folders for media
+subfolders
+upload media to folder
+
+add multiple videos (instead of just single one)
