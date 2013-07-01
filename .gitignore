@@ -1,4 +1,2 @@
 /uploads
-/config
-/config/settings.php
-/config/DB.php
+/config/*
