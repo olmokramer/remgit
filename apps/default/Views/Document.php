@@ -100,8 +100,6 @@ class Document {
 						?>
 					</ul>
 
-					</p>
-
 					<!-- end categories -->
 
 					<!-- custom template fields -->
