@@ -50,7 +50,7 @@ class Document {
 						<div class="imageHolder" id="coverImage">
 							<div class="image">
 								<?php if(isset($this->doc->coverUrl)): ?>
-								<img src="<?=THUMBS.$this->doc->coverUrl?>" data-cleanurl="<?=$this->doc->coverUrl?>">
+								<img src="<?=((substr($this->doc->coverUrl, 0, 4) != "http") ? THUMBS : "") .$this->doc->coverUrl?>" data-cleanurl="<?=$this->doc->coverUrl?>">
 								<?php else: ?>
 								<div class="chooseImage">choose image</div>
 								<?php endif; ?>

@@ -1,8 +1,9 @@
-comments bij media per document opslaan, niet per foto/filmpje
+﻿comments bij media per document opslaan, niet per foto/filmpje
 upload button in media browser
 new table for video streams
 fix: streams get added multiple times
 fix: press enter to login
+	-fixed
 
 document tabs NEEED TO GET UPDATED I HATE JQUERYUI
 
