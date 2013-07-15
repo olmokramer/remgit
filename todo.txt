@@ -5,7 +5,9 @@ fix: streams get added multiple times
 fix: press enter to login
 	-fixed
 
-document tabs NEEED TO GET UPDATED I HATE JQUERYUI
+upgrade cleditor to ckeditor (wysiwyg text editor)
+
+document tabs need to get updated
 
 autoupdate metadata filmpjes
 
