@@ -64,10 +64,16 @@ class Document {
 			$media = array();
 			foreach($gallery->media as $mediaItem) {
 				$item = new \stdClass;
-				$item->url = UPLOADS.$mediaItem->imgUrl;
-				$item->thumb_url = THUMBS.$mediaItem->imgUrl;
+				if(substr($mediaItem->imgUrl, 0, 4) == "http") {
+					$item->url = $mediaItem->imgUrl;
+					$item->thumb_url = $mediaItem->imgUrl;
+				} else {
+					$item->url = UPLOADS.$mediaItem->imgUrl;
+					$item->thumb_url = THUMBS.$mediaItem->imgUrl;
+				}
 				$item->title = $mediaItem->title;
 				$item->caption = $mediaItem->caption;
+				$item->embedCode = $mediaItem->embedCode;
 				$media[] = $item;
 			}
 			return $media;
