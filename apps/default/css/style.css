@@ -1128,9 +1128,12 @@ background-attachment: scroll;
 background-clip: border-box;
 background-color:
 rgba(0, 0, 0, 0);
-background-image: -webkit-linear-gradient(top,
-rgb(252, 252, 252),
-rgb(207, 207, 208));
+background-image: linear-gradient(to bottom, rgb(252, 252, 252) 0%, rgb(207, 207, 208) 100%);
+background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, rgb(252, 252, 252)), color-stop(1, rgb(207, 207, 208)));
+background-image: -webkit-linear-gradient(top, rgb(252, 252, 252), rgb(207, 207, 208));
+background-image: -moz-linear-gradient(top, rgb(252, 252, 252) 0%, rgb(207, 207, 208) 100%);
+background-image: -ms-linear-gradient(top, rgb(252, 252, 252) 0%, rgb(207, 207, 208) 100%);
+background-image: -o-linear-gradient(top, rgb(252, 252, 252) 0%, rgb(207, 207, 208) 100%);
 background-origin: padding-box;
 border-bottom-left-radius: 4px;
 border-bottom-right-radius: 4px;
