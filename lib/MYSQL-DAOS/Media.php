@@ -9,36 +9,36 @@ class Media {
 		$media = $this->parseResultToMedia($result);
 		return $media;
 	}
-	
+
 	public function findOrphans($options=null) {
 		$result = $this->selectOrphans();
 		$media = $this->parseResultToMedia($result);
 		return $media;
 	}
-	
+
 	public function findMostRecent($options=null) {
 		$result = $this->selectMostRecent($options);
 		$media = $this->parseResultToMedia($result);
 		return $media;
 	}
-	
+
 	public function findMediaById($id) {
 		$mediaItem = $this->selectMediaById($id);
 		return $mediaItem;
 	}
-	
+
 	public function findGalleriesByDocId($docId) {
 		$result = $this->selectGalleriesByDocId($docId);
 		$galleries = $this->parseResultToGalleries($result);
 		return $galleries;
 	}
-	
+
 	public function findMediaByGalleryId($galleryId) {
 		$result = $this->selectMediaByGalleryId($galleryId);
 		$media = $this->parseResultToMedia($result);
-		return $media;	
+		return $media;
 	}
-	
+
 	public function findMediaByKind($mediaKind, $options) {
 		switch($mediaKind) {
 		case 'photos':
@@ -47,7 +47,7 @@ class Media {
 		case 'videos':
 			$mediaKind = 'embedded';
 			break;
-		case 'mixed':
+		default:
 			$mediaKind = "";
 			break;
 		}
@@ -55,7 +55,7 @@ class Media {
 		$media = $this->parseResultToMedia($result);
 		return $media;
 	}
-	
+
 	public function addVideoStream($vimeoUserId) {
 		if(!$this->streamExists($vimeoUserId)) {
 			$this->insertVideoStream($vimeoUserId);
@@ -64,7 +64,7 @@ class Media {
 		}
 		return false;
 	}
-	
+
 	public function refreshVideoStreams() {
 		$videoStreams = $this->findVideoStreams();
 		foreach($videoStreams as $videoStream) {
@@ -74,19 +74,19 @@ class Media {
 			}
 		}
 	}
-	
+
 	public function findVideoStreams() {
 		$result = $this->selectVideoStreams();
 		return $result;
 	}
-	
+
 	private function addVideoItems($videoItems) {
 		foreach($videoItems as $mediaItem) {
 			$this->insertMediaItem($mediaItem);
 		}
 		return true;
 	}
-	
+
 	private function findNewVideoItems($streamId, $videoKind) {
 		switch($videoKind) {
 		default:
@@ -97,7 +97,7 @@ class Media {
 		}
 		return $result;
 	}
-	
+
 	private function findNewVimeoItems($userId) {
 		$result = $this->selectVimeoItems();
 		$resultIds = array();
@@ -117,11 +117,11 @@ class Media {
 		}
 		return false;
 	}
-	
+
 	public function create($fileName, $kind, $embedCode=null, $title=null) {
-		
+
 		$title = ($title !=null) ? $title : $fileName;
-	
+
 		$pdo = \Config\DB::getInstance();
 		$sth = $pdo->prepare("INSERT INTO media(kind, imgUrl, title, created, embedCode) VALUES(:kind, :imgUrl, :title, UNIX_TIMESTAMP(), :embedCode)");
 		$sth->bindParam(":imgUrl", $fileName);
@@ -131,7 +131,7 @@ class Media {
 		$sth->execute();
 		return true;
 	}
-	
+
 	public function update($id, $vars) {
 		$pdo = \Config\DB::getInstance();
 		$sth = $pdo->prepare("UPDATE media SET title = :title, caption = :caption WHERE id = :id LIMIT 1");
@@ -141,33 +141,33 @@ class Media {
 		$sth->execute();
 		return true;
 	}
-	
+
 	public function delete($id) {
 		$item = $this->findMediaById($id);
-		
+
 		$pdo = \Config\DB::getInstance();
 		$sth = $pdo->prepare("DELETE FROM media WHERE id = :id");
 		$sth->bindParam(":id", $id);
-		
+
 		unlink(UPLOADS_PATH.$item->imgUrl);
 		unlink(THUMBS_PATH.$item->imgUrl);
 
 		$sth2 = $pdo->prepare("DELETE FROM galleries_media WHERE media_id = :id");
 		$sth2->bindParam(":id", $id);
-		
+
 		$sth->execute();
 		$sth2->execute();
 		return true;
 	}
-	
+
 	public function removeMediaFromGallery($galleryId, $mediaId) {
 		$pdo = \Config\DB::getInstance();
 		$sth = $pdo->prepare("DELETE FROM galleries_media WHERE galleries_id = :galleries_id AND media_id = :media_id LIMIT 1");
 		$sth->bindParam(":galleries_id", $galleryId);
 		$sth->bindParam(":media_id", $mediaId);
-		$sth->execute();		
+		$sth->execute();
 	}
-	
+
 	public function addMediaToGallery($galleryId, $mediaId) {
 		$pdo = \Config\DB::getInstance();
 		$sth = $pdo->prepare("INSERT INTO galleries_media(galleries_id, media_id) VALUES(:galleries_id, :media_id)");
@@ -175,7 +175,7 @@ class Media {
 		$sth->bindParam(":media_id", $mediaId);
 		$sth->execute();
 	}
-	
+
 	public function updateOrder($id, $items) {
 		$pdo = \Config\DB::getInstance();
 		$key = 0;
@@ -189,25 +189,25 @@ class Media {
 			$key++;
 		}
 	}
-	
+
 	private function selectAllMedia($options) {
 		$pdo = \Config\DB::getInstance();
 		$options = $this->parseOptions($options);
 		$sth = $pdo->prepare("SELECT id, kind, imgUrl, embedCode, title FROM media".$options->order.$options->limit);
 		$sth->execute();
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
-		return $result;	
+		return $result;
 	}
-	
+
 	private function selectOrphans($options) {
 		$pdo = \Config\DB::getInstance();
 		$options = $this->parseOptions($options);
 		$sth = $pdo->prepare("SELECT id, kind, imgUrl, embedCode, title FROM media left join galleries_media on media.id = galleries_media.media_id where galleries_media.id IS NULL".$options->order.$options->limit);
 		$sth->execute();
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
-		return $result;	
+		return $result;
 	}
-	
+
 	private function selectMostRecent($options) {
 		$pdo = \Config\DB::getInstance();
 		$sth = $pdo->prepare("SELECT created FROM media ORDER BY created DESC LIMIT 1");
@@ -218,19 +218,19 @@ class Media {
 		$sth2 = $pdo->prepare("SELECT id, kind, imgUrl, embedCode, title FROM media".$options->where.$options->order.$options->limit);
 		$sth2->execute();
 		$result = $sth2->fetchAll(\PDO::FETCH_OBJ);
-		return $result;	
+		return $result;
 
 	}
-	
+
 	private function selectMediaById($id) {
 		$pdo = \Config\DB::getInstance();
 		$sth = $pdo->prepare("SELECT id, kind, imgUrl, embedCode, caption, title FROM media WHERE id = :id");
 		$sth->bindParam(":id", $id);
 		$sth->execute();
 		$result = $sth->fetch(\PDO::FETCH_OBJ);
-		return $result;	
+		return $result;
 	}
-		
+
 	private function selectGalleriesByDocId($docId) {
 		$pdo = \Config\DB::getInstance();
 		$sth = $pdo->prepare("SELECT id, label, kind FROM galleries WHERE documents_id = :doc_id");
@@ -239,16 +239,16 @@ class Media {
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
 		return $result;
 	}
-	
+
 	private function selectMediaByGalleryId($galleryId) {
 		$pdo = \Config\DB::getInstance();
 		$sth = $pdo->prepare("SELECT media.id, media.kind, media.imgUrl, media.embedCode, media.title, media.caption, galleries_media.position FROM media LEFT JOIN galleries_media ON media.id = galleries_media.media_id WHERE galleries_media.galleries_id = :galleries_id ORDER BY galleries_media.position ASC");
 		$sth->bindParam(":galleries_id", $galleryId);
 		$sth->execute();
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
-		return $result;		
+		return $result;
 	}
-	
+
 	private function selectMediaByKind($mediaKind, $options) {
 		$options = $this->parseOptions($options);
 		$mediaKind = '%' . $mediaKind . '%';
@@ -259,7 +259,7 @@ class Media {
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
 		return $result;
 	}
-	
+
 	private function selectVideoStreams() {
 		$pdo = \Config\DB::getInstance();
 		$sth = $pdo->prepare("SELECT * FROM video_streams");
@@ -267,7 +267,7 @@ class Media {
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
 		return $result;
 	}
-	
+
 	private function selectVimeoItems() {
 		$pdo = \Config\DB::getInstance();
 		$sth = $pdo->prepare("SELECT * FROM media WHERE media.kind = 'vimeo/embedded' ORDER BY created");
@@ -275,7 +275,7 @@ class Media {
 		$result = $sth->fetchAll();
 		return $result;
 	}
-	
+
 	private function selectVimeoItemsAPI($userId) {
 		$pdo = \Config\DB::getInstance();
 		$content = file_get_contents("http://vimeo.com/api/v2/user/".$userId."/videos.php");
@@ -284,14 +284,14 @@ class Media {
 		}
 		return $vimeoItems;
 	}
-	
+
 	private function insertVideoStream($streamId) {
 		$pdo = \Config\DB::getInstance();
 		$sth = $pdo->prepare("INSERT INTO video_streams(stream_id, kind) VALUES(:stream_id, 'embedded/vimeo')");
 		$sth->bindParam(':stream_id', $streamId);
 		$sth->execute();
 	}
-	
+
 	private function insertMediaItem($mediaItem) {
 		var_dump($mediaItem);
 		$pdo = \Config\DB::getInstance();
@@ -305,7 +305,7 @@ class Media {
 		$sth->bindParam(':created', $mediaItem->created);
 		$sth->execute();
 	}
-	
+
 	private function parseResultToGalleries($result) {
 		$galleries = array();
 		foreach($result as $galleryResult) {
@@ -313,7 +313,7 @@ class Media {
 		}
 		return $galleries;
 	}
-	
+
 	private function parseGalleryResultToGallery($galleryResult) {
 		$gallery = new \Models\Gallery;
 		$gallery->id = $galleryResult->id;
@@ -322,7 +322,7 @@ class Media {
 		$gallery->kind = $galleryResult->kind;
 		return $gallery;
 	}
-	
+
 	private function parseResultToMedia($result) {
 		$media = array();
 		foreach($result as $mediaResult) {
@@ -330,7 +330,7 @@ class Media {
 		}
 		return $media;
 	}
-	
+
 	private function parseVimeoResultToMedia($vimeoResult) {
 		$mediaItems = array();
 		foreach($vimeoResult as $vimeoItem) {
@@ -355,7 +355,7 @@ class Media {
 		$optionsObj = $this->parseOptionsToObject($options);
 		return $optionsObj;
 	}
-	
+
 	private function parseStringToOptionsElements($optionsString) {
 		$optionsElements = ($optionsString != null) ? explode("&", $optionsString) : null;
 		return $optionsElements;
@@ -371,7 +371,7 @@ class Media {
 		}
 		return $options;
 	}
-	
+
 	private function parseOptionsToObject($options) {
 		$conditions = (isset($options['conditions'])) ? $options['conditions'] : null;
 		$orderBy = (isset($options['orderBy'])) ? $options['orderBy'] : 'media.created';
@@ -387,17 +387,17 @@ class Media {
 	private function parseOrder($orderBy, $orderType) {
 		return " ORDER BY " . $orderBy. " " . $orderType . " ";
 	}
-	
+
 	private function parseLimit($limit) {
 		return ($limit != null) ? " LIMIT " . $limit . " " : null;
 	}
-	
+
 	private function parseConditions($conditions) {
 		$conditions = str_replace(array("{", "}", "EQUALS"), array("","","="), $conditions);
 		$conditions = explode("&", $conditions);
 		$output = null;
 		if(count($conditions)>0) {
-			foreach($conditions as $condition) { 
+			foreach($conditions as $condition) {
 				$output .= $condition . " ";
 			}
 		}
@@ -406,7 +406,7 @@ class Media {
 		}
 		return " WHERE ".$output;
 	}
-	
+
 	private function streamExists($streamId) {
 		$pdo = \Config\DB::getInstance();
 		$sth = $pdo->query('(SELECT COUNT(*) FROM video_streams WHERE stream_id = ' . $streamId . ' LIMIT 1)');
