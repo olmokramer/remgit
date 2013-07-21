@@ -367,6 +367,7 @@ background: url('../img/icon_unpublished.png');
 }
 
 #content .list ul li h6.icon-doc {
+display: inline;
 background: url('../img/icon_document.png') 2px -3px;
 background-repeat: no-repeat;
 }
