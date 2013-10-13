@@ -61,7 +61,6 @@ $options = array(
 	"cat" => "bio,contact",
 	"query" => array(
 		array(
-<<<<<<< HEAD
 			"value" => "RIVA",
 			"wildcard" => true
 		),
