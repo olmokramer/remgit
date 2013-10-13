@@ -3,9 +3,6 @@
 namespace Models;
 
 class Document {
-	
-	//vars
-	
 	public $id;
 	public $title;
 	public $coverUrl;
@@ -19,7 +16,6 @@ class Document {
 	public $customfields;
 	public $galleries;
 
-	
 	public function __construct($docElements){
 		$this->id = $docElements->native->id;
 		$this->title = $docElements->native->title;
@@ -34,29 +30,27 @@ class Document {
 		foreach($docElements->custom as $customfield) { $this->field = $customfield; }
 		foreach($docElements->galleries as $gallery) { $this->gallery = $gallery; }
 	}
-	
-	//getter
 
-	
+	//getter
 	public function __get($value) {
 		if(isset($this->$value)) {
 			return $this->$value;
 		}
 		else {
 			if(in_array($value, array_keys($this->customfields))):
-			return $this->customfields[$value]->value;
+				return $this->customfields[$value]->value;
 			endif;
 			if(in_array($value, array_keys($this->galleries))):
-			return $this->galleries[$value];
-			endif;		
+				return $this->galleries[$value];
+			endif;
 		}
 	}
-	
+
 	public function getCoverUrl($type='full') {
-		$coverUrl = (substr($this->coverUrl, 0, 7) != 'http://') ? (($type!='full') ? THUMBS.$this->coverUrl : UPLOADS.$this->coverUrl) : $this->coverUrl;
+		if(substr($this->coverUrl, 0, 4) == "http") return $this->coverUrl;
+		$coverUrl = ($type!='full') ? THUMBS.$this->coverUrl : UPLOADS.$this->coverUrl;
 		return $coverUrl;
 	}
-	
 	public function getMedia($galleryLabel) {
 		if(isset($this->galleries[$galleryLabel])) {
 			$gallery = $this->galleries[$galleryLabel];
@@ -64,18 +58,24 @@ class Document {
 			foreach($gallery->media as $mediaItem) {
 				$item = new \stdClass;
 				$item->id = $mediaItem->id;
-				$item->url = (substr($mediaItem->imgUrl, 0, 7) != 'http://') ? UPLOADS.$mediaItem->imgUrl : $mediaItem->imgUrl;
-				$item->thumb_url = (substr($mediaItem->imgUrl, 0, 7) != 'http://') ? THUMBS.$mediaItem->imgUrl : $mediaItem->imgUrl;
 				$item->embedCode = $mediaItem->embedCode;
 				$item->title = $mediaItem->title;
 				$item->caption = $mediaItem->caption;
+				if(substr($mediaItem->imgUrl, 0, 4) == "http") {
+					$item->url = $mediaItem->imgUrl;
+					$item->thumb_url = $mediaItem->imgUrl;
+				} else {
+					$item->url = UPLOADS.$mediaItem->imgUrl;
+					$item->thumb_url = THUMBS.$mediaItem->imgUrl;
+				}
+				$item->embedCode = $mediaItem->embedCode;
 				$media[] = $item;
 			}
 			return $media;
 		}
 		return array();
 	}
-	
+
 	public function getFirstAvailableImage() {
 		if(count($this->galleries)>0) {
 			$galleryLabels = array_keys($this->galleries);
@@ -86,9 +86,9 @@ class Document {
 		}
 		return false;
 	}
-	
+
 	//setter
-	
+
 	public function __set($var, $value) {
 		switch($var) {
 		default:
@@ -102,7 +102,7 @@ class Document {
 			break;
 		}
 	}
-	
+
 	public function tidy($var) {
 		return trim(str_replace(array("'","\"", " "), array("", "", "_"), $var));
 	}

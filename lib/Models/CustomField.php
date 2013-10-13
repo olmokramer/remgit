@@ -5,7 +5,6 @@ namespace Models;
 class CustomField {
 
 	//vars
-	
 	public $id;
 	public $label;
 	public $value;
@@ -13,9 +12,10 @@ class CustomField {
 	public $fieldsId;
 	public $fieldType;
 	public $inputType;
-	
+	public $default;
+
 	//getter
-	
+
 	public function __get($value) {
 		return $this->value;
 	}

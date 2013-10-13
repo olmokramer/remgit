@@ -22,34 +22,34 @@ include(MODELS_ROOT."User.php");
 
 class BackendController {
 	private $docDAO;
-	
+
 	public function __construct() {
 		$this->docDAO = new \DAOS\Document;
 	}
-	
+
 	public function getDocuments($label, $options=null) {
 		$documents = $this->docDAO->getDocuments($label, $options);
-		return $documents;	
+		return $documents;
 	}
-	
+
 	public function countDocuments($label, $options=null) {
 		$count = $this->docDAO->countDocuments($label, $options);
 		return $count;
 	}
-	
+
 	public function searchDocuments($label, $options=null) {
 		$documents = $this->docDAO->searchDocuments($label, $options);
-		return $documents;	
+		return $documents;
 	}
-	
+
 	public function getRelatedDocuments($id, $options=null) {
 		$documents = $this->docDAO->getRelatedDocuments($id, $options);
-		return $documents;		
+		return $documents;
 	}
-	
+
 	public function getDocument($id) {
 		$document = $this->docDAO->getDocument($id);
-		return $document;	
+		return $document;
 	}
 }
 
@@ -61,9 +61,10 @@ $options = array(
 	"cat" => "bio,contact",
 	"query" => array(
 		array(
+<<<<<<< HEAD
 			"value" => "RIVA",
 			"wildcard" => true
-		),	
+		),
 		array(
 			"value" => "test",
 			"wildcard" => false
@@ -79,5 +80,4 @@ $options = array(
 	),
 );
 */
-
 ?>

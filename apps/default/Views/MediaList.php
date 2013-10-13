@@ -5,7 +5,7 @@ namespace Views;
 class MediaList {
 	public function __construct($media, $options, $kind, $append=0) {
 		$this->media = $media;
-		
+
 		/* options */
 		$num_records = count($media);
 		$optionsarray = explode("&", $options);
@@ -14,15 +14,15 @@ class MediaList {
 		list($label, $value) = explode("=", $option);
 		$options[$label] = $value;
 		endforeach;
-		
+
 		list($limitstart, $limitend) = explode(",", $options['limit']);
 		$rows_requested = $limitend;
 		$max_row_num = $limitstart+$limitend;
-		/* end options */	
+		/* end options */
 		?>
-		
+
 		<?php if($append == 0): ?><ul><?php endif; ?>
-		
+
 		<!-- media items -->
 		<?php
 		switch($kind):
@@ -44,12 +44,12 @@ class MediaList {
 				endforeach;
 			break;
 		endswitch;
-				
+
 		?>
 		<!-- end media items -->
-				
+
 		<?php if($append == 1): ?></ul><?php endif; ?>
-		
+
 		<?php if($num_records == $rows_requested): ?>
 		<div class="showmore" data-limitstart="<?php echo $limitstart+50; ?>" data-limitend="<?php echo 50; ?>">show 50 more…</div>
 		<?php endif;

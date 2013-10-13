@@ -7,9 +7,9 @@ include(MODELS_ROOT.'User.php');
 
 class Logger {
 		private $valid_users;
-		
+
 		public function login($vars) {
-	
+
 			$input_user = trim(strip_tags($vars['username']));
 			$input_password = trim(strip_tags($vars['password']));
 			$input_sharedkey = SHARED_KEY;
@@ -21,11 +21,10 @@ class Logger {
 			$_SESSION['app']['loginStatus'] = ($valid_credentials == 'true') ? 1 : 0;
 			echo $valid_credentials;
 		}
-		
+
 		public function logout() {
 			session_destroy();
 		}
-
 	private function findAllUsers() {
 		$userDAO = \DAOS\User::getInstance();
 		$users = $userDAO->findAllUsers();
@@ -58,5 +57,4 @@ class Logger {
 	}
 
 }
-
 ?>

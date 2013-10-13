@@ -5,8 +5,7 @@ session_start();
 include("../../config/settings.php");
 include("Utils.php");
 include("settings.php");
-
-//
+//enable magic quotes if needed
 if (get_magic_quotes_gpc()) {
     function stripslashes_gpc(&$value) {
         $value = stripslashes($value);
@@ -23,14 +22,14 @@ $action = ($_SERVER['REQUEST_METHOD'] == "POST") ? strip_tags($_POST['action']) 
 $listener->$action();
 
 class AjaxListener {
-	
+
 	private $vars;
 	private $controller;
-	
+
 	public function __set($var, $value) {
 		$this->$var = $value;
 	}
-	
+
 	public function showMainMenu() {
 		include(CONTROLLERS_ROOT."MainMenu.php");
 		$this->controller = new \Controllers\MainMenu;
