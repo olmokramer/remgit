@@ -205,6 +205,11 @@ class Document {
 				<!-- gallery tab -->
 				<div class="document-gallery" id="tabs-<?=$gallery->label?>" data-id="<?=$gallery->id?>">
 
+					<div class="upload-media">
+						<span class="icon">+</span>upload image(s)
+					</div>
+						<input id="uploadImages" type="file" accept="image/*" multiple/>
+
 					<div class="add-media">
 						<span class="icon">+</span>add media
 					</div>

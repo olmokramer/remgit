@@ -5,7 +5,7 @@ var Gallery = {
 	function sort
 	Sorts gallery images
 	*/
-	
+
 	sort: function(galleryId) {
 
 		Main.currentGallery = galleryId;
@@ -30,42 +30,46 @@ var Gallery = {
 				$("#loading-indicator").hide(); //hide the loading indicator
 				Main.notify('Order Media');
 			}
-		})	
+		})
 	},
-	
+
 	/*
 	function addMedia
 	*/
-	
+
 	addMedia: function() {
 
 		selectedMedia = [];
 		$("#mediaBrowser").find('.activated').each(function() {
 			selectedMedia.push($(this).parent().data('id'));
 		})
-		
+
 		if(selectedMedia.length > 0) { //check if at least one item is selected
-			$.ajax({
-				type: "POST",
-				url: "AjaxListener.php",
-				data: {
-					"action": "addMediaToGallery",
-					"galleryId": Main.currentGallery,
-					"selectedMedia": selectedMedia
-				},
-				cache: false,
-				beforeSend: function() {
-					$("#loading-indicator").show(); //show the loading indicator
-				},
-				success: function(data){
-					$("#loading-indicator").hide(); //hide the loading indicator
-					$(".gallery[data-id="+Main.currentGallery+"]").append(data);
-					Gallery.initItems();
-				}
-			})
+			Gallery.putMedia(selectedMedia);
 		} //endif
 	},
-	
+
+	putMedia: function(selectedMedia) {
+		$.ajax({
+			type: "POST",
+			url: "AjaxListener.php",
+			data: {
+				"action": "addMediaToGallery",
+				"galleryId": Main.currentGallery,
+				"selectedMedia": selectedMedia
+			},
+			cache: false,
+			beforeSend: function() {
+				$("#loading-indicator").show(); //show the loading indicator
+			},
+			success: function(data){
+				$("#loading-indicator").hide(); //hide the loading indicator
+				$(".gallery[data-id="+Main.currentGallery+"]").append(data);
+				Gallery.initItems();
+			}
+		})
+	},
+
 	/*
 	function removeMedia
 	@param int id (optional) - id of a specifix mediaItem
@@ -74,7 +78,7 @@ var Gallery = {
 	removeMedia: function(id) {
 
 		selectedMedia = [];
-		
+
 		if(!id) {
 			Main.currentGallery = $('.gallery').data('id');
 			$('.gallery[data-id="'+Main.currentGallery+'"]').find('.selecteditem').each(function(){
@@ -85,9 +89,9 @@ var Gallery = {
 			Main.currentGallery = $('.item[data-id="'+id+'"]').parent().data('id');
 			selectedMedia.push(id);
 		}
-		
+
 		Main.selectedMedia = selectedMedia;
-		
+
 		$.ajax({
 			type: "POST",
 			url: "AjaxListener.php",
@@ -109,12 +113,12 @@ var Gallery = {
 			}
 		})
 	},
-	
+
 	/*
 	function initItems
 	@param string data - the ajax loaded data
 	*/
-	
+
 	initItems: function() {
 		$("#mediaBrowser").remove();
 
@@ -127,7 +131,7 @@ var Gallery = {
 		$('.gallery').find('.remove').unbind('click').click(function(){
 			Gallery.removeMedia($(this).parent().data('id'));
 		})
-		
+
 		Gallery.sort(Main.currentGallery);
 
 		$(".gallery[data-id="+Main.currentGallery+"]").sortable({
@@ -136,5 +140,5 @@ var Gallery = {
 
 		Main.notify('Add Media to Gallery');
 	}
-	
+
 }

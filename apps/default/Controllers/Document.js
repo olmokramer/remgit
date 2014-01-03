@@ -229,6 +229,11 @@ var Document = {
 		$(".gallery").sortable({
 			stop: function() { Gallery.sort($(this).data('id')); }
 		});
+
+		$('.upload-media').click(function() {
+			$("#uploadImages").trigger("click");
+		});
+
 		//init the add-media div element
 		$('.add-media').click(function() {
 			media = [];
@@ -239,6 +244,22 @@ var Document = {
 			});
 			Media.showBrowser(media, galleryKind, 'limit=0,50');
 		});
+
+		//init the upload-media div element
+		$("input#uploadImages").fileprocessor({
+            maxImageSize: Main.maxImageSize,
+            onItem: function(item, numProcessed, total) {
+            	var data = item;
+            	data.action = "uploadImage";
+				$.post("AjaxListener.php", data, function(result) {
+					Main.currentGallery = $('.gallery').data('id');
+					Gallery.putMedia([result]);
+				});
+            },
+            onEnd: function(data) {
+            }
+        });
+
 
 		//init the gallery item elements
 		$('.item').click(function() {

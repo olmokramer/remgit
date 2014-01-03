@@ -29,6 +29,9 @@ class AjaxListener {
 	public function __set($var, $value) {
 		$this->$var = $value;
 	}
+	public function getMaxImageSize() {
+		echo MAX_UPLOADS_PX;
+	}
 
 	public function showMainMenu() {
 		include(CONTROLLERS_ROOT."MainMenu.php");
@@ -112,6 +115,11 @@ class AjaxListener {
 		include(CONTROLLERS_ROOT."Media.php");
 		$this->controller = new \Controllers\Media;
 		$this->controller->showList($this->vars['options'], $this->vars['append']);
+	}
+	public function uploadImage() {
+		include(CONTROLLERS_ROOT."Media.php");
+		$this->controller = new \Controllers\Media;
+		$this->controller->uploadImage($this->vars);
 	}
 	public function showMediaItem() {
 		include(CONTROLLERS_ROOT."Media.php");

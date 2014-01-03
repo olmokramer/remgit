@@ -128,7 +128,7 @@ class Media {
 		$sth->bindParam(":kind", $kind);
 		$sth->bindParam(":embedCode", $embedCode);
 		$sth->execute();
-		return true;
+		return $pdo->lastInsertId();;
 	}
 
 	public function update($id, $vars) {

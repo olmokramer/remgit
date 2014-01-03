@@ -6,7 +6,7 @@ var Main = {
 	windowHeight: null,
 	headerHeight: null,
 	footerHeight: null,
-	
+
 	//js session vars
 	currentPageId: null,
 	currentGallery: null,
@@ -14,15 +14,17 @@ var Main = {
 	currentMenuItemId: null,
 	currentMediaItemId: null,
 	currentTypeOfMain3Data: 'document',
+	maxImageSize: 0,
 
 	run: function() {
 		Main.resizeWindow();
 		Main.initList();
 		Main.initMenuItems();
 		Main.initNav();
+		Main.getMaxImageSize();
 		MainMenu.show();
 	},
-	
+
 	resizeWindow: function() {
 		this.setWindowSizes();
 		this.adjustWindow();
@@ -39,15 +41,21 @@ var Main = {
 			switch($(this).attr('class')) {
 			case 'section list':
 				$(this).width(($(window).width()/5));
-				break;	
+				break;
 			case 'section view':
 				$(this).width(($(window).width()/5*3));
-				break;	
+				break;
 			}
 			$(this).height(($(window).height()-102));
 		})
 	},
-	
+
+	getMaxImageSize: function() {
+		$.post("AjaxListener.php", {action: "getMaxImageSize"}, function(maxSize) {
+			Main.maxImageSize = maxSize;
+		})
+	},
+
 	initList: function(container) {
 		$(container).find('li').click(function() {
 			$(this).parent().find('.current').removeClass('current');
@@ -55,7 +63,7 @@ var Main = {
 		Main.ListItemEvent($(this).data());
 		});
 	},
-	
+
 	initTextareas: function(container) {
 		$(container)
 			.find('textarea')
@@ -75,7 +83,7 @@ var Main = {
 					}
 				})
 	},
-	
+
 	ListItemEvent: function(data) {
 		switch(data.type) {
 		case 'folder':
@@ -95,7 +103,7 @@ var Main = {
 			break;
 		}
 	},
-	
+
 	notify: function(functionName) {
 		var gritter_title = functionName;
 		switch(functionName) {
@@ -133,7 +141,7 @@ var Main = {
 			var gritter_text = 'Youtube video successfully added to the library';
 			break;
 		}
-		
+
 		$.gritter.add({
 			title: gritter_title,
 			text: gritter_text,
@@ -142,7 +150,7 @@ var Main = {
 		});
 
 	},
-	
+
 	initMenuItems: function() {
 		$('.button-create').click(function() {
 			switch(Main.currentTypeOfMain3Data){
@@ -178,9 +186,9 @@ var Main = {
 				break;
 			}
 
-		})		
+		})
 	},
-	
+
 	initNav: function() {
 		$('nav').find('li').click(function() {
 			if(!$(this).hasClass('current')) {
@@ -208,7 +216,7 @@ var Main = {
 
 	confirmDelete: function (action, id) {
 		apprise('Are You Sure you want to delete this item?', {'verify':true}, function(r) {
-		if(r) { 
+		if(r) {
 			switch(action) {
 			case 'document':
 				Document.drop();

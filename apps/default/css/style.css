@@ -735,12 +735,12 @@ color:#ab2323;
 	border: 3px solid transparent;
 }
 
-.add-media {
+.add-media, .upload-media {
 width:150px;
 margin-top: -20px;
-right:0px;
 display:inline;
 float:left;
+vertical-align: top;
 color:#444;
 cursor: pointer;
 z-index: 1000;
@@ -748,18 +748,26 @@ float: right;
 position: fixed;
 }
 
-.add-media:hover {
+.add-media {
+	right:0px;
+}
+
+.upload-media {
+	right:170px;
+}
+
+.add-media:hover, .uploads-media:hover {
 color:#26b961;
 }
 
-.add-media .icon {
+.add-media .icon, .upload-media .icon {
 font-family: 'WebSymbolsRegular';
 font-size: 24px;
 vertical-align: middle;
 cursor: pointer;
 }
 
-.add-media .text {
+.add-media .text, .upload-media .text {
 margin-top: 5px;
 }
 
@@ -1406,4 +1414,10 @@ display: inline;
     display: inline-block;
     background-size:contain;
     background-repeat: no-repeat;
+}
+
+#uploadImages {
+	width:0;
+	height:0;
+	display: none;
 }
