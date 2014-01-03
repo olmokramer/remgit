@@ -21,7 +21,6 @@ class ApplicationHeader {
 		<link rel="stylesheet" href="css/jquery.cleditor.css">
 		<link rel="stylesheet" href="css/jquery.gritter.css">
 		<link rel="stylesheet" href="css/jquery.apprise.css">
-		<link rel="stylesheet" href="plugins/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css" type="text/css" media="screen" />
 
 		<!-- jquery files -->
 		<script src="js/jquery.js"></script>
@@ -34,10 +33,6 @@ class ApplicationHeader {
 		<script src="js/jquery.gritter.js"></script>
 		<script src="js/jquery.apprise.js"></script>
 		<script src="js/jquery.fileprocessor.js"></script>
-		<script type="text/javascript" src="plugins/plupload/js/plupload.js"></script>
-		<script type="text/javascript" src="plugins/plupload/js/plupload.html4.js"></script>
-		<script type="text/javascript" src="plugins/plupload/js/plupload.html5.js"></script>
-		<script type="text/javascript" src="plugins/plupload/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
 
 		<!-- javascript controller files -->
 		<script src="Controllers/Main.js"></script>

@@ -120,7 +120,7 @@ class Media {
 
 	public function create($fileName, $kind, $embedCode=null, $title=null) {
 
-		$title = ($title !=null) ? $title : $fileName;
+		list($prefix, $title) = explode("_", $fileName);
 		$pdo = \Config\DB::getInstance();
 		$sth = $pdo->prepare("INSERT INTO media(kind, imgUrl, title, created, embedCode) VALUES(:kind, :imgUrl, :title, UNIX_TIMESTAMP(), :embedCode)");
 		$sth->bindParam(":imgUrl", $fileName);

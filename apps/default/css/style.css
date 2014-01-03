@@ -1416,7 +1416,7 @@ display: inline;
     background-repeat: no-repeat;
 }
 
-#uploadImages {
+input[type="file"] {
 	width:0;
 	height:0;
 	display: none;
