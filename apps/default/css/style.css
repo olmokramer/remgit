@@ -696,6 +696,7 @@ box-shadow: 0 0 5px #000;
 
 .gallery .item {
 	display: inline;
+	position: relative;
 	float: left;
 	margin: 5px;
 	height: 150px;
@@ -1383,4 +1384,26 @@ margin: 20px 0 20px 20px;
 height: 45px;
 word-spacing: 0px;
 display: inline;
+}
+
+.video-play {
+    width: 60px;
+    height:60px;
+	background-image: url(../img/video-play.png);
+	background-repeat: no-repeat;
+	position: absolute;
+    top:50%;
+    left:50%;
+    margin-left: -30px;
+    margin-top: -40px;
+}
+
+.itemimage {
+    width: 150px;
+    height:120px;
+    background-position: 0 50%;
+    vertical-align: top;
+    display: inline-block;
+    background-size:contain;
+    background-repeat: no-repeat;
 }

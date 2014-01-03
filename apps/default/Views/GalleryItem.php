@@ -10,7 +10,12 @@ class GalleryItem {
 		<!-- gallery item -->
 		<div class="item" data-id="<?php echo $item->id; ?>">
 			<div class="remove">-</div>
-			<img src="<?=$imgUrl?>">
+			<div class="itemimage" style="background-image: url('<?=$imgUrl?>')"></div>
+			<?php
+			if($item->kind == "vimeo/embedded" || $item->kind == "youtube/embedded"):
+			?>
+			<div class="video-play"></div>
+			<?php endif; ?>
 		</div>
 		<!-- end gallery item -->
 		
