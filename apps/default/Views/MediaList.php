@@ -4,6 +4,7 @@ namespace Views;
 
 class MediaList {
 	public function __construct($media, $options, $kind, $append=0) {
+	    $uuid = uniqid();
 		$this->media = $media;
 
 		/* options */
@@ -21,12 +22,12 @@ class MediaList {
 		/* end options */
 		?>
 
-		<?php if($append == 0): ?><ul><?php endif; ?>
 
 		<!-- media items -->
 		<?php
 		switch($kind):
 			case "all":
+			default:
 				foreach($this->media as $item):
 					new \Views\ListItem($type='mediaItem', $id=$item->id, $label=$item->title, null, ($item->kind != "vimeo/embedded" && $item->kind != "youtube/embedded") ? THUMBS.$item->imgUrl : $item->imgUrl);
 				endforeach;
@@ -48,10 +49,9 @@ class MediaList {
 		?>
 		<!-- end media items -->
 
-		<?php if($append == 1): ?></ul><?php endif; ?>
 
-		<?php if($num_records == $rows_requested): ?>
-		<div class="showmore" data-limitstart="<?php echo $limitstart+50; ?>" data-limitend="<?php echo 50; ?>">show 50 more…</div>
+		<?php if(count($this->media) >= $rows_requested): ?>
+		<div class="showmore" data-limitstart="<?php echo $limitstart+50; ?>" data-limitend="<?php echo 50; ?>">show <?=$limitstart+50;?> to <?=$limitstart+100;?></div>
 		<?php endif;
 	}
 }

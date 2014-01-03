@@ -83,19 +83,21 @@ var Media = {
 	@param string options
 	*/
 	
-	appendToList: function(options) {
+	appendToList: function(options, append) {
 		$.ajax({
 			type: "POST",
 			url: "AjaxListener.php",
 			data: {
 				"action": "appendToMediaList",
-				"options": options
+				"options": options,
+				"append": append
 			},
 			cache: false,
 			beforeSend: function() {
 				$("#loading-indicator").show(); //show the loading indicator
 			},
 			success: function(data){
+			    $(".showmore").remove();
 				$("#loading-indicator").hide(); //hide the loading indicator
 				Media.handleListMedia(data);
 			}
@@ -135,7 +137,7 @@ var Media = {
 	Append newly loaded items to the Media Browser
 	*/
 	
-	appendToBrowser: function() {
+	appendToBrowser: function(activeIds, options) {
 
 		Main.activeGalleryIds = activeIds;
 		
@@ -419,9 +421,10 @@ var Media = {
 	*/
 	
 	initList: function(data) {
-		$('#main-2').find('.section-container').html(data);		
+	    $('#main-2').find('.section-container').html("<ul></ul>");
+		$('#main-2').find('.section-container ul').html(data);		
 		Main.initList('#main-2');
-		$('.showmore').click(function(){
+		$('.showmore').unbind("click").click(function(){
 			$(this).remove();
 			options = "limit="+$(this).data('limitstart')+","+$(this).data('limitend');
 			Media.appendToList(options, 1);
@@ -436,7 +439,7 @@ var Media = {
 		$('#main-2').find('.section-container').find('ul').append(data);		
 		Main.initList('#main-2');
 		$('.footer').find('.button-docsettings').hide();
-		$('.showmore').click(function(){
+		$('.showmore').unbind("click").click(function(){
 			$(this).remove();
 			options = "limit="+$(this).data('limitstart')+","+$(this).data('limitend');
 			Media.appendToList(options, 1);
