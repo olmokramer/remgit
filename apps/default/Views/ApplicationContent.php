@@ -97,6 +97,13 @@ class ApplicationContent {
 			<div id="ajaxLoader"></div>
 			<!-- end ajax loader -->
 
+			<!-- uploads-progress -->
+			<div id="uploads-progress">
+				<h2>upload media</h2>
+				<h3>reading files</h3>
+			</div>
+			<!-- uploads-progress -->
+
 		</body>
 		</html>
 

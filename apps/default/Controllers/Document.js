@@ -251,7 +251,19 @@ var Document = {
             onItem: function(item, numProcessed, total) {
             	var data = item;
             	data.action = "uploadImage";
+            	if(numProcessed === 1) {
+            		$("#uploads-progress").show();
+            		Media.uploadedFiles = 0;
+            		Media.processedFiles = numProcessed;
+            		Media.totalFiles = total;
+            		$("#uploads-progress h3").html("uploading files");
+            	}
 				$.post("AjaxListener.php", data, function(result) {
+					Media.uploadedFiles++;
+            		$("#uploads-progress h3").html("uploaded " + Media.uploadedFiles + " of " + Media.totalFiles);
+            		if(Media.uploadedFiles === Media.totalFiles) {
+						$("#uploads-progress").fadeOut();
+            		}
 					Main.currentGallery = $('.gallery').data('id');
 					Gallery.putMedia([result]);
 				});

@@ -1,6 +1,10 @@
 /* Media Controller JS */
 var Media = {
 
+	uploadedFiles: 0,
+	processedFiles: 0,
+	totalFiles: 0,
+
 	/*
 	function show
 	Displays a media item from the Library
@@ -349,7 +353,19 @@ var Media = {
             onItem: function(item, numProcessed, total) {
             	var data = item;
             	data.action = "uploadImage";
+            	if(numProcessed === 1) {
+            		$("#uploads-progress").show();
+            		Media.uploadedFiles = 0;
+            		Media.processedFiles = numProcessed;
+            		Media.totalFiles = total;
+            		$("#uploads-progress h3").html("uploading files");
+            	}
 				$.post("AjaxListener.php", data, function(result) {
+					Media.uploadedFiles++;
+            		$("#uploads-progress h3").html("uploaded " + Media.uploadedFiles + " of " + Media.totalFiles);
+            		if(Media.uploadedFiles === Media.totalFiles) {
+						$("#uploads-progress").fadeOut();
+            		}
 					Media.showList('limit=0,50', Media.currentMediaKind);
 				});
             },
