@@ -7,6 +7,15 @@ var Main = {
 	headerHeight: null,
 	footerHeight: null,
 
+	LoadingIndicator: {
+		show: function() {
+			$(".loading-indicator").css({opacity: 1})
+		},
+		hide: function() {
+			$(".loading-indicator").css({opacity: 0})
+		}
+	},
+
 	//js session vars
 	currentPageId: null,
 	currentGallery: null,

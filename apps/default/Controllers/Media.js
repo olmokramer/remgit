@@ -21,10 +21,10 @@ var Media = {
 			},
 			cache: false,
 			beforeSend: function() {
-				$("#loading-indicator").show(); //show the loading indicator
+				Main.LoadingIndicator.show(); //show the loading indicator
 			},
 			success: function(data){
-				$("#loading-indicator").hide(); //hide the loading indicator
+				Main.LoadingIndicator.hide(); //hide the loading indicator
 				Main.currentMediaItemId = id;
 				Media.init(data);
 			}
@@ -45,10 +45,10 @@ var Media = {
 			},
 			cache: false,
 			beforeSend: function() {
-				$("#loading-indicator").show(); //show the loading indicator
+				Main.LoadingIndicator.show(); //show the loading indicator
 			},
 			success: function(data){
-				$("#loading-indicator").hide(); //hide the loading indicator
+				Main.LoadingIndicator.hide(); //hide the loading indicator
 				Media.initMenu(data);
 
 			}
@@ -72,10 +72,10 @@ var Media = {
 			},
 			cache: false,
 			beforeSend: function() {
-				$("#loading-indicator").show(); //show the loading indicator
+				Main.LoadingIndicator.show(); //show the loading indicator
 			},
 			success: function(data){
-				$("#loading-indicator").hide(); //hide the loading indicator
+				Main.LoadingIndicator.hide(); //hide the loading indicator
 				Media.initList(data);
 			}
 		})
@@ -98,11 +98,11 @@ var Media = {
 			},
 			cache: false,
 			beforeSend: function() {
-				$("#loading-indicator").show(); //show the loading indicator
+				Main.LoadingIndicator.show(); //show the loading indicator
 			},
 			success: function(data){
 			    $(".showmore").remove();
-				$("#loading-indicator").hide(); //hide the loading indicator
+				Main.LoadingIndicator.hide(); //hide the loading indicator
 				Media.handleListMedia(data);
 			}
 		})
@@ -127,10 +127,10 @@ var Media = {
 			},
 			cache: false,
 			beforeSend: function() {
-				$("#loading-indicator").show(); //show the loading indicator
+				Main.LoadingIndicator.show(); //show the loading indicator
 			},
 			success: function(data){
-				$("#loading-indicator").hide(); //hide the loading indicator
+				Main.LoadingIndicator.hide(); //hide the loading indicator
 				Media.initBrowser(data, options);
 			}
 		})
@@ -142,7 +142,6 @@ var Media = {
 	*/
 
 	appendToBrowser: function(activeIds, options) {
-
 		Main.activeGalleryIds = activeIds;
 
 		$.ajax({
@@ -155,10 +154,10 @@ var Media = {
 			},
 			cache: false,
 			beforeSend: function() {
-				$("#loading-indicator").show(); //show the loading indicator
+				Main.LoadingIndicator.show(); //show the loading indicator
 			},
 			success: function(data){
-				$("#loading-indicator").hide(); //hide the loading indicator
+				Main.LoadingIndicator.hide(); //hide the loading indicator
 				Media.handleBrowserMedia(data, options);
 			}
 		})
@@ -181,10 +180,10 @@ var Media = {
 			},
 			cache: false,
 			beforeSend: function() {
-				$("#loading-indicator").show(); //show the loading indicator
+				Main.LoadingIndicator.show(); //show the loading indicator
 			},
 			success: function(data){
-				$("#loading-indicator").hide(); //hide the loading indicator
+				Main.LoadingIndicator.hide(); //hide the loading indicator
 				$("#imagepicker-media").append(data);
 				$("#imagepicker-media").find(".showmore-browser").click(function() {
 					options = "limit="+$(this).data('limitstart')+","+$(this).data('limitend');
@@ -216,10 +215,10 @@ var Media = {
 			},
 			cache: false,
 			beforeSend: function() {
-				$("#loading-indicator").show(); //show the loading indicator
+				Main.LoadingIndicator.show(); //show the loading indicator
 			},
 			success: function(data){
-				$("#loading-indicator").hide(); //hide the loading indicator
+				Main.LoadingIndicator.hide(); //hide the loading indicator
 				Main.notify('Add vimeo stream');
 				Media.refreshVideoStreams();
 				$('#addVideoStream').remove();
@@ -245,10 +244,10 @@ var Media = {
 			},
 			cache: false,
 			beforeSend: function() {
-				$("#loading-indicator").show(); //show the loading indicator
+				Main.LoadingIndicator.show(); //show the loading indicator
 			},
 			success: function(data){
-				$("#loading-indicator").hide(); //hide the loading indicator
+				Main.LoadingIndicator.hide(); //hide the loading indicator
 				Main.notify('Save Media');
 			}
 		})
@@ -270,10 +269,10 @@ var Media = {
 			},
 			cache: false,
 			beforeSend: function() {
-				$("#loading-indicator").show(); //show the loading indicator
+				Main.LoadingIndicator.show(); //show the loading indicator
 			},
 			success: function(data){
-				$("#loading-indicator").hide(); //hide the loading indicator
+				Main.LoadingIndicator.hide(); //hide the loading indicator
 				$('#main-3').find('.section-container').html('');
 				$('#main-2').find('li[data-id="'+Main.currentMediaItemId+'"]').remove();
 				Main.notify('Delete Media');
@@ -295,10 +294,10 @@ var Media = {
 			},
 			cache: false,
 			beforeSend: function() {
-				$("#loading-indicator").show(); //show the loading indicator
+				Main.LoadingIndicator.show(); //show the loading indicator
 			},
 			success: function(data){
-				$("#loading-indicator").hide(); //hide the loading indicator
+				Main.LoadingIndicator.hide(); //hide the loading indicator
 				$("#ajaxLoader").html(data);
 				$("#addVideoStream").draggable({
 					handle: ".header"
@@ -321,10 +320,10 @@ var Media = {
 			},
 			cache: false,
 			beforeSend: function() {
-				$("#loading-indicator").show(); //show the loading indicator
+				Main.LoadingIndicator.show(); //show the loading indicator
 			},
 			success: function(data){
-				$("#loading-indicator").hide(); //hide the loading indicator
+				Main.LoadingIndicator.hide(); //hide the loading indicator
 			}
 		})
 	},
@@ -460,8 +459,7 @@ var Media = {
 		 handle: ".header"
 		});
 		$("#mediaBrowser").find('.mediaItem').unbind('click').click(function() {
-			imageElem = $(this).find('img');
-			imageElem.toggleClass('activated');
+			$(this).toggleClass('activated');
 		});
 		$(".showmore-browser").click(function() {
 			options = "limit="+$(this).data('limitstart')+","+$(this).data('limitend');
@@ -481,7 +479,7 @@ var Media = {
 	function handleBrowserMedia
 	*/
 
-	handleBrowserMedia: function() {
+	handleBrowserMedia: function(data) {
 		$(".showmore-browser").remove();
 		$("#media-tabs").append(data);
 		$(".showmore-browser").click(function() {
@@ -489,8 +487,7 @@ var Media = {
 			Media.appendToBrowser(Main.activeGalleryIds, options);
 		})
 		$("#mediaBrowser").find('.mediaItem').unbind('click').click(function() {
-			imageElem = $(this).find('img');
-			imageElem.toggleClass('activated');
+			$(this).toggleClass('activated');
 		});
 	},
 
@@ -530,11 +527,11 @@ var Media = {
 			},
 			cache: false,
 			beforeSend: function() {
-				$("#loading-indicator").show(); //show the loading indicator
+				Main.LoadingIndicator.show(); //show the loading indicator
 			},
 			success: function(data){
 				//alert(data);
-				$("#loading-indicator").hide(); //hide the loading indicator
+				Main.LoadingIndicator.hide(); //hide the loading indicator
 				$(".modalOverlay").hide().remove();
 				Main.notify('Video added to library');
 				Media.showList('limit=0,50', Media.currentMediaKind);

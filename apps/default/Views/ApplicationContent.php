@@ -11,7 +11,28 @@ class ApplicationContent {
 			<!-- header -->
 			<header>
 
-				 <h1><img src="img/loader.gif" id="loading-indicator"> rearend <b>manager </b> 3 | <a class="logout">logout</a></h1>
+				 <h1>
+
+				 	<div id="floatingBarsG" class="loading-indicator">
+						<div class="blockG" id="rotateG_01">
+						</div>
+						<div class="blockG" id="rotateG_02">
+						</div>
+						<div class="blockG" id="rotateG_03">
+						</div>
+						<div class="blockG" id="rotateG_04">
+						</div>
+						<div class="blockG" id="rotateG_05">
+						</div>
+						<div class="blockG" id="rotateG_06">
+						</div>
+						<div class="blockG" id="rotateG_07">
+						</div>
+						<div class="blockG" id="rotateG_08">
+						</div>
+					</div>
+
+				 rearend <b>manager </b> 3 | <a class="logout">logout</a></h1>
 
 				<!-- main navigation -->
 				<nav>

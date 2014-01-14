@@ -14,17 +14,17 @@ var Document = {
 			data: {action: 'showDoc', id: id},
 			cache: false,
 			beforeSend: function() {
-				$("#loading-indicator").show(); //show the loading indicator
+				Main.LoadingIndicator.show(); //show the loading indicator
 			},
 			success: function(data){
-				$("#loading-indicator").hide(); //hide the loading indicator
+				Main.LoadingIndicator.hide(); //hide the loading indicator
 				Main.currentPageId = id; //set the Application current page id to current page id
 				Document.init(data); //initialize the document using the ajax returned data
 			}
 		});
 	},
 
-	/*
+	/*Main.LoadingIndicator
 	function show list
 	@param string type - the documentlist type
 	@param int id - the id of the current menu items id
@@ -47,10 +47,10 @@ var Document = {
 			},
 			cache: false,
 			beforeSend: function() {
-				$("#loading-indicator").show(); //show the loading indicator
+				Main.LoadingIndicator.show(); //show the loading indicator
 			},
 			success: function(data){
-				$("#loading-indicator").hide(); //hide the loading indicator
+				Main.LoadingIndicator.hide(); //hide the loading indicator
 				Document.initList(data);
 			}
 		});
@@ -110,11 +110,11 @@ var Document = {
 			},
 			cache: false,
 			beforeSend: function() {
-				$("#loading-indicator").show(); //show the loading indicator
+				Main.LoadingIndicator.show(); //show the loading indicator
 			},
 			success: function(data){
 				console.log(data);
-				$("#loading-indicator").hide(); //hide the loading indicator
+				Main.LoadingIndicator.hide(); //hide the loading indicator
 				//get the title from the saved document and apply it to the corresponding list item
 				doctitle = $("#document-form").find('input[data-name=title]').val();
 				$('#main-2').find('li[data-id="'+Main.currentPageId+'"]').find('h6').html(doctitle);
@@ -143,10 +143,10 @@ var Document = {
 			data: {action: 'createDoc', menuItemsId: Main.currentMenuItemId},
 			cache: false,
 			beforeSend: function() {
-				$("#loading-indicator").show(); //show the loading indicator
+				Main.LoadingIndicator.show(); //show the loading indicator
 			},
 			success: function(docId){
-				$("#loading-indicator").hide(); //hide the loading indicator
+				Main.LoadingIndicator.hide(); //hide the loading indicator
 				Document.showList('folder', Main.currentMenuItemId, true); //reload the document list
 				Document.show(docId); //show the just created document
 				Main.notify('Create Document'); //notify that the document was created
@@ -176,10 +176,10 @@ var Document = {
 			},
 			cache: false,
 			beforeSend: function() {
-				$("#loading-indicator").show(); //show the loading indicator
+				Main.LoadingIndicator.show(); //show the loading indicator
 			},
 			success: function(data){
-				$("#loading-indicator").hide(); //hide the loading indicator
+				Main.LoadingIndicator.hide(); //hide the loading indicator
 				Main.notify('Order Documents'); //notify that the list was re-ordered
 			}
 		});
@@ -199,10 +199,10 @@ var Document = {
 			},
 			cache: false,
 			beforeSend: function() {
-				$("#loading-indicator").show(); //show the loading indicator
+				Main.LoadingIndicator.show(); //show the loading indicator
 			},
 			success: function(data){
-				$("#loading-indicator").hide(); //hide the loading indicator
+				Main.LoadingIndicator.hide(); //hide the loading indicator
 				$('#main-2').find('li[data-id="'+Main.currentPageId+'"]').remove(); //remove the corresponding lis element
 				$('#main-3').find('.section-container').html(''); //empty the right container since the document was deleted
 				Main.notify('Delete Document'); //notify that the document was deleted

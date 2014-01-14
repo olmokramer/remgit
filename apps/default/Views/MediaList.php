@@ -33,7 +33,7 @@ class MediaList {
 				endforeach;
 			break;
 			case "videos":
-				$this->media = array_filter($this->media, function($item) {return ($item->kind == "vimeo/embedded" || $item->kind == "youtube/embedded") ? true : false;});
+				$this->media = array_filter($this->media, function($item) { print_r($item); return ($item->kind == "vimeo/embedded" || $item->kind == "youtube/embedded") ? true : false;});
 				foreach($this->media as $item):
 					new \Views\ListItem($type='mediaItem', $id=$item->id, $label=$item->title, null, $item->imgUrl);
 				endforeach;

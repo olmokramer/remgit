@@ -24,10 +24,10 @@ var Gallery = {
 			},
 			cache: false,
 			beforeSend: function() {
-				$("#loading-indicator").show(); //show the loading indicator
+				Main.LoadingIndicator.show(); //show the loading indicator
 			},
 			success: function(data){
-				$("#loading-indicator").hide(); //hide the loading indicator
+				Main.LoadingIndicator.hide(); //hide the loading indicator
 				Main.notify('Order Media');
 			}
 		})
@@ -41,7 +41,7 @@ var Gallery = {
 
 		selectedMedia = [];
 		$("#mediaBrowser").find('.activated').each(function() {
-			selectedMedia.push($(this).parent().data('id'));
+			selectedMedia.push($(this).data('id'));
 		})
 
 		if(selectedMedia.length > 0) { //check if at least one item is selected
@@ -60,10 +60,10 @@ var Gallery = {
 			},
 			cache: false,
 			beforeSend: function() {
-				$("#loading-indicator").show(); //show the loading indicator
+				Main.LoadingIndicator.show(); //show the loading indicator
 			},
 			success: function(data){
-				$("#loading-indicator").hide(); //hide the loading indicator
+				Main.LoadingIndicator.hide(); //hide the loading indicator
 				$(".gallery[data-id="+Main.currentGallery+"]").append(data);
 				Gallery.initItems();
 			}
@@ -102,10 +102,10 @@ var Gallery = {
 			},
 			cache: false,
 			beforeSend: function() {
-				$("#loading-indicator").show(); //show the loading indicator
+				Main.LoadingIndicator.show(); //show the loading indicator
 			},
 			success: function(data){
-				$("#loading-indicator").hide(); //hide the loading indicator
+				Main.LoadingIndicator.hide(); //hide the loading indicator
 				for(i=0;i<Main.selectedMedia.length;i++) {
 					$('.item[data-id="'+Main.selectedMedia[i]+'"]').remove();
 				}
