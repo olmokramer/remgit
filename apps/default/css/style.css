@@ -856,6 +856,7 @@ letter-spacing: 4px;
 
 #mediaBrowser .mediaItem,
 #mediaBrowser .mediaItemInactive {
+	position: relative;
 	display: inline;
 	float: left;
 	margin: 0 10px 20px 10px;

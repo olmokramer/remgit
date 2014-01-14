@@ -29,11 +29,17 @@ class MediaBrowser_Media {
 		?>
 
 		<div class="<?=$className?>" data-id="<?=$item->id?>" style="background-image:url(<?=$imgUrl?>)" data-id="<?=$item->id?>">
+			<?php if(($item->kind == "vimeo/embedded" || $item->kind == "youtube/embedded")) : ?>
+			<div class="video-play"></div>
+			<?php endif; ?>
 		</div>
 
 		<?php else: ?>
 
 		<div class="<?=$className?>" data-id="<?=$item->id?>" style="background-image:url(<?=$imgUrl?>)" data-id="<?=$item->id?>">
+			<?php if(($item->kind == "vimeo/embedded" || $item->kind == "youtube/embedded")) : ?>
+			<div class="video-play"></div>
+			<?php endif; ?>
 		</div>
 
 		<?php endif;
