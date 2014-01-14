@@ -86,7 +86,7 @@ var Document = {
 		});
 
 		//coverImage
-		coverImage = $("#coverImage").find('.image').find('img').data('cleanurl');
+		coverImage = $("#coverImage").data('cleanurl');
 
 		//parse publication status
 		pubdate = $("#pubstate-form").find("input[data-name=pubdate-year]").val();

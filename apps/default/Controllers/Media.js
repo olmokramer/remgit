@@ -191,9 +191,11 @@ var Media = {
 					Media.appendToPicker(options);
 				})
 				$("#imagePicker").find('.mediaItem').unbind('click').click(function() {
-					imgCleanUrl = $(this).find('img').data('cleanurl');
-					imgUrl = $(this).find('img').attr('src');
-					$("#coverImage").find('.image').html('<img src="'+imgUrl+'" data-cleanurl="'+imgCleanUrl+'">');
+					imgCleanUrl = $(this).data('cleanurl');
+					imgUrl = $(this).css('background-image');
+					$("#coverImage")
+						.css({"background-image": imgUrl})
+						.attr("data-cleanurl", imgCleanUrl)
 					$("#imagePickerHolder").hide();
 				});
 			}

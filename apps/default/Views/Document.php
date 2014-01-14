@@ -47,14 +47,7 @@ class Document {
 					<form data-name="document-form" id="document-form">
 					<div id="dochead">
 
-						<div class="imageHolder" id="coverImage">
-							<div class="image">
-								<?php if(isset($this->doc->coverUrl)): ?>
-								<img src="<?=((substr($this->doc->coverUrl, 0, 4) != "http") ? THUMBS : "") .$this->doc->coverUrl?>" data-cleanurl="<?=$this->doc->coverUrl?>">
-								<?php else: ?>
-								<div class="chooseImage">choose image</div>
-								<?php endif; ?>
-							</div>
+						<div class="imageHolder" id="coverImage" style="background-image:url(<?=THUMBS . $this->doc->coverUrl?>)">
 						</div>
 
 						<div id="imagePickerHolder">
