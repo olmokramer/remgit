@@ -27,6 +27,7 @@ class ApplicationHeader {
 		<script src="js/jqueryui.js"></script>
 
 		<!-- jquery plugins -->
+		<script src="js/moment.min.js"></script>
 		<script src="js/jquery.cookie.js"></script>
 		<script src="js/jquery.tagsinput.js"></script>
 		<script src="js/jquery.cleditor.js"></script>

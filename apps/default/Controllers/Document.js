@@ -252,6 +252,7 @@ var Document = {
             	var data = item;
             	data.action = "uploadImage";
             	if(numProcessed === 1) {
+            		data.timestamp = moment().format("X");
             		$("#uploads-progress").show();
             		Media.uploadedFiles = 0;
             		Media.processedFiles = numProcessed;

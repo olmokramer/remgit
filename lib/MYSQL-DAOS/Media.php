@@ -10,6 +10,12 @@ class Media {
 		return $media;
 	}
 
+	public function findAllMediaByCreationDate($creationDate, $options=null) {
+		$result = $this->selectAllMediaByCreationDate($creationDate, $options);
+		$media = $this->parseResultToMedia($result);
+		return $media;
+	}
+
 	public function findOrphans($options=null) {
 		$result = $this->selectOrphans();
 		$media = $this->parseResultToMedia($result);
@@ -75,6 +81,15 @@ class Media {
 		}
 	}
 
+	public function findAllDistinctBatches() {
+		$pdo = \Config\DB::getInstance();
+		$sth = $pdo->prepare("SELECT DISTINCT(created) FROM media");
+		$sth->execute();
+		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		return $result;
+	}
+
+
 	public function findVideoStreams() {
 		$result = $this->selectVideoStreams();
 		return $result;
@@ -118,15 +133,16 @@ class Media {
 		return false;
 	}
 
-	public function create($fileName, $kind, $embedCode=null, $title=null) {
-
+	public function create($fileName, $kind, $embedCode=null, $title=null, $timestamp=false) {
+		$timestamp = ($timestamp) ? $timestamp : time();
 		list($prefix, $title) = explode("_", $fileName);
 		$pdo = \Config\DB::getInstance();
-		$sth = $pdo->prepare("INSERT INTO media(kind, imgUrl, title, created, embedCode) VALUES(:kind, :imgUrl, :title, UNIX_TIMESTAMP(), :embedCode)");
+		$sth = $pdo->prepare("INSERT INTO media(kind, imgUrl, title, created, embedCode) VALUES(:kind, :imgUrl, :title, :created, :embedCode)");
 		$sth->bindParam(":imgUrl", $fileName);
 		$sth->bindParam(":title", $title);
 		$sth->bindParam(":kind", $kind);
 		$sth->bindParam(":embedCode", $embedCode);
+		$sth->bindParam(":created", $timestamp);
 		$sth->execute();
 		return $pdo->lastInsertId();;
 	}
@@ -191,6 +207,16 @@ class Media {
 		$pdo = \Config\DB::getInstance();
 		$options = $this->parseOptions($options);
 		$sth = $pdo->prepare("SELECT id, kind, imgUrl, embedCode, title FROM media".$options->order.$options->limit);
+		$sth->execute();
+		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		return $result;
+	}
+
+	private function selectAllMediaByCreationDate($creationDate, $options) {
+		$pdo = \Config\DB::getInstance();
+		$options = $this->parseOptions($options);
+		$sth = $pdo->prepare("SELECT id, kind, imgUrl, embedCode, title FROM media WHERE created = :creationDate".$options->order.$options->limit);
+		$sth->bindParam(":creationDate", $creationDate);
 		$sth->execute();
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
 		return $result;

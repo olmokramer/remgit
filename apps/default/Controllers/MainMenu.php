@@ -5,6 +5,7 @@ namespace Controllers;
 //include files
 include(DAOS_ROOT.'MenuItem.php');
 include(DAOS_ROOT.'Category.php');
+include(DAOS_ROOT.'Media.php');
 include(MODELS_ROOT.'MenuItem.php');
 
 include(VIEWS_ROOT.'MainMenu.php');
@@ -19,9 +20,11 @@ class MainMenu {
 		$categories = $categoryDAO->findAll();
 		new \Views\MainMenu($menuItems, $categories);
 	}
-	
+
 	public function showMediaMenu() {
-		new \Views\MediaMenu();
+		$mediaDAO = new \DAOS\Media;
+		$menuItems = $mediaDAO->findAllDistinctBatches();
+		new \Views\MediaMenu($menuItems);
 	}
 }
 ?>

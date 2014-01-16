@@ -73,7 +73,7 @@ class Media {
 		$mimeType = strip_tags($vars['type']);
 		$data = $this->getFileData(strip_tags($vars['data']));
 		$this->writeFile($data, $fileName);
-		$this->create($fileName, $mimeType);
+		$this->create($fileName, $mimeType, false, false, $vars['timestamp']);
 		$this->generateThumbnail(UPLOADS_PATH.$fileName, $fileName);
 	}
 
