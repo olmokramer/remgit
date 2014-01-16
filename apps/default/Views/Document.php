@@ -47,7 +47,7 @@ class Document {
 					<form data-name="document-form" id="document-form">
 					<div id="dochead">
 
-						<div class="imageHolder" id="coverImage" style="background-image:url(<?=THUMBS . $this->doc->coverUrl?>)">
+						<div class="imageHolder" id="coverImage" style="background-image:url(<?=THUMBS . $this->doc->coverUrl?>)" data-cleanurl="<?=$this->doc->coverUrl?>">
 						</div>
 
 						<div id="imagePickerHolder">
