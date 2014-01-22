@@ -7,6 +7,7 @@ var MainMenu = {
 	*/
 
 	show: function() {
+		$('.menu-item-deleteallimages').css({visibility:"hidden"});
 		$.ajax({
 			type: "POST",
 			url: "AjaxListener.php",

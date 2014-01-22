@@ -33,7 +33,6 @@ var Document = {
 	*/
 
 	showList: function(type, id, reOrder) {
-
 		if(reOrder === true) { Document.sortList(); } //reorder open list if true
 		Main.currentMenuItemId = id; //set the currentId to this id
 
@@ -245,7 +244,8 @@ var Document = {
 			Media.showBrowser(media, galleryKind, 'limit=0,50');
 		});
 
-		//init the upload-media div element
+
+        var batchdate = false;		//init the upload-media div element
 		$("input#uploadImages").fileprocessor({
             maxImageSize: Main.maxImageSize,
             onItem: function(item, numProcessed, total) {
@@ -257,8 +257,10 @@ var Document = {
             		Media.uploadedFiles = 0;
             		Media.processedFiles = numProcessed;
             		Media.totalFiles = total;
+            		batchdate = Math.round((new Date()).getTime() / 1000);
             		$("#uploads-progress h3").html("uploading files");
             	}
+            	data.creationdate = batchdate;
 				$.post("AjaxListener.php", data, function(result) {
 					Media.uploadedFiles++;
             		$("#uploads-progress h3").html("uploaded " + Media.uploadedFiles + " of " + Media.totalFiles);

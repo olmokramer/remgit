@@ -2,10 +2,12 @@
 /* MainMenu Controller PHP */
 namespace Controllers;
 
+//include backend files
+include(DAOS_ROOT.'Media.php');
+
 //include files
 include(DAOS_ROOT.'MenuItem.php');
 include(DAOS_ROOT.'Category.php');
-include(DAOS_ROOT.'Media.php');
 include(MODELS_ROOT.'MenuItem.php');
 
 include(VIEWS_ROOT.'MainMenu.php');
@@ -23,8 +25,8 @@ class MainMenu {
 
 	public function showMediaMenu() {
 		$mediaDAO = new \DAOS\Media;
-		$menuItems = $mediaDAO->findAllDistinctBatches();
-		new \Views\MediaMenu($menuItems);
+		$batches = $mediaDAO->findDistinctBatches();
+		new \Views\MediaMenu($batches);
 	}
 }
 ?>

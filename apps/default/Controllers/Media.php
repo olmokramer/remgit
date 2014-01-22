@@ -42,7 +42,23 @@ class Media {
 
 	public function showList($options="limit=0,50", $kind="all", $append=0) {
 		$mediaDAO = new \DAOS\Media;
-		$media = $mediaDAO->findAllMedia($options);
+		switch($kind) {
+			default:
+			case "all":
+				$media = $mediaDAO->findAllMedia($options);
+				break;
+			case "videos":
+					$media = $mediaDAO->findAllVideos($options);
+					break;
+			case "photos":
+					$media = $mediaDAO->findAllImages($options);
+					break;
+			case "batch":
+					$date = preg_replace("/^.*id=/", "", $options);
+					$media = $mediaDAO->findMediaByCreationDate($date, $options);
+					break;
+
+		}
 		new \Views\MediaList($media, $options, $kind, $append);
 	}
 
@@ -62,18 +78,27 @@ class Media {
 		$mediaItem = $mediaDAO->delete($id);
 	}
 
-	public function create($fileName, $mediaKind) {
+	public function deleteBatch($batchId) {
 		$mediaDAO = new \DAOS\Media;
-		$id = $mediaDAO->create($fileName, $mediaKind);
+		$mediaItems = $mediaDAO->findMediaByCreationDate($batchId, "limit=99999999");
+		foreach($mediaItems as $mediaItem):
+		$mediaDAO->delete($mediaItem->id);
+		endforeach;
+	}
+
+	public function create($fileName, $mediaKind, $created) {
+		$mediaDAO = new \DAOS\Media;
+		$id = $mediaDAO->create($fileName, $mediaKind, null, null, $created);
 		echo $id;
 	}
 
 	public function uploadImage($vars) {
 		$fileName =  uniqid() . "_" . strip_tags($vars['name']);
+		$created = strip_tags($vars['creationdate']);
 		$mimeType = strip_tags($vars['type']);
 		$data = $this->getFileData(strip_tags($vars['data']));
 		$this->writeFile($data, $fileName);
-		$this->create($fileName, $mimeType, false, false, $vars['timestamp']);
+		$this->create($fileName, $mimeType, $created);
 		$this->generateThumbnail(UPLOADS_PATH.$fileName, $fileName);
 	}
 

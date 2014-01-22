@@ -94,6 +94,7 @@ var Main = {
 	},
 
 	ListItemEvent: function(data) {
+		$('.menu-item-deleteallimages').css({visibility:"hidden"});
 		switch(data.type) {
 		case 'folder':
 		case 'cat':
@@ -102,10 +103,12 @@ var Main = {
 		case 'doc':
 			Document.show(data.id);
 			break;
+		case 'batch':
+		$('.menu-item-deleteallimages').css({visibility:"visible"});
 		case 'library':
 			$('#main-2').find('.section-container').html();
 			Media.currentMediaKind=data.mediakind;
-			Media.showList("limit=0,50",Media.currentMediaKind);
+			Media.showList("limit=0,50&id="+data.id,Media.currentMediaKind);
 			break;
 		case 'mediaItem':
 			Media.show(data.id);
@@ -196,6 +199,13 @@ var Main = {
 			}
 
 		})
+		$('.menu-item-deleteallimages').click(function() {
+			var curItem = $("#main-1").find("li.current");
+			if($(curItem).attr("data-mediakind") == "batch") {
+				var batchId = $(curItem).attr("data-id");
+				Media.deleteBatch(batchId);
+			}
+		});
 	},
 
 	initNav: function() {

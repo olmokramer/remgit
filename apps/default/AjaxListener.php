@@ -136,6 +136,11 @@ class AjaxListener {
 		$this->controller = new \Controllers\Media;
 		$this->controller->delete($this->vars['id']);
 	}
+	public function deleteMediaBatch() {
+		include(CONTROLLERS_ROOT."Media.php");
+		$this->controller = new \Controllers\Media;
+		$this->controller->deleteBatch($this->vars['batchId']);
+	}
 	public function showUploadScreen() {
 		include(CONTROLLERS_ROOT."Media.php");
 		$this->controller = new \Controllers\Media;
