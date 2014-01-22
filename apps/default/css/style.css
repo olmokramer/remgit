@@ -245,6 +245,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#444444', end
 	background-image: url(../img/icons_hover_settings.png);
 }
 
+.menu-item-deleteallimages {
+	visibility: hidden;
+}
+
 #content .section .footer .menu .button .dropdown {
 	display: none;
 	position: absolute;
@@ -384,7 +388,8 @@ background-repeat: no-repeat;
 background: url('../img/icon_folder.png') 2px -3px;
 background-repeat: no-repeat;
 }
-#content .list ul li h6.icon-cat {
+#content .list ul li h6.icon-cat,
+#content .list ul li h6.icon-batch {
 background: url('../img/icon_category.png') 2px -3px;
 background-repeat: no-repeat;
 }
@@ -838,6 +843,13 @@ letter-spacing: 4px;
 	border: 2px solid transparent;
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
+	background-color: #222;
+}
+
+#mediaBrowser .mediaItem small,
+#mediaBrowser .mediaItemInactive small {
+	color: #fff;
+	font-size: 10px;
 }
 
 #mediaBrowser .mediaItemInactive {

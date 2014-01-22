@@ -2,6 +2,9 @@
 /* MainMenu Controller PHP */
 namespace Controllers;
 
+//include backend files
+include(DAOS_ROOT.'Media.php');
+
 //include files
 include(DAOS_ROOT.'MenuItem.php');
 include(DAOS_ROOT.'Category.php');
@@ -19,9 +22,11 @@ class MainMenu {
 		$categories = $categoryDAO->findAll();
 		new \Views\MainMenu($menuItems, $categories);
 	}
-	
+
 	public function showMediaMenu() {
-		new \Views\MediaMenu();
+		$mediaDAO = new \DAOS\Media;
+		$batches = $mediaDAO->findDistinctBatches();
+		new \Views\MediaMenu($batches);
 	}
 }
 ?>

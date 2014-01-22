@@ -32,6 +32,7 @@ class MediaBrowser_Media {
 			<?php if(($item->kind == "vimeo/embedded" || $item->kind == "youtube/embedded")) : ?>
 			<div class="video-play"></div>
 			<?php endif; ?>
+			<small><?=$item->title?></small>
 		</div>
 
 		<?php else: ?>
@@ -40,6 +41,7 @@ class MediaBrowser_Media {
 			<?php if(($item->kind == "vimeo/embedded" || $item->kind == "youtube/embedded")) : ?>
 			<div class="video-play"></div>
 			<?php endif; ?>
+			<small><?=$item->title?></small>
 		</div>
 
 		<?php endif;

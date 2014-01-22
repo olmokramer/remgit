@@ -282,6 +282,27 @@ var Media = {
 		})
 	},
 
+	deleteBatch: function(batchId) {
+		$.ajax({
+			type: "POST",
+			url: "AjaxListener.php",
+			data: {
+				action: 'deleteMediaBatch',
+				batchId: batchId
+			},
+			cache: false,
+			beforeSend: function() {
+				Main.LoadingIndicator.show(); //show the loading indicator
+			},
+			success: function(data){
+				Main.LoadingIndicator.hide(); //hide the loading indicator
+				$('#main-1').find('li.current').remove();
+				$('#main-2 .section-container').html("");
+				Main.notify('Delete Media');
+			}
+		})
+	},
+
 	/*
 	function showAddVideoStream
 	Displays a popup in which you can fill in video stream information
@@ -348,6 +369,7 @@ var Media = {
 
 	initMenu: function(data) {
 
+        var batchdate = false;
 		//init the upload-media div element
 		$("input#addImages").fileprocessor({
             maxImageSize: Main.maxImageSize,
@@ -359,8 +381,10 @@ var Media = {
             		Media.uploadedFiles = 0;
             		Media.processedFiles = numProcessed;
             		Media.totalFiles = total;
+            		batchdate = Math.round((new Date()).getTime() / 1000);
             		$("#uploads-progress h3").html("uploading files");
             	}
+            	data.creationdate = batchdate;
 				$.post("AjaxListener.php", data, function(result) {
 					Media.uploadedFiles++;
             		$("#uploads-progress h3").html("uploaded " + Media.uploadedFiles + " of " + Media.totalFiles);
@@ -532,7 +556,6 @@ var Media = {
 				Main.LoadingIndicator.show(); //show the loading indicator
 			},
 			success: function(data){
-				//alert(data);
 				Main.LoadingIndicator.hide(); //hide the loading indicator
 				$(".modalOverlay").hide().remove();
 				Main.notify('Video added to library');

@@ -57,7 +57,11 @@ class ApplicationContent {
 						<!-- hier komt het hoofd menu -->
 						</div>
 						<div class="footer">
-						<!-- footer -->
+
+							<div class="menu">
+								<div class="button button-delete menu-item-deleteallimages" title="Delete All"></div>
+							</div>
+
 						</div>
 					</div>
 					<!-- end main 1 -->

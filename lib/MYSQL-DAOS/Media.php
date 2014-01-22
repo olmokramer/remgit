@@ -10,6 +10,29 @@ class Media {
 		return $media;
 	}
 
+	public function findAllImages($options=null) {
+		$result = $this->selectAllImages($options);
+		$media = $this->parseResultToMedia($result);
+		return $media;
+	}
+
+	public function findAllVideos($options=null) {
+		$result = $this->selectAllVideos($options);
+		$media = $this->parseResultToMedia($result);
+		return $media;
+	}
+
+	public function findMediaByCreationDate($date, $options=null) {
+		$result = $this->selectMediaByCreationDate($date, $options);
+		$media = $this->parseResultToMedia($result);
+		return $media;
+	}
+
+	public function findDistinctBatches() {
+		$result = $this->selectDistinctBatches();
+		return $result;
+	}
+
 	public function findOrphans($options=null) {
 		$result = $this->selectOrphans();
 		$media = $this->parseResultToMedia($result);
@@ -118,15 +141,16 @@ class Media {
 		return false;
 	}
 
-	public function create($fileName, $kind, $embedCode=null, $title=null) {
+	public function create($fileName, $kind, $embedCode=null, $title=null, $creationDate) {
 
 		list($prefix, $title) = explode("_", $fileName);
 		$pdo = \Config\DB::getInstance();
-		$sth = $pdo->prepare("INSERT INTO media(kind, imgUrl, title, created, embedCode) VALUES(:kind, :imgUrl, :title, UNIX_TIMESTAMP(), :embedCode)");
+		$sth = $pdo->prepare("INSERT INTO media(kind, imgUrl, title, created, embedCode) VALUES(:kind, :imgUrl, :title, :created, :embedCode)");
 		$sth->bindParam(":imgUrl", $fileName);
 		$sth->bindParam(":title", $title);
 		$sth->bindParam(":kind", $kind);
 		$sth->bindParam(":embedCode", $embedCode);
+		$sth->bindParam(":created", $creationDate);
 		$sth->execute();
 		return $pdo->lastInsertId();;
 	}
@@ -191,6 +215,42 @@ class Media {
 		$pdo = \Config\DB::getInstance();
 		$options = $this->parseOptions($options);
 		$sth = $pdo->prepare("SELECT id, kind, imgUrl, embedCode, title FROM media".$options->order.$options->limit);
+		$sth->execute();
+		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		return $result;
+	}
+
+	private function selectAllImages($options) {
+		$pdo = \Config\DB::getInstance();
+		$options = $this->parseOptions($options);
+		$sth = $pdo->prepare("SELECT id, kind, imgUrl, embedCode, title FROM media WHERE kind LIKE 'image/%' ".$options->order.$options->limit);
+		$sth->execute();
+		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		return $result;
+	}
+
+	private function selectMediaByCreationDate($creationDate, $options) {
+		$pdo = \Config\DB::getInstance();
+		$options = $this->parseOptions($options);
+		$sth = $pdo->prepare("SELECT id, kind, imgUrl, embedCode, title FROM media WHERE created = :created ".$options->order.$options->limit);
+		$sth->bindParam(":created", $creationDate);
+		$sth->execute();
+		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		return $result;
+	}
+
+	private function selectDistinctBatches() {
+		$pdo = \Config\DB::getInstance();
+		$sth = $pdo->prepare("SELECT DISTINCT created FROM media ORDER BY created DESC");
+		$sth->execute();
+		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		return $result;
+	}
+
+	private function selectAllVideos($options) {
+		$pdo = \Config\DB::getInstance();
+		$options = $this->parseOptions($options);
+		$sth = $pdo->prepare("SELECT id, kind, imgUrl, embedCode, title FROM media WHERE kind = 'vimeo/embedded' OR kind = 'youtube/embedded' ".$options->order.$options->limit);
 		$sth->execute();
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
 		return $result;
