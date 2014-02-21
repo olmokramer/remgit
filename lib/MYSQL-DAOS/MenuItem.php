@@ -8,10 +8,10 @@ class DAOS_MenuItem {
 	}
 	
 	private function selectAll() {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$sth = $pdo->prepare("SELECT id, label FROM menuItems ORDER BY label ASC");
 		$sth->execute();
-		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		$result = $sth->fetchAll(PDO::FETCH_OBJ);
 		return $result;
 	}
 }
