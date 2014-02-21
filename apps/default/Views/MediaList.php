@@ -1,8 +1,7 @@
 <?php
 /* MediaList View PHP */
-namespace Views;
 
-class MediaList {
+class Views_MediaList {
 	public function __construct($media, $options, $kind, $append=0) {
 	    $uuid = uniqid();
 		$this->media = $media;
@@ -29,17 +28,17 @@ class MediaList {
 			case "all":
 			default:
 				foreach($this->media as $item):
-					new \Views\ListItem($type='mediaItem', $id=$item->id, $label=$item->title, null, ($item->kind != "vimeo/embedded" && $item->kind != "youtube/embedded") ? THUMBS.$item->imgUrl : $item->imgUrl);
+					new Views_ListItem($type='mediaItem', $id=$item->id, $label=$item->title, null, ($item->kind != "vimeo/embedded" && $item->kind != "youtube/embedded") ? THUMBS.$item->imgUrl : $item->imgUrl);
 				endforeach;
 			break;
 			case "videos":
 				foreach($this->media as $item):
-					new \Views\ListItem($type='mediaItem', $id=$item->id, $label=$item->title, null, $item->imgUrl);
+					new Views_ListItem($type='mediaItem', $id=$item->id, $label=$item->title, null, $item->imgUrl);
 				endforeach;
 			break;
 			case "photos":
 				foreach($this->media as $item):
-					new \Views\ListItem($type='mediaItem', $id=$item->id, $label=$item->title, null, THUMBS.$item->imgUrl);
+					new Views_ListItem($type='mediaItem', $id=$item->id, $label=$item->title, null, THUMBS.$item->imgUrl);
 				endforeach;
 			break;
 		endswitch;

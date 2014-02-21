@@ -1,8 +1,7 @@
 <?php
 /* Application Content View PHP */
-namespace Views;
 
-class ApplicationContent {
+class Views_ApplicationContent {
 	public function __construct() {
 		?>
 

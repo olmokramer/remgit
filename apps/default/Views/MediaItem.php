@@ -1,8 +1,7 @@
 <?php
 /* MediaItem View PHP */
-namespace Views;
 
-class MediaItem {
+class Views_MediaItem {
 	public function __construct($mediaItem) {
 		$this->m = $mediaItem;
 		?>

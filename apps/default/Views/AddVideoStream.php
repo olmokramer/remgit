@@ -1,8 +1,7 @@
 <?php
 /* UploadScreen View PHP */
-namespace Views;
 
-class AddVideoStream {
+class Views_AddVideoStream {
 	public function __construct() {
 		?>
 		

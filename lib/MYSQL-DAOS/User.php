@@ -1,14 +1,13 @@
 <?php
 /* User DAO PHP */
-namespace DAOS;
 
-class User {
+class DAOS_User {
 	private static $instance = null;
 	private function __construct(){}
 
 	public static function getInstance() {
 		if(self::$instance == null) {
-			self::$instance = new \DAOS\User();
+			self::$instance = new DAOS_User();
 		}
 		return self::$instance;
 	}
@@ -20,7 +19,7 @@ class User {
 	}
 
 	private function selectAllUsers() {
-		$db = \Config\DB::getInstance();
+		$db = DB::getInstance();
 		$sth = $db->prepare("SELECT * FROM users");
 		$sth->execute();
 		$result = $sth->fetchAll();
@@ -36,7 +35,7 @@ class User {
 	}
 
 	private function parseUserResultToUser($userResult) {
-		$user = new \Models\User;
+		$user = new Models_User;
 		$user->setId($userResult['id']);
 		$user->setUsername($userResult['username']);
 		$user->setPassword($userResult['digesta1']);

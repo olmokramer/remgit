@@ -1,8 +1,7 @@
 <?php
 /* Category DAO PHP */
-namespace DAOS;
 
-class Category {
+class DAOS_Category {
 	public function findAll() {
 		$result = $this->selectAll();
 		$cats = $this->parseResultToCats($result);
@@ -32,7 +31,7 @@ class Category {
 	}
 	
 	public function deleteDocCategories($docId) {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$sth = $pdo->prepare("DELETE FROM documents_categories WHERE documents_id = :documents_id");
 		$sth->bindParam(":documents_id", $docId);
 		$sth->execute();
@@ -40,7 +39,7 @@ class Category {
 	}
 	
 	public function insertDocCategories($docId, $catIds) {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$sth = $pdo->prepare("INSERT INTO documents_categories(documents_id, categories_id) VALUES(:documents_id, :categories_id)");
 		foreach($catIds as $catId) {
 			$sth->bindParam(":documents_id", $docId);
@@ -51,37 +50,37 @@ class Category {
 	}
 	
 	private function selectByLabel($label) {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$sth = $pdo->prepare("SELECT * FROM categories WHERE label = :label LIMIT 1");
 		$sth->bindParam(":label", $label);
 		$sth->execute();
-		$result = $sth->fetch(\PDO::FETCH_OBJ);
+		$result = $sth->fetch(PDO::FETCH_OBJ);
 		return $result;
 	}
 	
 	private function selectByDocId($docId) {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$sth = $pdo->prepare("SELECT documents_categories.categories_id as id, categories.label as label FROM documents_categories LEFT JOIN categories ON documents_categories.categories_id = categories.id WHERE documents_categories.documents_id = :documents_id");
 		$sth->bindParam(":documents_id", $docId);
 		$sth->execute();
-		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		$result = $sth->fetchAll(PDO::FETCH_OBJ);
 		return $result;
 	}
 	
 	private function selectAll() {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$sth = $pdo->prepare("SELECT id, label FROM categories ORDER BY label ASC");
 		$sth->execute();
-		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		$result = $sth->fetchAll(PDO::FETCH_OBJ);
 		return $result;
 	}
 	
 	private function selectByMenuItemsId($menuItemsId) {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$sth = $pdo->prepare("SELECT id, label FROM categories WHERE menuItems_id = :menuItems_id ORDER BY label ASC");
 		$sth->bindParam(":menuItems_id", $menuItemsId);
 		$sth->execute();
-		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		$result = $sth->fetchAll(PDO::FETCH_OBJ);
 		return $result;
 	}
 	

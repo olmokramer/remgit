@@ -1,8 +1,7 @@
 <?php
 /* MediaItem Model PHP */
-namespace Models;
 
-class MediaItem {
+class Models_MediaItem {
 	
 	//vars
 	

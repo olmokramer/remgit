@@ -1,8 +1,7 @@
 <?php
 /* GalleryItem View PHP */
-namespace Views;
 
-class GalleryItem {
+class Views_GalleryItem {
 	public function __construct($item) {
 		$imgUrl = ($item->kind != "vimeo/embedded" && $item->kind != "youtube/embedded") ? THUMBS.$item->imgUrl : $item->imgUrl;
 		?>

@@ -1,8 +1,7 @@
 <?php
 /* ListItem View PHP */
-namespace Views;
 
-class ListItem {
+class Views_ListItem {
 	public function __construct($type, $id, $label, $secondary=null, $imgurl=null, $mediakind=null) {
 		$this->type = $type;
 		$this->imgurl = $imgurl;

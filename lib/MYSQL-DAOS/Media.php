@@ -1,8 +1,7 @@
 <?php
 /* Media DAO PHP */
-namespace DAOS;
 
-class Media {
+class DAOS_Media {
 
 	public function findAllMedia($options=null) {
 		$result = $this->selectAllMedia($options);

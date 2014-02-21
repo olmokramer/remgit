@@ -1,8 +1,7 @@
 <?php
 /* User Model PHP */
-namespace Models;
 
-class User {
+class Models_User {
 	private $id;
 	private $username;
 	private $password;

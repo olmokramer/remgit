@@ -1,8 +1,7 @@
 <?php
 /* Gallery Model PHP */
-namespace Models;
 
-class Gallery {
+class Models_Gallery {
 
 	//vars
 	

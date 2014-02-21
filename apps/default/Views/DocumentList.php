@@ -1,8 +1,7 @@
 <?php
 /* DocumentList View PHP */
-namespace Views;
 
-class DocumentList {
+class Views_DocumentList {
 	public function __construct($documents) {
 		$this->docs = $documents;
 		?>

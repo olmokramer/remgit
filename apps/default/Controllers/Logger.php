@@ -1,11 +1,10 @@
 <?php
 /* Logger Controller PHP */
-namespace Controllers;
 
 include(DAOS_ROOT.'User.php');
 include(MODELS_ROOT.'User.php');
 
-class Logger {
+class Controllers_Logger {
 		private $valid_users;
 
 		public function login($vars) {
@@ -26,7 +25,7 @@ class Logger {
 			session_destroy();
 		}
 	private function findAllUsers() {
-		$userDAO = \DAOS\User::getInstance();
+		$userDAO = DAOS_User::getInstance();
 		$users = $userDAO->findAllUsers();
 
 		$valid_users = array();

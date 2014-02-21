@@ -1,8 +1,7 @@
 <?php
 /* MenuItem DAO PHP */
-namespace DAOS;
 
-class MenuItem {
+class DAOS_MenuItem {
 	public function findAll() {
 		$result = $this->selectAll();
 		return $result;

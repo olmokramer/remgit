@@ -1,8 +1,7 @@
 <?php
 /* MediaBrowser_Media View PHP */
-namespace Views;
 
-class MediaBrowser_Media {
+class Views_MediaBrowser_Media {
 	public function __construct($media, $activeMedia, $options) {
 		$this->media = $media;
 		$this->activeMedia = $activeMedia;

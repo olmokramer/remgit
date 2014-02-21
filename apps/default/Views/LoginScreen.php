@@ -1,8 +1,7 @@
 <?php
 /* LoginScreen View PHP */
-namespace Views;
 
-class LoginScreen {
+class Views_LoginScreen {
 	public function __construct() {
 ?>
     

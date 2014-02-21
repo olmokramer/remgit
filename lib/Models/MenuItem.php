@@ -1,8 +1,7 @@
 <?php
 /* MenuItem Model PHP */
-namespace Models;
 
-class MenuItem {
+class Models_MenuItem {
 	
 	//vars
 	

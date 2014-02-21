@@ -1,8 +1,7 @@
 <?php
 /* Field Model PHP */
-namespace Models;
 
-class Field {
+class Models_Field {
 
 	public $id;
 	public $label;

@@ -1,8 +1,7 @@
 <?php
 /* CustomField Model PHP */
-namespace Models;
 
-class CustomField {
+class Models_CustomField {
 
 	//vars
 	public $id;

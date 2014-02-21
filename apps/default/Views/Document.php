@@ -1,8 +1,7 @@
 <?php
 /* Document View PHP */
-namespace Views;
 
-class Document {
+class Views_Document {
 	public function __construct($doc, $categories) {
 		$this->doc = $doc;
 		$this->categories = $categories;
@@ -213,7 +212,7 @@ class Document {
 					<div class="gallery" data-id="<?=$gallery->id?>">
 						<?php
 						foreach($gallery->media as $item):
-						new \Views\GalleryItem($item);
+						new Views_GalleryItem($item);
 						endforeach;
 						?>
 					</div>

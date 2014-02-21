@@ -1,6 +1,5 @@
 <?php
 /* Main Controller PHP */
-namespace Controllers;
 
 //include Views
 require('Views/ApplicationHeader.php');
@@ -8,10 +7,10 @@ require('Views/ApplicationContent.php');
 require('Views/Application.php');
 require('Views/LoginScreen.php');
 
-class Main {
+class Controllers_Main {
 	public function __construct() {	
-		new \Views\ApplicationHeader();
-		$application = new \Views\Application;
+		new Views_ApplicationHeader();
+		$application = new Views_Application;
 		
 		if((!isset($_SESSION['app']['loginStatus'])) || ($_SESSION['app']['loginStatus'] != 1)) {
 			$application->login();

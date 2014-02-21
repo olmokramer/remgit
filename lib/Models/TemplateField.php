@@ -1,8 +1,7 @@
 <?php
 /* TemplateField Model PHP */
-namespace Models;
 
-class TemplateField {
+class Models_TemplateField {
 	
 	//vars
 	

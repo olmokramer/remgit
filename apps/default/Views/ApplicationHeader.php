@@ -1,8 +1,7 @@
 <?php
 /* Application Header View PHP */
-namespace Views;
 
-class ApplicationHeader {
+class Views_ApplicationHeader {
 	public function __construct() {
 		?>
 

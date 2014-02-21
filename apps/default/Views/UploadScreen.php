@@ -1,8 +1,7 @@
 <?php
 /* UploadScreen View PHP */
-namespace Views;
 
-class UploadScreen {
+class Views_UploadScreen {
 	public function __construct() {
 		?>
 		

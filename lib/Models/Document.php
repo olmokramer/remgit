@@ -1,8 +1,7 @@
 <?php
 /* Document Model PHP */
-namespace Models;
 
-class Document {
+class Models_Document {
 	public $id;
 	public $title;
 	public $coverUrl;
@@ -56,7 +55,7 @@ class Document {
 			$gallery = $this->galleries[$galleryLabel];
 			$media = array();
 			foreach($gallery->media as $mediaItem) {
-				$item = new \stdClass;
+				$item = new stdClass;
 				$item->id = $mediaItem->id;
 				$item->embedCode = $mediaItem->embedCode;
 				$item->title = $mediaItem->title;

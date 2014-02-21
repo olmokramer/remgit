@@ -1,8 +1,7 @@
 <?php
 /* Fields DAO PHP */
-namespace DAOS;
 
-class Field {
+class DAOS_Field {
 
 	public function findAllFields() {
 		$result = $this->selectAllFields();
@@ -16,26 +15,26 @@ class Field {
 	}
 
 	private function selectAllFields() {
-		$db = \Config\DB::getInstance();
+		$db = DB::getInstance();
 		$sth = $db->prepare("SELECT * FROM fields");
 		$sth->execute();
-		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		$result = $sth->fetchAll(PDO::FETCH_OBJ);
 		return $result;
 	}
 
 	private function selectFieldByLabel($label) {
-		$db = \Config\DB::getInstance();
+		$db = DB::getInstance();
 		$sth = $db->prepare("SELECT * FROM fields WHERE label = :label LIMIT 1");
 		$sth->bindParam(":label", $label);
 		$sth->execute();
-		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		$result = $sth->fetchAll(PDO::FETCH_OBJ);
 		return $result[0];
 	}
 
 	private function parseResultsToFields($result) {
 		$fields = array();
 		foreach($result as $fieldResult) {
-			$fields[] = new \Models\Field($result);
+			$fields[] = Models_Field($result);
 		}
 		return $fields;
 	}

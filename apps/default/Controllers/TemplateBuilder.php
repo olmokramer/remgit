@@ -1,8 +1,7 @@
 <?php
 /* TemplateBuilder Controller PHP */
-namespace Controllers;
 
-class TemplateBuilder {
+class Controllers_TemplateBuilder {
 	
 }
 ?>

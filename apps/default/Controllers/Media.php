@@ -1,6 +1,5 @@
 <?php
 /* Media Controller PHP */
-namespace Controllers;
 
 //include backend files
 include(DAOS_ROOT.'Media.php');
@@ -15,33 +14,33 @@ require_once(VIEWS_ROOT.'ListItem.php');
 include(VIEWS_ROOT.'UploadScreen.php');
 include(VIEWS_ROOT.'AddVideoStream.php');
 
-class Media {
+class Controllers_Media {
 	public function showBrowser($activeMedia, $mediaKind, $options="limit=0,50") {
-		$mediaDAO = new \DAOS\Media;
+		$mediaDAO = new DAOS_Media;
 		$media = $mediaDAO->findMediaByKind($mediaKind, $options);
-		new \Views\MediaBrowser($media, $activeMedia, $options);
+		new Views_MediaBrowser($media, $activeMedia, $options);
 	}
 
 	public function showPicker($activeMedia, $options="limit=0,50") {
-		$mediaDAO = new \DAOS\Media;
+		$mediaDAO = new DAOS_Media;
 		$media = $mediaDAO->findAllMedia($options);
-		new \Views\ImagePicker($media, $activeMedia, $options);
+		new Views_ImagePicker($media, $activeMedia, $options);
 	}
 
 	public function appendToBrowser($activeMedia, $options="limit=0,50") {
-		$mediaDAO = new \DAOS\Media;
+		$mediaDAO = new DAOS_Media;
 		$media = $mediaDAO->findAllMedia($options);
-		new \Views\MediaBrowser_Media($media, $activeMedia, $options);
+		new Views_MediaBrowser_Media($media, $activeMedia, $options);
 	}
 
 	public function appendToPicker($options="limit=0,50") {
-		$mediaDAO = new \DAOS\Media;
+		$mediaDAO = new DAOS_Media;
 		$media = $mediaDAO->findAllMedia($options);
-		new \Views\MediaBrowser_Media($media, $activeMedia=array(), $options);
+		new Views_MediaBrowser_Media($media, $activeMedia=array(), $options);
 	}
 
 	public function showList($options="limit=0,50", $kind="all", $append=0) {
-		$mediaDAO = new \DAOS\Media;
+		$mediaDAO = new DAOS_Media;
 		switch($kind) {
 			default:
 			case "all":
@@ -59,27 +58,27 @@ class Media {
 					break;
 
 		}
-		new \Views\MediaList($media, $options, $kind, $append);
+		new Views_MediaList($media, $options, $kind, $append);
 	}
 
 	public function show($id) {
-		$mediaDAO = new \DAOS\Media;
+		$mediaDAO = new DAOS_Media;
 		$mediaItem = $mediaDAO->findMediaById($id);
-		new \Views\MediaItem($mediaItem);
+		new Views_MediaItem($mediaItem);
 	}
 
 	public function update($vars) {
-		$mediaDAO = new \DAOS\Media;
+		$mediaDAO = new DAOS_Media;
 		$mediaItem = $mediaDAO->update($vars['id'], $vars);
 	}
 
 	public function delete($id) {
-		$mediaDAO = new \DAOS\Media;
+		$mediaDAO = new DAOS_Media;
 		$mediaItem = $mediaDAO->delete($id);
 	}
 
 	public function deleteBatch($batchId) {
-		$mediaDAO = new \DAOS\Media;
+		$mediaDAO = new DAOS_Media;
 		$mediaItems = $mediaDAO->findMediaByCreationDate($batchId, "limit=99999999");
 		foreach($mediaItems as $mediaItem):
 		$mediaDAO->delete($mediaItem->id);
@@ -87,7 +86,7 @@ class Media {
 	}
 
 	public function create($fileName, $mediaKind, $created) {
-		$mediaDAO = new \DAOS\Media;
+		$mediaDAO = new DAOS_Media;
 		$id = $mediaDAO->create($fileName, $mediaKind, null, null, $created);
 		echo $id;
 	}
@@ -103,20 +102,20 @@ class Media {
 	}
 
 	public function showUploadScreen() {
-		new \Views\UploadScreen();
+		new Views_UploadScreen();
 	}
 
 	public function showAddVideoStream() {
-		new \Views\AddVideoStream();
+		new Views_UploadScreen;
 	}
 
 	public function addVideoStream($vimeoUserId) {
-		$mediaDAO = new \DAOS\Media;
+		$mediaDAO = new DAOS_Media;
 		$mediaDAO->addVideoStream($vimeoUserId);
 	}
 
 	public function refreshVideoStreams() {
-		$mediaDAO = new \DAOS\Media;
+		$mediaDAO = new DAOS_Media;
 		$mediaDAO->refreshVideoStreams();
 	}
 
@@ -149,7 +148,7 @@ class Media {
 	}
 
 	private function saveYoutubeVideo($url) {
-		$mediaDAO = new \DAOS\Media;
+		$mediaDAO = new DAOS_Media;
 		$pos = strrpos($url, "/") + 1;
 		$id = substr(stristr(substr($url, $pos), "="), 1);
 		$embedCode = '<iframe width="560" height="315" src="http://www.youtube.com/embed/'.$id.'" frameborder="0" allowfullscreen></iframe>';
@@ -159,7 +158,7 @@ class Media {
 	}
 
 	private function saveVimeoVideo($url) {
-		$mediaDAO = new \DAOS\Media;
+		$mediaDAO = new DAOS_Media;
 		$pos = strrpos($url, "/") + 1;
 		$id = substr($url, $pos);
 

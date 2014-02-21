@@ -1,8 +1,7 @@
 <?php
 /* ImagePicker View PHP */
-namespace Views;
 
-class ImagePicker {
+class Views_ImagePicker {
 	public function __construct($media, $activeMedia, $options) {		
 		?>
 		
@@ -10,7 +9,7 @@ class ImagePicker {
 		<div id="imagePicker">
 		
 			<div id="imagepicker-media">
-				<?php new \Views\MediaBrowser_Media($media, $activeMedia, $options); ?>
+				<?php new Views_MediaBrowser_Media($media, $activeMedia, $options); ?>
 			</div>
 
 		</div>

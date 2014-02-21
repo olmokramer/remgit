@@ -1,8 +1,7 @@
 <?php
 /* Document DAO PHP */
-namespace DAOS;
 
-class Document {
+class DAOS_Document {
 
 	//public
 
@@ -91,7 +90,7 @@ class Document {
 
 	public function create($menuItemsId) {
 		$templateId = $this->getTemplatesIdByMenuItemsId($menuItemsId);
-		$templateDAO = new \DAOS\Template;
+		$templateDAO = new DAOS_Template;
 		$docId = $this->insertDoc($menuItemsId);
 		$templateFields = $templateDAO->getTemplateFields($templateId);
 		$this->createCustomFields($templateFields, $docId);
@@ -118,7 +117,7 @@ class Document {
 	//private
 
 	private function insertDoc($menuItemsId) {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$title = 'Untitled Document';
 		$sth = $pdo->prepare("INSERT INTO documents(title, menuItems_id, created, published) VALUES(:title, :menuItems_id, UNIX_TIMESTAMP(), UNIX_TIMESTAMP())");
 		$sth->bindParam(":title", $title);
@@ -128,7 +127,7 @@ class Document {
 	}
 
 	private function deleteDoc($id) {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$sth = $pdo->prepare("DELETE FROM documents WHERE id = :id LIMIT 1");
 		$sth->bindParam(":id", $id);
 		$sth->execute();
@@ -152,8 +151,8 @@ class Document {
 	}
 
 	private function deleteCustomFields($docId) {
-		$pdo = \Config\DB::getInstance();
-		$mediaDAO = new \DAOS\Media;
+		$pdo = DB::getInstance();
+		$mediaDAO = new DAOS_Media;
 		$galleries = $mediaDAO->findGalleriesByDocId($docId);
 
 		foreach($galleries as $gallery) {
@@ -176,7 +175,7 @@ class Document {
 	}
 
 	private function insertFieldInstance($fieldtype, $templateField, $docId) {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$table = ($fieldtype == 'single') ? 'documents_fields_singleline' : 'documents_fields_multiline';
 		$sth = $pdo->prepare("INSERT INTO ".$table."(documents_id, fields_id) VALUES(:documents_id, :fields_id)");
 		$sth->bindParam(":documents_id", $docId);
@@ -186,7 +185,7 @@ class Document {
 	}
 
 	private function insertGalleryInstance($templateField, $docId) {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$sth = $pdo->prepare("INSERT INTO galleries(label, kind, documents_id) VALUES(:label, :kind, :documents_id)");
 		$sth->bindParam(":label", $templateField->label);
 		$sth->bindParam(":kind", $templateField->kind);
@@ -196,18 +195,18 @@ class Document {
 	}
 
 	private function getTemplatesIdByMenuItemsId($menuItemsId) {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$sth = $pdo->prepare("SELECT id FROM templates WHERE menuItems_id = :menuItems_id LIMIT 1");
 		$sth->bindParam(":menuItems_id", $menuItemsId);
 		$sth->execute();
-		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		$result = $sth->fetchAll(PDO::FETCH_OBJ);
 		return $result[0]->id;
 	}
 
 	private function parseDocumentElements($docResult) {
-		$mediaDAO = new \DAOS\Media;
-		$categoryDAO = new \DAOS\Category;
-		$docElements = new \stdClass();
+		$mediaDAO = new DAOS_Media;
+		$categoryDAO = new DAOS_Category;
+		$docElements = new stdClass();
 		$docElements->native = $docResult;
 		$docElements->custom = $this->findCustomFieldsByDocId($docResult->id);
 		$docElements->categories = $categoryDAO->findByDocId($docResult->id);
@@ -216,51 +215,51 @@ class Document {
 	}
 
 	private function findCustomFieldsByDocId($docId) {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$sth = $pdo->prepare("(SELECT templates_fields.position as a, documents_fields_singleline.id, documents_fields_singleline.value, fields.label, fields.fieldtype, fields.inputtype, fields.default FROM documents_fields_singleline LEFT JOIN fields ON documents_fields_singleline.fields_id = fields.id LEFT JOIN templates_fields ON documents_fields_singleline.fields_id = templates_fields.fields_id WHERE documents_fields_singleline.documents_id = :doc_id)
 UNION ALL (SELECT templates_fields.position as bx, documents_fields_multiline.id, documents_fields_multiline.value, fields.label, fields.fieldtype, fields.inputtype, fields.default FROM documents_fields_multiline LEFT JOIN fields ON documents_fields_multiline.fields_id = fields.id LEFT JOIN templates_fields ON documents_fields_multiline.fields_id = templates_fields.fields_id WHERE documents_fields_multiline.documents_id = :doc_id) ORDER BY a ASC");
 		$sth->bindParam(":doc_id", $docId);
 		$sth->execute();
-		$customFields = $sth->fetchAll(\PDO::FETCH_OBJ);
+		$customFields = $sth->fetchAll(PDO::FETCH_OBJ);
 		return $customFields;
 	}
 
 	private function findGalleriesByDocId($docId) {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$sth = $pdo->prepare("SELECT * FROM galleries WHERE documents_id = :doc_id");
 		$sth->bindParam(":doc_id", $docId);
 		$sth->execute();
-		$galleries = $sth->fetchAll(\PDO::FETCH_OBJ);
+		$galleries = $sth->fetchAll(PDO::FETCH_OBJ);
 		return $galleries;
 	}
 
 	private function selectByMenuItemsId($menuItemsId, $options) {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$options = $this->parseOptions($options);
 		$sth = $pdo->prepare("SELECT * FROM documents WHERE menuItems_id = :menuItems_id ".$options->conditions.$options->order.$options->limit);
 		$sth->bindParam(":menuItems_id", $menuItemsId);
 		$sth->execute();
-		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		$result = $sth->fetchAll(PDO::FETCH_OBJ);
 		return $result;
 	}
 
 	private function selectByMenuItemsLabel($menuItemsLabel, $options) {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$options = $this->parseOptions($options);
 		$sth = $pdo->prepare("SELECT documents.* FROM documents LEFT JOIN menuItems ON documents.menuItems_id = menuItems.id ".$options->joins." WHERE menuItems.label = :label ".$options->conditions.$options->order.$options->limit);
 		$sth->bindParam(":label", $menuItemsLabel);
 		$sth->execute();
-		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		$result = $sth->fetchAll(PDO::FETCH_OBJ);
 		return $result;
 	}
 
 	private function selectSearchByMenuItemsId($menuItemsId, $options) {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$options = $this->parseOptions($options);
 		$sth = $pdo->prepare("SELECT documents.* FROM documents LEFT JOIN documents_fields_singleline ON documents.id = documents_fields_singleline.documents_id LEFT JOIN documents_fields_multiline ON documents.id = documents_fields_multiline.documents_id LEFT JOIN menuItems ON documents.menuItems_id = menuItems.id WHERE menuItems.id = :menuItems_id ".$options->conditions." GROUP BY documents.id ".$options->order.$options->limit);
 		$sth->bindParam(':menuItems_id', $menuItemsId);
 		$sth->execute();
-		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		$result = $sth->fetchAll(PDO::FETCH_OBJ);
 		$sth2 = $pdo->prepare("SELECT COUNT(documents.id) FROM documents LEFT JOIN documents_fields_singleline ON documents.id = documents_fields_singleline.documents_id LEFT JOIN documents_fields_multiline ON documents.id = documents_fields_multiline.documents_id LEFT JOIN menuItems ON documents.menuItems_id = menuItems.id WHERE menuItems.id = :menuItems_id ".$options->conditions." GROUP BY documents.id ".$options->order);
 		$sth->bindParam(':menuItems_id', $menuItemsId);
 		$sth2->execute();
@@ -270,12 +269,12 @@ UNION ALL (SELECT templates_fields.position as bx, documents_fields_multiline.id
 	}
 
 	private function selectSearchByMenuItemsLabel($menuItemsLabel, $options) {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$options = $this->parseOptions($options);
 		$sth = $pdo->prepare("SELECT documents.* FROM documents LEFT JOIN documents_fields_singleline ON documents.id = documents_fields_singleline.documents_id LEFT JOIN documents_fields_multiline ON documents.id = documents_fields_multiline.documents_id LEFT JOIN menuItems ON documents.menuItems_id = menuItems.id WHERE menuItems.label = :menuItems_label ".$options->conditions." GROUP BY documents.id ".$options->order.$options->limit);
 		$sth->bindParam(':menuItems_label', $menuItemsLabel);
 		$sth->execute();
-		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		$result = $sth->fetchAll(PDO::FETCH_OBJ);
 		$sth2 = $pdo->prepare("SELECT COUNT(documents.id) FROM documents LEFT JOIN documents_fields_singleline ON documents.id = documents_fields_singleline.documents_id LEFT JOIN documents_fields_multiline ON documents.id = documents_fields_multiline.documents_id LEFT JOIN menuItems ON documents.menuItems_id = menuItems.id WHERE menuItems.label = :menuItems_label ".$options->conditions." GROUP BY documents.id ".$options->order);
 		$sth2->bindParam(':menuItems_label', $menuItemsLabel);
 		$sth2->execute();
@@ -285,7 +284,7 @@ UNION ALL (SELECT templates_fields.position as bx, documents_fields_multiline.id
 	}
 
 	private function selectCountByMenuItemsId($menuItemsId, $options) {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$options = $this->parseOptions($options);
 		$sth = $pdo->prepare("SELECT COUNT(id) FROM documents WHERE menuItems_id = :menuItems_id ".$options->conditions);
 		$sth->bindParam(":menuItems_id", $menuItemsId);
@@ -295,7 +294,7 @@ UNION ALL (SELECT templates_fields.position as bx, documents_fields_multiline.id
 	}
 
 	private function selectCountByMenuItemsLabel($menuItemsLabel, $options) {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$options = $this->parseOptions($options);
 		$sth = $pdo->prepare("SELECT COUNT(documents.id) FROM documents LEFT JOIN menuItems ON documents.menuItems_id = menuItems.id ".$options->joins." WHERE menuItems.label = :label ".$options->conditions);
 		$sth->bindParam(":label", $menuItemsLabel);
@@ -305,30 +304,30 @@ UNION ALL (SELECT templates_fields.position as bx, documents_fields_multiline.id
 	}
 
 	private function selectByCategoryMatchCount($id, $options) {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$options = $this->parseOptions($options);
 		$sth = $pdo->prepare("SELECT (SELECT menuItems_id FROM documents WHERE id = :documents_id LIMIT 1) AS menuItemsId, documents.*, count(*) AS matches FROM documents_categories LEFT JOIN documents ON documents_categories.documents_id = documents.id WHERE categories_id IN (SELECT categories_id FROM documents_categories WHERE documents_id = :documents_id) AND documents_id != :documents_id AND menuItems_id = menuItems_id GROUP BY documents_id ORDER BY matches DESC, RAND() ".$options->limit);
 		$sth->bindParam(":documents_id", $id);
 		$sth->execute();
-		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		$result = $sth->fetchAll(PDO::FETCH_OBJ);
 		return $result;
 	}
 
 	private function selectById($id) {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$sth = $pdo->prepare("SELECT * FROM documents WHERE id = :id LIMIT 1");
 		$sth->bindParam(":id", $id);
 		$sth->execute();
-		$result = $sth->fetch(\PDO::FETCH_OBJ);
+		$result = $sth->fetch(PDO::FETCH_OBJ);
 		return $result;
 	}
 
 	private function selectCategoryIdByCategoryLabel($catLabel) {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$sth = $pdo->prepare("SELECT id FROM categories WHERE label = :label LIMIT 1");
 		$sth->bindParam(":label", $catLabel);
 		$sth->execute();
-		$result = $sth->fetch(\PDO::FETCH_OBJ);
+		$result = $sth->fetch(PDO::FETCH_OBJ);
 		return $result->id;
 	}
 
@@ -339,17 +338,17 @@ UNION ALL (SELECT templates_fields.position as bx, documents_fields_multiline.id
 	}
 
 	private function selectByCategoryId($id, $options) {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$options = $this->parseOptions($options);
 		$sth = $pdo->prepare("SELECT documents.* FROM documents LEFT JOIN documents_categories ON documents.id = documents_categories.documents_id WHERE documents_categories.categories_id = :categories_id ".$options->conditions.$options->order.$options->limit);
 		$sth->bindParam(":categories_id", $id);
 		$sth->execute();
-		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		$result = $sth->fetchAll(PDO::FETCH_OBJ);
 		return $result;
 	}
 
 	private function updateDoc($doc) {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$sth = $pdo->prepare("UPDATE documents SET title = :title, published = :published, lastmodified = UNIX_TIMESTAMP(), publishState = :publishState, coverUrl = :coverUrl WHERE id = :id LIMIT 1");
 		$sth->bindParam(":title", $doc->title);
 		$sth->bindParam(":published", $doc->published);
@@ -361,7 +360,7 @@ UNION ALL (SELECT templates_fields.position as bx, documents_fields_multiline.id
 	}
 
 	private function updateDocPosition($menuItemsId, $docId, $position) {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$sth = $pdo->prepare("UPDATE documents SET position = :position WHERE id = :id LIMIT 1");
 		$sth->bindParam(":position", $position);
 		$sth->bindParam(":id", $docId);
@@ -377,7 +376,7 @@ UNION ALL (SELECT templates_fields.position as bx, documents_fields_multiline.id
 	}
 
 	private function updateCustomField($customField) {
-		$pdo = \Config\DB::getInstance();
+		$pdo = DB::getInstance();
 		$table = ($customField->fieldType == "single" ? "documents_fields_singleline" : "documents_fields_multiline");
 		$sth = $pdo->prepare("UPDATE ".$table." SET value = :value WHERE id = :id LIMIT 1");
 		$sth->bindParam(":value", $customField->value);
@@ -401,7 +400,7 @@ UNION ALL (SELECT templates_fields.position as bx, documents_fields_multiline.id
 	}
 
 	private function parseDocElementsToDoc($docElements) {
-		$doc = new \Models\Document($docElements);
+		$doc = new Models_Document($docElements);
 		return $doc;
 	}
 
@@ -435,7 +434,7 @@ UNION ALL (SELECT templates_fields.position as bx, documents_fields_multiline.id
 		$cats = (isset($options['cat'])) ? $options['cat'] : null;
 		$query = (isset($options['query'])) ? $options['query'] : null;
 		$ignoreUnpublished = (isset($options['ignoreUnpublished'])) ? $options['ignoreUnpublished'] : null;
-		$optionsObj = new \stdClass();
+		$optionsObj = new stdClass();
 		$optionsObj->joins = ($cats != null) ? $this->joinTable('categories', $cats) : null;
 		$optionsObj->conditions = $this->parseConditions($cats, $query, $ignoreUnpublished);
 		$optionsObj->order = $this->parseOrder($orderBy, $orderType);
@@ -471,7 +470,7 @@ UNION ALL (SELECT templates_fields.position as bx, documents_fields_multiline.id
 	private function parseCatConditions($cats) {
 		$conditions = array();
 		foreach($cats as $cat) {
-			$categoryDAO = new \DAOS\Category;
+			$categoryDAO = new DAOS_Category;
 			$catId = $categoryDAO->findIdByLabel($cat);
 			$conditions[] = "documents_categories.categories_id = '".$catId."'";
 		}
@@ -500,7 +499,7 @@ UNION ALL (SELECT templates_fields.position as bx, documents_fields_multiline.id
 	}
 
 	private function parseQueryItem($queryItem, $label) {
-		$fieldDAO = new \DAOS\Field;
+		$fieldDAO = new DAOS_Field;
 		$wildcard = (isset($queryItem['wildcard']) && !$queryItem['wildcard']) ? '' : '%'; //defaults to wildcard=true
 		$wildcard_operator = (isset($queryItem['wildcard']) && !$queryItem['wildcard']) ? ' = ' : ' LIKE '; //defaults to wildcard=true
 		switch($label) {

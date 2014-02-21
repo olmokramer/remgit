@@ -1,8 +1,7 @@
 <?php
 /* MediaBrowser View PHP */
-namespace Views;
 
-class MediaBrowser {
+class Views_MediaBrowser {
 	public function __construct($media, $activeMedia, $options) {		
 		?>
 		
@@ -19,7 +18,7 @@ class MediaBrowser {
 			</div>
 		
 			<div id="media-tabs">
-				<?php new \Views\MediaBrowser_Media($media, $activeMedia, $options); ?>
+				<?php new Views_MediaBrowser_Media($media, $activeMedia, $options); ?>
 			</div>
 
 		</div>

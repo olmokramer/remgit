@@ -1,15 +1,14 @@
 <?php
 /* Application View PHP */
-namespace Views;
 
-class Application {
+class Views_Application {
 	
 	public function login() {
-		new \Views\LoginScreen();
+		new Views_LoginScreen();
 	}
 
 	public function run() {
-		new \Views\ApplicationContent();
+		new Views_ApplicationContent();
 	}
 }
 ?>
