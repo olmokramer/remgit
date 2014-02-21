@@ -37,7 +37,7 @@ class Controllers_Document {
 		$this->dao2 = new DAOS_Category;
 		$doc = $this->dao->getDocument($id);
 		$categories = $this->dao2->findByMenuItemsId($doc->menuItemsId);
-		new \Views\Document($doc, $categories);
+		new Views_Document($doc, $categories);
 	}
 	
 	public function create($menuItemsId) {

@@ -19,13 +19,13 @@ class Controllers_MainMenu {
 		$categoryDAO = new DAOS_Category;
 		$menuItems = $menuItemDAO->findAll();
 		$categories = $categoryDAO->findAll();
-		new \Views\MainMenu($menuItems, $categories);
+		new Views_MainMenu($menuItems, $categories);
 	}
 
 	public function showMediaMenu() {
 		$mediaDAO = new DAOS_Media;
 		$batches = $mediaDAO->findDistinctBatches();
-		new \Views\MediaMenu($batches);
+		new Views_MainMenu($batches);
 	}
 }
 ?>
