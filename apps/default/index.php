@@ -3,5 +3,5 @@
 require("Controllers/Main.php");
 session_start();
 
-new \Controllers\Main();
+new Controllers_Main();
 ?>
