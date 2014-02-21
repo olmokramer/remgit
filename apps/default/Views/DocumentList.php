@@ -11,7 +11,7 @@ class Views_DocumentList {
 			<?php
 			foreach($this->docs as $doc):
 			$img = (strlen($doc->coverUrl)>0) ? $doc->getCoverUrl('thumb') : null;
-			new \Views\ListItem($type='doc', $id=$doc->id, $label=$doc->title, $doc->pubstate, $img);
+			new Views_ListItem($type='doc', $id=$doc->id, $label=$doc->title, $doc->pubstate, $img);
 			endforeach;
 			?>
 			<!-- end loop documents -->

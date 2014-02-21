@@ -2,7 +2,7 @@
 /* MainMenu View PHP */
 
 class Views_MainMenu {
-	public function __construct($menuItems, $categories) {
+	public function __construct($menuItems, $categories=array()) {
 		$this->items = $menuItems;
 		$this->cats = $categories;
 		?>

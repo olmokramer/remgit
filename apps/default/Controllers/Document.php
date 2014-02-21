@@ -77,7 +77,7 @@ class Controllers_Document {
 			foreach($mediaIds as $mediaId) {
 				$this->dao->addMediaToGallery($galleryId, $mediaId);
 				$mediaItem = $this->dao->findMediaById($mediaId);
-				new \Views\GalleryItem($mediaItem);
+				new Views_GalleryItem($mediaItem);
 			}
 		}
 	}
