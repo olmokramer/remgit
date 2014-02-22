@@ -25,7 +25,7 @@ class Controllers_MainMenu {
 	public function showMediaMenu() {
 		$mediaDAO = new DAOS_Media;
 		$batches = $mediaDAO->findDistinctBatches();
-		new Views_MainMenu($batches);
+		new Views_MediaMenu($batches);
 	}
 }
 ?>
