@@ -1,4 +1,7 @@
 /* TemplateBuilder Controller JS */
-var TemplateBuilder = {
+(function() {
+    "use strict";
+    window.TemplateBuilder = {
 
-}
+    };
+})();
