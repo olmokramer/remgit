@@ -12,7 +12,7 @@
 				type: "POST",
 				url: "AjaxListener.php",
 				data: "action=login&"+$('#loginForm').serialize(),
-				success: function(data){
+				success: function(data) {
 					if(data === 'true') {
 						document.location.reload();
 					}
