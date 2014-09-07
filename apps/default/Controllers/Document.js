@@ -13,7 +13,10 @@
 			$.ajax({
 				type: "POST",
 				url: "AjaxListener.php",
-				data: {action: 'showDoc', id: id},
+				data: {
+					action: 'showDoc',
+					id: id
+				},
 				cache: false,
 				beforeSend: function() {
 					Main.LoadingIndicator.show(); //show the loading indicator
