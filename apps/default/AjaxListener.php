@@ -175,7 +175,6 @@ class AjaxListener {
 		include(CONTROLLERS_ROOT.'Logger.php');
 		$loginController = new \Controllers\Logger;
 		$loginController->logout();
-		break;
 	}
 
 }
