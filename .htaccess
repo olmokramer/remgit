@@ -1,0 +1,4 @@
+<FilesMatch "\.git(ignore|attributes)?$|settings\.php$|DB\.php$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
