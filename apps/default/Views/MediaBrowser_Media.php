@@ -28,7 +28,7 @@ class MediaBrowser_Media {
 		$className = (!in_array($item->id, $this->activeMedia)) ? "mediaItem" : "mediaItemInactive";
 		?>
 
-		<div class="<?=$className?>" data-id="<?=$item->id?>" style="background-image:url(<?=$imgUrl?>)" data-id="<?=$item->id?>" data-cleanurl="<?=$item->imgUrl?>">
+		<div class="<?=$className?>" data-id="<?=$item->id?>" style="background-image:url(<?=urlencode($imgUrl)?>)" data-id="<?=$item->id?>" data-cleanurl="<?=$item->imgUrl?>">
 			<?php if(($item->kind == "vimeo/embedded" || $item->kind == "youtube/embedded")) : ?>
 			<div class="video-play"></div>
 			<?php endif; ?>
@@ -37,7 +37,7 @@ class MediaBrowser_Media {
 
 		<?php else: ?>
 
-		<div class="<?=$className?>" data-id="<?=$item->id?>" style="background-image:url(<?=$imgUrl?>)" data-id="<?=$item->id?>" data-cleanurl="<?=$item->imgUrl?>">
+		<div class="<?=$className?>" data-id="<?=$item->id?>" style="background-image:url(<?=urlencode($imgUrl)?>)" data-id="<?=$item->id?>" data-cleanurl="<?=$item->imgUrl?>">
 			<?php if(($item->kind == "vimeo/embedded" || $item->kind == "youtube/embedded")) : ?>
 			<div class="video-play"></div>
 			<?php endif; ?>
