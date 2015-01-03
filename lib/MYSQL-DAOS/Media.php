@@ -214,7 +214,7 @@ class Media {
 	private function selectAllMedia($options) {
 		$pdo = \Config\DB::getInstance();
 		$options = $this->parseOptions($options);
-		$sth = $pdo->prepare("SELECT id, kind, imgUrl, embedCode, title FROM media".$options->order.$options->limit);
+		$sth = $pdo->prepare("SELECT id, kind, imgUrl, caption, embedCode, title FROM media".$options->order.$options->limit);
 		$sth->execute();
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
 		return $result;
@@ -223,7 +223,7 @@ class Media {
 	private function selectAllImages($options) {
 		$pdo = \Config\DB::getInstance();
 		$options = $this->parseOptions($options);
-		$sth = $pdo->prepare("SELECT id, kind, imgUrl, embedCode, title FROM media WHERE kind LIKE 'image/%' ".$options->order.$options->limit);
+		$sth = $pdo->prepare("SELECT id, kind, imgUrl, caption, embedCode, title FROM media WHERE kind LIKE 'image/%' ".$options->order.$options->limit);
 		$sth->execute();
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
 		return $result;
@@ -232,7 +232,7 @@ class Media {
 	private function selectMediaByCreationDate($creationDate, $options) {
 		$pdo = \Config\DB::getInstance();
 		$options = $this->parseOptions($options);
-		$sth = $pdo->prepare("SELECT id, kind, imgUrl, embedCode, title FROM media WHERE created = :created ".$options->order.$options->limit);
+		$sth = $pdo->prepare("SELECT id, kind, imgUrl, caption, embedCode, title FROM media WHERE created = :created ".$options->order.$options->limit);
 		$sth->bindParam(":created", $creationDate);
 		$sth->execute();
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
@@ -250,7 +250,7 @@ class Media {
 	private function selectAllVideos($options) {
 		$pdo = \Config\DB::getInstance();
 		$options = $this->parseOptions($options);
-		$sth = $pdo->prepare("SELECT id, kind, imgUrl, embedCode, title FROM media WHERE kind = 'vimeo/embedded' OR kind = 'youtube/embedded' ".$options->order.$options->limit);
+		$sth = $pdo->prepare("SELECT id, kind, imgUrl, caption, embedCode, title FROM media WHERE kind = 'vimeo/embedded' OR kind = 'youtube/embedded' ".$options->order.$options->limit);
 		$sth->execute();
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
 		return $result;
@@ -259,7 +259,7 @@ class Media {
 	private function selectOrphans($options) {
 		$pdo = \Config\DB::getInstance();
 		$options = $this->parseOptions($options);
-		$sth = $pdo->prepare("SELECT id, kind, imgUrl, embedCode, title FROM media left join galleries_media on media.id = galleries_media.media_id where galleries_media.id IS NULL".$options->order.$options->limit);
+		$sth = $pdo->prepare("SELECT id, kind, imgUrl, caption, embedCode, title FROM media left join galleries_media on media.id = galleries_media.media_id where galleries_media.id IS NULL".$options->order.$options->limit);
 		$sth->execute();
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
 		return $result;
@@ -272,7 +272,7 @@ class Media {
 		$last = $sth->fetch();
 		$options .= "&conditions={media.created EQUALS ".$last->created."}";
 		$options = $this->parseOptions($options);
-		$sth2 = $pdo->prepare("SELECT id, kind, imgUrl, embedCode, title FROM media".$options->where.$options->order.$options->limit);
+		$sth2 = $pdo->prepare("SELECT id, kind, imgUrl, caption, embedCode, title FROM media".$options->where.$options->order.$options->limit);
 		$sth2->execute();
 		$result = $sth2->fetchAll(\PDO::FETCH_OBJ);
 		return $result;

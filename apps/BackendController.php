@@ -53,9 +53,9 @@ class BackendController {
 		return $document;
 	}
 
-	public function getMedia() {
-		$media = $this->mediaDAO->findAllImages();
-		return $media;
+	public function getImages() {
+		$images = $this->mediaDAO->findAllImages();
+		return $images;
 	}
 }
 
