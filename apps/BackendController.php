@@ -24,7 +24,8 @@ class BackendController {
 	private $docDAO;
 
 	public function __construct() {
-		$this->docDAO = new \DAOS\Document;
+		$this->docDAO = new \DAOS\Document();
+		$this->mediaDAO = new \DAOS\Media();
 	}
 
 	public function getDocuments($label, $options=null) {
@@ -50,6 +51,11 @@ class BackendController {
 	public function getDocument($id) {
 		$document = $this->docDAO->getDocument($id);
 		return $document;
+	}
+
+	public function getMedia() {
+		$media = $this->mediaDAO->findAllImages();
+		return $media;
 	}
 }
 
