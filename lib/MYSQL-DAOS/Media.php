@@ -22,6 +22,12 @@ class Media {
 		return $media;
 	}
 
+	public function findRandomImage() {
+		$result = $this->selectRandomImage();
+		$media = $this->parseResultToMedia($result);
+		return $media[0];
+	}
+
 	public function findMediaByCreationDate($date, $options=null) {
 		$result = $this->selectMediaByCreationDate($date, $options);
 		$media = $this->parseResultToMedia($result);
@@ -229,6 +235,23 @@ class Media {
 		return $result;
 	}
 
+	private function selectAllVideos($options) {
+		$pdo = \Config\DB::getInstance();
+		$options = $this->parseOptions($options);
+		$sth = $pdo->prepare("SELECT id, kind, imgUrl, caption, embedCode, title FROM media WHERE kind = 'vimeo/embedded' OR kind = 'youtube/embedded' ".$options->order.$options->limit);
+		$sth->execute();
+		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		return $result;
+	}
+
+	private function selectRandomImage() {
+		$pdo = \Config\DB::getInstance();
+		$sth = $pdo->prepare("SELECT id, kind, imgUrl, caption, embedCode, title FROM media WHERE kind LIKE 'image/%' ORDER BY RAND() LIMIT 1");
+		$sth->execute();
+		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
+		return $result;
+	}
+
 	private function selectMediaByCreationDate($creationDate, $options) {
 		$pdo = \Config\DB::getInstance();
 		$options = $this->parseOptions($options);
@@ -242,15 +265,6 @@ class Media {
 	private function selectDistinctBatches() {
 		$pdo = \Config\DB::getInstance();
 		$sth = $pdo->prepare("SELECT DISTINCT created FROM media ORDER BY created DESC");
-		$sth->execute();
-		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
-		return $result;
-	}
-
-	private function selectAllVideos($options) {
-		$pdo = \Config\DB::getInstance();
-		$options = $this->parseOptions($options);
-		$sth = $pdo->prepare("SELECT id, kind, imgUrl, caption, embedCode, title FROM media WHERE kind = 'vimeo/embedded' OR kind = 'youtube/embedded' ".$options->order.$options->limit);
 		$sth->execute();
 		$result = $sth->fetchAll(\PDO::FETCH_OBJ);
 		return $result;

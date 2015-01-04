@@ -53,9 +53,9 @@ class BackendController {
 		return $document;
 	}
 
-	public function getImages() {
-		$images = $this->mediaDAO->findAllImages();
-		return $images;
+	public function getRandomImage() {
+		$image = $this->mediaDAO->findRandomImage();
+		return $image;
 	}
 }
 
