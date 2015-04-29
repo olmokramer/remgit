@@ -35,5 +35,5 @@ define('MAX_THUMBS_PX', 300);
 //shared key
 define('SHARED_KEY', 'demo');
 
-require(CONFIG_ROOT . 'DB.php')
+require(CONFIG_ROOT . 'DB.php');
 ?>
