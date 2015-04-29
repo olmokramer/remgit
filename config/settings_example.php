@@ -9,7 +9,7 @@ ini_set("error_log", dirname(__FILE__) . "/error_log.txt");
 define('ROOT', dirname(dirname(__FILE__)) . '/');
 define('WEBROOT', 'http://domain/path/to/rearend/');
 
-define('CONFIG_ROOT', ROOT . 'config/')
+define('CONFIG_ROOT', ROOT . 'config/');
 define('LIB_ROOT', ROOT . 'lib/');
 define('APPS_ROOT', ROOT . 'apps/');
 define('CONFIG_ROOT', ROOT . 'config/');
