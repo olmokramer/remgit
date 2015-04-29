@@ -5,13 +5,11 @@ error_reporting(0);
 ini_set("log_errors", 1);
 ini_set("error_log", dirname(__FILE__) . "/error_log.txt");
 
-//include db
-require(dirname(__FILE__) . "/DB.php");
-
 //global settings
-define('ROOT', '/absolute/path/to/rearend/');
+define('ROOT', dirname(dirname(__FILE)) . '/');
 define('WEBROOT', 'http://domain/path/to/rearend/');
 
+define('CONFIG_ROOT', ROOT . 'config/')
 define('LIB_ROOT', ROOT . 'lib/');
 define('APPS_ROOT', ROOT . 'apps/');
 define('CONFIG_ROOT', ROOT . 'config/');
@@ -36,4 +34,6 @@ define('MAX_THUMBS_PX', 300);
 
 //shared key
 define('SHARED_KEY', 'demo');
+
+require(CONFIG_ROOT . 'DB.php')
 ?>
