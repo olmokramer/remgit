@@ -350,7 +350,6 @@ class Media {
 	}
 
 	private function insertMediaItem($mediaItem) {
-		var_dump($mediaItem);
 		$pdo = \Config\DB::getInstance();
 		$sth = $pdo->prepare("INSERT INTO media(kind, imgUrl, embedCode, title, caption, uuid, created) VALUES(:kind, :imgUrl, :embedCode, :title, :caption, :uuid, :created)");
 		$sth->bindParam(':kind', $mediaItem->kind);
